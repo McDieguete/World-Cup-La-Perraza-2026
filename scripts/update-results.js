@@ -275,6 +275,18 @@ async function main() {
   const matches = await fetchMatches();
   console.log(`  recibidos ${matches.length} partidos`);
 
+  // Resumen por status — útil para diagnosticar si la API aún no marca FINISHED
+  const byStatus = {};
+  const byStage  = {};
+  matches.forEach(m => {
+    byStatus[m.status || '?'] = (byStatus[m.status || '?'] || 0) + 1;
+    if (m.status === 'FINISHED') byStage[m.stage || '?'] = (byStage[m.stage || '?'] || 0) + 1;
+  });
+  console.log(`  por status: ${Object.entries(byStatus).map(([k,v])=>`${k}=${v}`).join(', ')}`);
+  if (byStatus.FINISHED) {
+    console.log(`  FINISHED por stage: ${Object.entries(byStage).map(([k,v])=>`${k}=${v}`).join(', ')}`);
+  }
+
   const log = {
     groupChanged:  [],
     koChanged:     [],

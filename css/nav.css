@@ -1,0 +1,28 @@
+/* ===========================================================
+   nav.css — navegación principal (tabs sticky)
+   =========================================================== */
+
+nav{
+  position:sticky;top:0;z-index:30;
+  background:rgba(8,8,8,.86);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;gap:6px;max-width:1200px;margin:0 auto;padding:0 22px}
+
+.tab{
+  flex:1;background:none;border:none;color:var(--cream-dim);cursor:pointer;
+  font-family:'Outfit';font-weight:700;font-size:14.5px;padding:18px 8px;
+  position:relative;letter-spacing:.2px;transition:color .2s;
+}
+.tab .ico{display:block;font-size:20px;margin-bottom:3px;filter:grayscale(.3)}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--gold)}
+.tab.active::after{
+  content:"";position:absolute;left:14%;right:14%;bottom:0;height:3px;border-radius:3px 3px 0 0;
+  background:linear-gradient(90deg,var(--gold),var(--coral));
+}
+
+@media(max-width:560px){
+  .tab{font-size:12px;padding:14px 4px}
+  .tab .ico{font-size:18px}
+}

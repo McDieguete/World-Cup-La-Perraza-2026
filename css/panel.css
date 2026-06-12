@@ -1,0 +1,27 @@
+/* ===========================================================
+   panel.css — paneles, cabeceras de sección y animación fade
+   =========================================================== */
+
+.panel{display:none;padding:38px 0 90px;animation:fade .4s ease}
+.panel.active{display:block}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:none}
+}
+
+.sec-head{margin-bottom:26px}
+.sec-head h2{
+  font-family:'Anton';font-weight:400;font-size:clamp(26px,4vw,40px);
+  text-transform:uppercase;letter-spacing:.5px;line-height:1;
+}
+.sec-head h2 em{font-style:normal;color:var(--coral-soft)}
+.sec-head p{
+  color:var(--cream-dim);max-width:680px;margin-top:8px;
+  font-size:14.5px;line-height:1.55;
+}
+
+.kicker{
+  font-family:'Space Mono';font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);display:block;margin-bottom:6px;
+}

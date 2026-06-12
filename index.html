@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Perraza · Mundial 2026</title>
+
+  <!-- Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos modulares (base primero, luego en orden del DOM) -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="stylesheet" href="css/panel.css">
+  <link rel="stylesheet" href="css/search.css">
+  <link rel="stylesheet" href="css/players.css">
+  <link rel="stylesheet" href="css/stats.css">
+  <link rel="stylesheet" href="css/clasif.css">
+  <link rel="stylesheet" href="css/jornada.css">
+  <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/footer.css">
+
+  <!-- Scripts: dataset primero, luego módulos por responsabilidad -->
+  <script defer src="js/data.js"></script>
+  <script defer src="js/helpers.js"></script>
+  <script defer src="js/nav.js"></script>
+  <script defer src="js/players.js"></script>
+  <script defer src="js/stats.js"></script>
+  <script defer src="js/clasif.js"></script>
+  <script defer src="js/modal.js"></script>
+  <script defer src="js/jornada.js"></script>
+</head>
+<body>
+
+  <!-- Franja tricolor de países anfitriones (Canadá · México · USA) -->
+  <div class="host-stripe" title="Canadá · México · Estados Unidos" aria-hidden="true">
+    <span class="can"></span><span class="mex"></span><span class="usa"></span>
+  </div>
+
+  <!-- ===== CABECERA ===== -->
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="crest-img"><img src="assets/crest.png" alt="Escudo La Perraza"></div>
+        <div>
+          <h1>La <span>Perraza</span></h1>
+          <div class="tagline">Porra del <b>Mundial 2026</b> · USA · México · Canadá — seguimiento, estadísticas y curiosidades</div>
+        </div>
+        <div class="countdown">
+          <div class="num" id="cdNum">3</div>
+          <div class="lbl">días para el pitido inicial</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== NAVEGACIÓN ===== -->
+  <nav>
+    <div class="nav-inner">
+      <button class="tab active" data-tab="quien"><span class="ico">🕵️</span>¿Quién es quién?</button>
+      <button class="tab"        data-tab="stats"><span class="ico">📊</span>Estadísticas</button>
+      <button class="tab"        data-tab="clasif"><span class="ico">🏆</span>Clasificación</button>
+      <button class="tab"        data-tab="jornada"><span class="ico">📅</span>Próxima jornada</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <!-- ===== ¿QUIÉN ES QUIÉN? ===== -->
+    <section class="panel active" id="quien" aria-label="Quién es quién">
+      <div class="sec-head">
+        <span class="kicker">El gallinero al completo</span>
+        <h2>¿Quién es <em>quién</em>?</h2>
+        <p>Busca a cualquier participante y mira su quiniela: su podio, sus elegidos al Balón y la Bota de Oro, su mayor pedrada (la apuesta que casi nadie más se ha atrevido a firmar) y qué clase de porrista es. Pulsa una ficha para ver el detalle.</p>
+      </div>
+      <div class="searchbar">
+        <span class="mag">🔍</span>
+        <input id="search" type="text" placeholder="Busca por nombre… (p. ej. Chema, Diego, Pi)" autocomplete="off">
+      </div>
+      <div class="count-pill">Mostrando <b id="pcount">0</b> de <b id="ptotal">0</b> porristas</div>
+      <div class="grid" id="pgrid"></div>
+      <div class="no-res" id="noRes" style="display:none">Nadie con ese nombre se ha jugado los cuartos aquí. Prueba con otra búsqueda. 🤷</div>
+    </section>
+
+    <!-- ===== ESTADÍSTICAS ===== -->
+    <section class="panel" id="stats" aria-label="Estadísticas de la porra">
+      <div class="sec-head">
+        <span class="kicker">La sabiduría (o locura) de la masa</span>
+        <h2>Estadísticas de la <em>porra</em></h2>
+        <p>Lo que opina el grupo en conjunto: las cifras clave de las 81 quinielas, el reparto de votos a campeón, subcampeón, semifinalistas y premios individuales, hasta dónde llega cada selección, las sorpresas más improbables y las apuestas más temerarias.</p>
+      </div>
+
+      <div class="stat-block">
+        <h3>📊 Las cifras de la porra</h3>
+        <p class="sub">Lo más jugoso de las 81 quinielas, de un vistazo.</p>
+        <div class="table-scroll"><table class="facts-table" id="factsTable"></table></div>
+      </div>
+
+      <div class="stat-block">
+        <h3>🏆 ¿Quién levanta la copa?</h3>
+        <p class="sub">Reparto de votos al título y al subcampeonato. El consenso al campeón es… abrumador.</p>
+        <div class="two-col">
+          <div class="barlist"><div class="barrow"><div class="top"><span class="name">🥇 Campeón</span></div></div><div id="champBars"></div></div>
+          <div class="barlist"><div class="barrow"><div class="top"><span class="name">🥈 Subcampeón</span></div></div><div id="runnerBars"></div></div>
+        </div>
+      </div>
+
+      <div class="stat-block">
+        <h3>🎯 Los semifinalistas de la peña</h3>
+        <p class="sub">Selecciones que más gente mete entre las cuatro mejores del Mundial.</p>
+        <div class="barlist"><div id="semisBars"></div></div>
+      </div>
+
+      <div class="stat-block">
+        <h3>El podio individual: votaciones</h3>
+        <p class="sub">Quién se lleva más papeletas al Balón de Oro (mejor jugador) y a la Bota de Oro (máximo goleador) según las apuestas del grupo.</p>
+        <div class="two-col">
+          <div class="barlist"><div class="barrow"><div class="top"><span class="name">🏅 Balón de Oro — mejor jugador</span></div></div><div id="balonBars"></div></div>
+          <div class="barlist"><div class="barrow"><div class="top"><span class="name">👟 Bota de Oro — máximo goleador</span></div></div><div id="botaBars"></div></div>
+        </div>
+      </div>
+
+      <div class="stat-block">
+        <h3>¿Hasta dónde llega cada selección?</h3>
+        <p class="sub">Número de porristas (de 81) que han hecho clasificar a cada equipo a cada ronda. Cuanto más dorada la casilla, más gente lo ve. Ordenado por favoritismo al título.</p>
+        <div class="table-scroll">
+          <table class="adv-table" id="advTable"></table>
+        </div>
+      </div>
+
+      <div class="stat-block">
+        <h3>🎲 Sorpresas inesperadas — apostar contra el guion</h3>
+        <p class="sub">Cuanto más floja es la categoría de una selección, más sorprende que la peña la haga llegar lejos. A la izquierda, los equipos "improbables" a los que más gente da galones; a la derecha, las apuestas individuales más temerarias y por qué lo son.</p>
+        <div class="two-col">
+          <div class="barlist"><div class="barrow"><div class="top"><span class="name">🚀 Las sorpresas más populares</span></div></div><div id="surpriseTeams"></div></div>
+          <div class="risk-list" id="riskList"></div>
+        </div>
+      </div>
+
+      <div class="stat-block">
+        <h3>Los patitos feos del Mundial 🦆</h3>
+        <p class="sub">Selecciones más veces colocadas en el último puesto de su grupo. Sin rencores: alguien tiene que cerrar la tabla.</p>
+        <div class="worst-grid" id="worstGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== CLASIFICACIÓN ===== -->
+    <section class="panel" id="clasif" aria-label="Clasificación">
+      <div class="sec-head">
+        <span class="kicker">La carrera por el trofeo</span>
+        <h2>Clasificación de la <em>porra</em></h2>
+        <p>Cómo evoluciona la puntuación jornada a jornada. El gráfico muestra por defecto el top 5 (los empates van por orden alfabético) y puedes desplegar a los 81. Debajo, la tabla con los puntos del día y la subida o bajada de posiciones respecto al día anterior.</p>
+      </div>
+      <div class="clas-note"><span class="ne">🏁</span><div id="clasNote"></div></div>
+      <div class="chart-wrap">
+        <div class="chart-tools"><h3>Puntos acumulados por jornada</h3><button class="toggle-all" id="toggleAll">Ver todos (81)</button></div>
+        <div id="clasChart"></div>
+        <div id="clasLegend"></div>
+      </div>
+      <div class="clas-day-sel"><label>Cambios del día:</label><select id="clasDaySel"></select></div>
+      <div class="clas-table-wrap"><table class="clas-table" id="clasTable"></table></div>
+    </section>
+
+    <!-- ===== PRÓXIMA JORNADA ===== -->
+    <section class="panel" id="jornada" aria-label="Próxima jornada">
+      <div class="sec-head">
+        <span class="kicker">A pie de campo</span>
+        <h2>Próxima <em>jornada</em></h2>
+        <p>La frase del día, los partidos con su horario español y lo que dice la porra de cada uno: a cuánta gente le sale victoria local, empate o visitante, y el resultado exacto más repetido.</p>
+      </div>
+      <div class="day-chips" id="dayChips"></div>
+      <div class="day-nav">
+        <button id="prevDay">‹</button>
+        <div class="day-display"><div class="dow" id="dayDow"></div><div class="date" id="dayDate"></div></div>
+        <button id="nextDay">›</button>
+      </div>
+      <div class="quote" id="quoteBox"></div>
+      <div id="curioBox"></div>
+      <div id="matchList"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== PIE ===== -->
+  <footer>
+    <div class="wrap">
+      <div>🐾 <b>La Perraza</b> · 81 porristas, un solo trofeo · Mundial USA / México / Canadá 2026</div>
+    </div>
+  </footer>
+
+  <!-- ===== MODAL (jugador / apuestas por partido) ===== -->
+  <div class="modal-bg" id="modalBg"><div class="modal" id="modalContent"></div></div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* ===========================================================
+   players.css — grid de porristas, fichas, podios, perfiles
+   =========================================================== */
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+
+.pcard{
+  background:linear-gradient(165deg,var(--card2),var(--card));
+  border:1px solid var(--line);border-radius:18px;padding:18px;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:transform .18s,border-color .18s,box-shadow .18s;
+}
+.pcard:hover{
+  transform:translateY(-4px);
+  border-color:rgba(242,193,78,.4);
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
+}
+.pcard::before{
+  content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,193,78,.12),transparent 70%);
+}
+
+.pcard-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:10px;margin-bottom:14px;
+}
+.pname{
+  font-family:'Anton';font-weight:400;font-size:22px;letter-spacing:.4px;
+  line-height:1.04;text-transform:uppercase;
+}
+
+/* ===== Badges de perfil ===== */
+.badge{
+  font-family:'Space Mono';font-size:10px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;padding:5px 9px;border-radius:8px;white-space:nowrap;flex-shrink:0;
+}
+.b-conservador{background:rgba(47,184,154,.14);color:var(--teal);border:1px solid rgba(47,184,154,.3)}
+.b-atrevido{background:rgba(236,77,42,.14);color:var(--coral-soft);border:1px solid rgba(236,77,42,.35)}
+.b-equilibrista{background:rgba(242,193,78,.13);color:var(--gold);border:1px solid rgba(242,193,78,.3)}
+.b-soldado{background:rgba(120,144,156,.16);color:#9fb4c0;border:1px solid rgba(120,144,156,.35)}
+.b-kompany{background:rgba(236,77,42,.2);color:#ffb38f;border:1px solid rgba(236,77,42,.5)}
+.b-gold{background:rgba(242,193,78,.13);color:var(--gold);border:1px solid rgba(242,193,78,.32)}
+.b-coral{background:rgba(236,77,42,.14);color:var(--coral-soft);border:1px solid rgba(236,77,42,.35)}
+.b-teal{background:rgba(47,184,154,.14);color:var(--teal);border:1px solid rgba(47,184,154,.32)}
+.b-slate{background:rgba(120,144,156,.16);color:#9fb4c0;border:1px solid rgba(120,144,156,.35)}
+.b-violet{background:rgba(150,120,210,.16);color:#c4b1ec;border:1px solid rgba(150,120,210,.4)}
+.b-green{background:rgba(86,176,98,.15);color:#86d28f;border:1px solid rgba(86,176,98,.38)}
+.b-red{background:rgba(214,69,55,.18);color:#ff9a82;border:1px solid rgba(214,69,55,.45)}
+.b-blue{background:rgba(86,140,224,.16);color:#9cc0ff;border:1px solid rgba(86,140,224,.4)}
+
+/* ===== Podio + filas de premios ===== */
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:13px}
+.podium .slot{background:rgba(0,0,0,.22);border-radius:10px;padding:9px 7px;text-align:center}
+.podium .medal{font-size:15px;line-height:1}
+.podium .team{font-weight:700;font-size:12.5px;margin-top:3px;line-height:1.1}
+.podium .role{
+  font-size:9px;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--cream-dim);margin-top:2px;
+}
+
+.prow{display:flex;gap:8px;font-size:12.5px;margin-top:7px}
+.prow .ic{opacity:.75}
+.prow .k{color:var(--cream-dim);min-width:74px}
+.prow .v{font-weight:600}
+
+/* ===== Pedrada (apuesta atrevida) ===== */
+.pedrada{
+  margin-top:13px;padding:11px 12px;border-radius:11px;
+  background:linear-gradient(120deg,rgba(236,77,42,.13),rgba(242,193,78,.07));
+  border:1px solid rgba(236,77,42,.25);
+}
+.pedrada .lbl{
+  font-family:'Space Mono';font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--coral-soft);display:flex;align-items:center;gap:5px;
+}
+.pedrada .txt{font-size:13px;font-weight:600;margin-top:4px;line-height:1.3}
+.pedrada .share{font-size:11px;color:var(--cream-dim);margin-top:3px;font-family:'Space Mono'}
+
+.profile-line{
+  margin-top:12px;font-size:12.5px;color:var(--cream-dim);line-height:1.45;
+  border-top:1px dashed var(--line);padding-top:11px;
+}
+.profile-line b{color:var(--cream)}
+.profile-crit{font-size:11.5px;color:var(--cream-dim);font-family:'Space Mono';margin-top:2px}

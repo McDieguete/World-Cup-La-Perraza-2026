@@ -1,0 +1,11 @@
+/* ===========================================================
+   footer.css — pie de página
+   =========================================================== */
+
+footer{
+  border-top:1px solid var(--line);
+  padding:26px 0 40px;
+  color:var(--cream-dim);
+  font-size:12px;text-align:center;line-height:1.7;
+}
+footer b{color:var(--cream-dim)}

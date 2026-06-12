@@ -1,0 +1,24 @@
+/* ===========================================================
+   search.css — barra de búsqueda y contador de resultados
+   =========================================================== */
+
+.searchbar{position:relative;margin-bottom:22px}
+.searchbar input{
+  width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;
+  color:var(--cream);font-family:'Outfit';font-size:16px;padding:16px 16px 16px 50px;
+  outline:none;transition:border .2s,box-shadow .2s;
+}
+.searchbar input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(242,193,78,.13);
+}
+.searchbar input::placeholder{color:var(--cream-dim)}
+.searchbar .mag{
+  position:absolute;left:18px;top:50%;transform:translateY(-50%);
+  font-size:18px;opacity:.7;
+}
+
+.count-pill{font-family:'Space Mono';font-size:12px;color:var(--cream-dim);margin:0 2px 18px}
+.count-pill b{color:var(--gold)}
+
+.no-res{text-align:center;color:var(--cream-dim);padding:50px;font-size:15px}

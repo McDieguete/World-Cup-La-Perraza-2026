@@ -1,0 +1,213 @@
+/* ===========================================================
+   recompute.js — Recálculo de DATA.clasif.series, result_exact, etc.
+   --------------------------------------------------------------
+   Toma el objeto DATA tal cual está en js/data.js y, a partir de
+   los resultados ya cargados en:
+     · DATA.matchdays[date][i].result            (fase de grupos)
+     · DATA.ko_results [{round, home, away, gh, ga}]  (eliminatorias)
+     · DATA.actual_qualifiers {r32,r16,qf,sf,thirdPlace,final}
+     · DATA.actual_awards    {champion,runnerup,third,balon_*,bota_*}
+   recompone:
+     · DATA.matchdays[date][i].result_exact       (cuántos lo clavaron)
+     · DATA.clasif.series[playerName]             (acumulado por día/fase)
+     · DATA.clasif.last_day                       (último índice con datos)
+     · DATA.clasif.started                        (true si hay algo)
+
+   Es una función pura: mismo DATA in → mismo DATA out (mutado).
+   =========================================================== */
+
+'use strict';
+
+const {
+  QUALIFIER_POINTS, AWARD_POINTS, PHASE_KEY,
+  parsePred, parseScore, predictionPoints
+} = require('./scoring');
+
+/** Punto de entrada principal. Muta y devuelve el mismo DATA. */
+function recompute(DATA) {
+  ensureSlots(DATA);
+
+  const dayKeys = DATA.clasif.day_keys;
+  const dayLabels = DATA.clasif.day_labels;
+  const players = DATA.players;
+
+  // Índice rápido: nombre del partido de grupo → posición en bets.gp
+  const gpIdxByName = {};
+  (DATA.gp_matches || []).forEach((g, i) => { gpIdxByName[g.name] = i; });
+
+  // delta[playerName][dayIdx] = puntos ganados ESE día/fase
+  const delta = {};
+  players.forEach(p => { delta[p.name] = new Array(dayKeys.length).fill(0); });
+
+  // -------- 1) Fase de grupos: puntos por partido en su fecha --------
+  let groupMatchesPlayed = 0;
+  const totalGroupMatches = (DATA.gp_matches || []).length;
+  const seenResultExactByName = {};
+
+  Object.entries(DATA.matchdays || {}).forEach(([dateKey, matches]) => {
+    const dayIdx = dayKeys.indexOf(dateKey);
+    if (dayIdx < 0) return;
+    matches.forEach(mc => {
+      const actual = parseScore(mc.result);
+      if (!actual) return;
+      const gpIdx = gpIdxByName[mc.name];
+      if (gpIdx == null) return;  // partido no es de grupos (no debería pasar con datos limpios)
+      groupMatchesPlayed++;
+
+      let exactCount = 0;
+      players.forEach(p => {
+        const pred = parsePred(p.bets && p.bets.gp ? p.bets.gp[gpIdx] : null);
+        const pts = predictionPoints('group', pred, actual, !!mc.triple);
+        if (pts) delta[p.name][dayIdx] += pts;
+        if (pred && pred.gh === actual.gh && pred.ga === actual.ga) exactCount++;
+      });
+      mc.result_exact = exactCount;
+      seenResultExactByName[mc.name] = exactCount;
+    });
+  });
+
+  // -------- 2) Eliminatorias: puntos por partido en su fase --------
+  (DATA.ko_results || []).forEach(ko => {
+    const round = ko.round;
+    const phase = PHASE_KEY[round];
+    if (!phase) return;
+    const phaseIdx = dayKeys.indexOf(phase);
+    if (phaseIdx < 0) return;
+    const actual = { gh: +ko.gh, ga: +ko.ga };
+    if (!Number.isFinite(actual.gh) || !Number.isFinite(actual.ga)) return;
+
+    players.forEach(p => {
+      const pred = matchKoPrediction(p, ko);
+      const pts = predictionPoints(round, pred, actual, false);
+      if (pts) delta[p.name][phaseIdx] += pts;
+    });
+  });
+
+  // -------- 3) "Equipo clasificado a X" --------
+  // a) r32 (a 1/16) → se otorga el día del último partido de grupos
+  if (groupMatchesPlayed >= totalGroupMatches && totalGroupMatches > 0) {
+    const lastGroupDay = lastGroupDateIdx(DATA, dayKeys);
+    if (lastGroupDay >= 0 && DATA.actual_qualifiers && DATA.actual_qualifiers.r32) {
+      addQualifierPoints(players, delta, lastGroupDay, 'r32', DATA.actual_qualifiers.r32);
+    }
+  }
+  // b) r16, qf, sf, final, thirdPlace → cada uno en su PHASE_KEY
+  ['r16', 'qf', 'sf', 'thirdPlace', 'final'].forEach(key => {
+    const phaseKey = PHASE_KEY[phaseForQualifier(key)];
+    const idx = dayKeys.indexOf(phaseKey);
+    if (idx < 0) return;
+    const list = DATA.actual_qualifiers && DATA.actual_qualifiers[key];
+    if (!list || !list.length) return;
+    addQualifierPoints(players, delta, idx, key, list);
+  });
+
+  // -------- 4) Premios finales (campeón, balón, bota) --------
+  const awards = DATA.actual_awards || {};
+  const finalIdx = dayKeys.indexOf('ph_Final');
+  if (finalIdx >= 0) {
+    players.forEach(p => {
+      if (awards.champion && p.champion === awards.champion) delta[p.name][finalIdx] += AWARD_POINTS.champion;
+      if (awards.runnerup && p.runnerup === awards.runnerup) delta[p.name][finalIdx] += AWARD_POINTS.runnerup;
+      if (awards.third    && p.third    === awards.third)    delta[p.name][finalIdx] += AWARD_POINTS.third;
+
+      const aw = (p.bets && p.bets.awards) || {};
+      ['balon_oro','balon_plata','balon_bronce','bota_oro','bota_plata','bota_bronce'].forEach(k => {
+        if (awards[k] && aw[k] === awards[k]) delta[p.name][finalIdx] += AWARD_POINTS[k];
+      });
+    });
+  }
+
+  // -------- 5) Acumular delta → series + last_day + started --------
+  let lastWithData = 0;
+  players.forEach(p => {
+    const arr = delta[p.name];
+    const series = new Array(dayKeys.length).fill(0);
+    let acc = 0;
+    for (let i = 0; i < dayKeys.length; i++) {
+      acc += arr[i];
+      series[i] = acc;
+    }
+    DATA.clasif.series[p.name] = series;
+  });
+
+  for (let i = dayKeys.length - 1; i >= 0; i--) {
+    if (players.some(p => delta[p.name][i] > 0)) { lastWithData = i; break; }
+  }
+
+  DATA.clasif.last_day = lastWithData;
+  DATA.clasif.started = lastWithData > 0 || players.some(p => DATA.clasif.series[p.name].some(v => v > 0));
+
+  return DATA;
+}
+
+/* ===== Helpers ===== */
+
+function ensureSlots(DATA) {
+  if (!DATA.ko_results) DATA.ko_results = [];
+  if (!DATA.actual_qualifiers) DATA.actual_qualifiers = {};
+  if (!DATA.actual_awards) DATA.actual_awards = {};
+  if (!DATA.clasif) throw new Error('DATA.clasif no existe — revisa el dataset');
+  if (!Array.isArray(DATA.clasif.day_keys) || !DATA.clasif.day_keys.length) {
+    throw new Error('DATA.clasif.day_keys vacío');
+  }
+}
+
+/** Devuelve la última fecha (YYYY-MM-DD) presente en DATA.matchdays
+ *  y la traduce al índice de day_keys. -1 si no hay coincidencia. */
+function lastGroupDateIdx(DATA, dayKeys) {
+  const dates = Object.keys(DATA.matchdays || {}).sort();
+  for (let j = dates.length - 1; j >= 0; j--) {
+    const idx = dayKeys.indexOf(dates[j]);
+    if (idx >= 0) return idx;
+  }
+  return -1;
+}
+
+/** Mapea la clave de "equipo clasificado a X" a la fase que la cierra.
+ *  Ej.: r16 (predicción de octavos) se confirma cuando termina r32 (1/16). */
+function phaseForQualifier(key) {
+  return ({
+    r16:        'r32',
+    qf:         'r16',
+    sf:         'quarters',
+    thirdPlace: 'semis',
+    final:      'semis'
+  })[key];
+}
+
+/** Añade los puntos de "Equipo clasificado a X" al delta del día indicado. */
+function addQualifierPoints(players, delta, dayIdx, key, actualList) {
+  const set = new Set(actualList);
+  const pts = QUALIFIER_POINTS[key];
+  players.forEach(p => {
+    const picks = (p.bets && p.bets[key]) || [];
+    let hits = 0;
+    picks.forEach(team => { if (set.has(team)) hits++; });
+    if (hits) delta[p.name][dayIdx] += hits * pts;
+  });
+}
+
+/** Busca la predicción KO del player que corresponde al partido real `ko`.
+ *  Estrategia: matchea por enfrentamiento exacto (home-away o away-home). */
+function matchKoPrediction(p, ko) {
+  if (!p.bets || !Array.isArray(p.bets.ko)) return null;
+  const a = ko.home, b = ko.away;
+  for (const k of p.bets.ko) {
+    if (!k || !k.match) continue;
+    const m = k.match.split('-');
+    if (m.length !== 2) continue;
+    const [h, w] = m.map(s => s.trim());
+    if ((h === a && w === b) || (h === b && w === a)) {
+      // Si están del revés, hay que invertir signo y marcador
+      if (h === a) {
+        return { signo: k.signo, gh: k.gh, ga: k.ga };
+      } else {
+        const flippedSign = k.signo === '1' ? '2' : (k.signo === '2' ? '1' : 'X');
+        return { signo: flippedSign, gh: k.ga, ga: k.gh };
+      }
+    }
+  }
+  return null;
+}
+
+module.exports = { recompute };

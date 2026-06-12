@@ -1,0 +1,15 @@
+{
+  "name": "la-perraza-mundial-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web de seguimiento de la porra del Mundial 2026 (estático) + scripts Node para auto-actualizar resultados desde football-data.org.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "update":  "node scripts/update-results.js",
+    "dry-run": "DRY_RUN=1 node scripts/update-results.js",
+    "verify":  "node scripts/verify-scoring.js",
+    "serve":   "powershell -ExecutionPolicy Bypass -File .serve.ps1"
+  }
+}

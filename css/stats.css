@@ -1,0 +1,99 @@
+/* ===========================================================
+   stats.css — bloques de estadísticas, tablas, barras y curiosidades
+   =========================================================== */
+
+.stat-block{margin-bottom:40px}
+.stat-block h3{
+  font-family:'Anton';font-weight:400;font-size:22px;text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:4px;
+}
+.stat-block .sub{color:var(--cream-dim);font-size:13.5px;margin-bottom:16px;line-height:1.5}
+
+/* ===== Tabla "hasta dónde llega cada selección" ===== */
+.adv-table{
+  width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  border-collapse:collapse;font-size:13.5px;
+}
+.adv-table th,.adv-table td{padding:11px 8px;text-align:center}
+.adv-table thead th{
+  background:var(--pitch);font-family:'Space Mono';font-size:10.5px;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--line);
+}
+.adv-table th.tname,.adv-table td.tname{text-align:left;font-weight:700;padding-left:16px}
+.adv-table tbody tr{border-bottom:1px solid rgba(245,239,226,.06)}
+.adv-table tbody tr:hover{background:rgba(242,193,78,.05)}
+.adv-table .rank{color:var(--cream-dim);font-family:'Space Mono';font-size:11px;width:30px}
+
+.cellbar{position:relative;display:inline-block;min-width:30px}
+.heat{
+  display:inline-block;padding:3px 9px;border-radius:7px;
+  font-family:'Space Mono';font-weight:700;font-size:12.5px;
+}
+.table-scroll{overflow-x:auto;border-radius:16px}
+
+/* ===== Dos columnas ===== */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.two-col{grid-template-columns:1fr}}
+
+/* ===== Listas de barras ===== */
+.barlist{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.barrow{margin-bottom:13px}
+.barrow:last-child{margin-bottom:0}
+.barrow .top{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:5px}
+.barrow .top .name{font-weight:600}
+.barrow .top .name .pos{font-family:'Space Mono';color:var(--cream-dim);margin-right:7px;font-size:12px}
+.barrow .top .val{font-family:'Space Mono';color:var(--gold);font-weight:700}
+.track{height:9px;background:rgba(0,0,0,.3);border-radius:6px;overflow:hidden}
+.fill{
+  height:100%;border-radius:6px;
+  background:linear-gradient(90deg,var(--gold-deep),var(--gold));
+  transition:width 1s cubic-bezier(.2,.8,.2,1);
+}
+.fill.coral{background:linear-gradient(90deg,#b8341a,var(--coral))}
+.fill.teal{background:linear-gradient(90deg,#017a04,var(--teal))}
+
+/* ===== Patitos feos ===== */
+.worst-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.worst-card{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:14px;text-align:center;position:relative;
+}
+.worst-card .rk{
+  position:absolute;top:8px;left:10px;
+  font-family:'Space Mono';font-size:11px;color:var(--cream-dim);
+}
+.worst-card .tm{font-family:'Anton';font-size:17px;text-transform:uppercase;margin-top:6px;line-height:1.05}
+.worst-card .v{font-family:'Space Mono';font-size:12px;color:var(--coral-soft);margin-top:5px}
+.worst-card .v b{color:var(--cream)}
+
+/* ===== Cifras clave (tabla) ===== */
+.facts-table{width:100%;border-collapse:collapse;font-size:14.5px}
+.facts-table td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.facts-table tr td:first-child{color:var(--cream-dim);width:48%}
+.facts-table tr td:last-child{font-weight:600;color:var(--cream)}
+.facts-table td.big{color:var(--gold)}
+.facts-table tr:hover{background:rgba(255,255,255,.03)}
+
+/* ===== Sorpresas y apuestas arriesgadas ===== */
+.surp-row{
+  display:flex;align-items:center;gap:10px;padding:10px 2px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap;
+}
+.surp-row .st-team{font-weight:700;min-width:115px}
+.surp-row .st-cat{
+  font-size:11px;padding:2px 9px;border-radius:20px;
+  background:rgba(255,255,255,.06);color:var(--cream-dim);
+}
+.surp-row .st-val{
+  margin-left:auto;font-family:'Space Mono',monospace;
+  font-size:12px;color:var(--gold);
+}
+
+.risk-list{display:flex;flex-direction:column;gap:11px}
+.risk-card{
+  background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--coral);
+  border-radius:11px;padding:12px 15px;
+}
+.risk-card .rk-bet{font-weight:800;color:var(--coral-soft);letter-spacing:.2px}
+.risk-card .rk-who{font-size:12.5px;color:var(--gold);margin:3px 0 5px;font-weight:600}
+.risk-card .rk-why{font-size:13px;color:var(--cream-dim);line-height:1.5}

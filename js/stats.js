@@ -12,10 +12,12 @@
   const adv = DATA.stats.advancement;
 
   function heatColor(v) {
+    /* Heatmap en azul USA (#1A4FB8) — más claro = más votos.
+       Color del texto cambia a blanco en el rango alto para contraste AA. */
     const r = v / N;
-    if (v === 0) return 'background:rgba(255,255,255,.03);color:var(--cream-dim)';
+    if (v === 0) return 'background:#F4F5F7;color:#6B7280';
     const a = 0.12 + r * 0.78;
-    return `background:rgba(254,221,0,${a.toFixed(2)});color:${r>0.45?'#1a0f06':'var(--cream)'}`;
+    return `background:rgba(26,79,184,${a.toFixed(2)});color:${r>0.5?'#FFFFFF':'#15163A'}`;
   }
 
   let html = `<thead><tr><th class="rank"></th><th class="tname">Selección</th>`

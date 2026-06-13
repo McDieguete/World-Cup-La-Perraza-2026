@@ -1,84 +1,160 @@
 /* ===========================================================
-   players.css — grid de porristas, fichas, podios, perfiles
+   players.css — Grid de fichas, podios, badges, pedrada
+   --------------------------------------------------------------
+   Fichas blancas con borde fino. Cada ficha lleva una franja
+   superior de color (rota Canadá/México/USA por nth-child) como
+   detalle de collage. Badges con paleta nueva.
    =========================================================== */
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: var(--s-4);
+}
 
 .pcard{
-  background:linear-gradient(165deg,var(--card2),var(--card));
-  border:1px solid var(--line);border-radius:18px;padding:18px;cursor:pointer;
-  position:relative;overflow:hidden;
-  transition:transform .18s,border-color .18s,box-shadow .18s;
-}
-.pcard:hover{
-  transform:translateY(-4px);
-  border-color:rgba(242,193,78,.4);
-  box-shadow:0 16px 40px rgba(0,0,0,.4);
+  position: relative;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-5) var(--s-5) var(--s-4);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform .18s, border-color .18s, box-shadow .18s;
 }
 .pcard::before{
-  content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;
-  background:radial-gradient(circle,rgba(242,193,78,.12),transparent 70%);
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: var(--c-navy);
+}
+.pcard:nth-child(3n+1)::before{background: var(--c-canada)}
+.pcard:nth-child(3n+2)::before{background: var(--c-mexico)}
+.pcard:nth-child(3n)::before  {background: var(--c-usa)}
+.pcard:hover{
+  transform: translateY(-3px);
+  border-color: var(--c-border-strong);
+  box-shadow: var(--shadow-hover);
 }
 
 .pcard-top{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  gap:10px;margin-bottom:14px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--s-3); margin-bottom: var(--s-4); padding-top: var(--s-1);
 }
 .pname{
-  font-family:'Anton';font-weight:400;font-size:22px;letter-spacing:.4px;
-  line-height:1.04;text-transform:uppercase;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -.01em;
+  line-height: 1.04;
+  text-transform: uppercase;
+  color: var(--c-navy);
 }
 
 /* ===== Badges de perfil ===== */
 .badge{
-  font-family:'Space Mono';font-size:10px;font-weight:700;letter-spacing:.5px;
-  text-transform:uppercase;padding:5px 9px;border-radius:8px;white-space:nowrap;flex-shrink:0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.b-conservador{background:rgba(47,184,154,.14);color:var(--teal);border:1px solid rgba(47,184,154,.3)}
-.b-atrevido{background:rgba(236,77,42,.14);color:var(--coral-soft);border:1px solid rgba(236,77,42,.35)}
-.b-equilibrista{background:rgba(242,193,78,.13);color:var(--gold);border:1px solid rgba(242,193,78,.3)}
-.b-soldado{background:rgba(120,144,156,.16);color:#9fb4c0;border:1px solid rgba(120,144,156,.35)}
-.b-kompany{background:rgba(236,77,42,.2);color:#ffb38f;border:1px solid rgba(236,77,42,.5)}
-.b-gold{background:rgba(242,193,78,.13);color:var(--gold);border:1px solid rgba(242,193,78,.32)}
-.b-coral{background:rgba(236,77,42,.14);color:var(--coral-soft);border:1px solid rgba(236,77,42,.35)}
-.b-teal{background:rgba(47,184,154,.14);color:var(--teal);border:1px solid rgba(47,184,154,.32)}
-.b-slate{background:rgba(120,144,156,.16);color:#9fb4c0;border:1px solid rgba(120,144,156,.35)}
-.b-violet{background:rgba(150,120,210,.16);color:#c4b1ec;border:1px solid rgba(150,120,210,.4)}
-.b-green{background:rgba(86,176,98,.15);color:#86d28f;border:1px solid rgba(86,176,98,.38)}
-.b-red{background:rgba(214,69,55,.18);color:#ff9a82;border:1px solid rgba(214,69,55,.45)}
-.b-blue{background:rgba(86,140,224,.16);color:#9cc0ff;border:1px solid rgba(86,140,224,.4)}
+/* Familia legacy (b-conservador, b-atrevido, …) remapeada a tricolor + navy + gold */
+.b-conservador{background: var(--c-mexico-soft); color: var(--c-mexico); border: 1px solid rgba(0,135,62,.3)}
+.b-atrevido   {background: var(--c-canada-soft); color: var(--c-canada); border: 1px solid rgba(226,35,26,.3)}
+.b-equilibrista{background: var(--c-gold-soft);  color: var(--c-gold);   border: 1px solid rgba(201,162,39,.35)}
+.b-soldado    {background: var(--c-navy-soft);   color: var(--c-navy);   border: 1px solid var(--c-border-strong)}
+.b-kompany    {background: var(--c-canada-soft); color: var(--c-canada); border: 1px solid rgba(226,35,26,.4)}
 
-/* ===== Podio + filas de premios ===== */
-.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:13px}
-.podium .slot{background:rgba(0,0,0,.22);border-radius:10px;padding:9px 7px;text-align:center}
-.podium .medal{font-size:15px;line-height:1}
-.podium .team{font-weight:700;font-size:12.5px;margin-top:3px;line-height:1.1}
+/* Familia nueva (b-gold, b-coral, …) usada por players.js */
+.b-gold  {background: var(--c-gold-soft);   color: var(--c-gold);   border: 1px solid rgba(201,162,39,.35)}
+.b-coral {background: var(--c-canada-soft); color: var(--c-canada); border: 1px solid rgba(226,35,26,.3)}
+.b-teal  {background: var(--c-mexico-soft); color: var(--c-mexico); border: 1px solid rgba(0,135,62,.3)}
+.b-slate {background: var(--c-navy-soft);   color: var(--c-navy);   border: 1px solid var(--c-border-strong)}
+.b-violet{background: var(--c-usa-soft);    color: var(--c-usa);    border: 1px solid rgba(26,79,184,.3)}
+.b-green {background: var(--c-mexico-soft); color: var(--c-mexico); border: 1px solid rgba(0,135,62,.3)}
+.b-red   {background: var(--c-canada-soft); color: var(--c-canada); border: 1px solid rgba(226,35,26,.3)}
+.b-blue  {background: var(--c-usa-soft);    color: var(--c-usa);    border: 1px solid rgba(26,79,184,.3)}
+
+/* ===== Podio ===== */
+.podium{display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); margin-bottom: var(--s-3)}
+.podium .slot{
+  background: var(--c-surface);
+  border-radius: var(--r-md);
+  padding: var(--s-2) var(--s-2);
+  text-align: center;
+}
+.podium .medal{font-size: 16px; line-height: 1}
+.podium .team{
+  font-weight: 700; font-size: 13px;
+  margin-top: 3px; line-height: 1.15;
+  color: var(--c-navy);
+}
 .podium .role{
-  font-size:9px;letter-spacing:.5px;text-transform:uppercase;
-  color:var(--cream-dim);margin-top:2px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+  margin-top: 2px;
 }
 
-.prow{display:flex;gap:8px;font-size:12.5px;margin-top:7px}
-.prow .ic{opacity:.75}
-.prow .k{color:var(--cream-dim);min-width:74px}
-.prow .v{font-weight:600}
+/* Filas de premio (Balón, Bota…) */
+.prow{
+  display: flex; gap: var(--s-2);
+  font-size: 13px;
+  margin-top: var(--s-2);
+}
+.prow .ic{opacity: .85}
+.prow .k{color: var(--c-text-soft); min-width: 80px}
+.prow .v{font-weight: 600; color: var(--c-navy)}
 
 /* ===== Pedrada (apuesta atrevida) ===== */
 .pedrada{
-  margin-top:13px;padding:11px 12px;border-radius:11px;
-  background:linear-gradient(120deg,rgba(236,77,42,.13),rgba(242,193,78,.07));
-  border:1px solid rgba(236,77,42,.25);
+  margin-top: var(--s-3);
+  padding: var(--s-3) var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--c-canada-soft);
+  border-left: 3px solid var(--c-canada);
 }
 .pedrada .lbl{
-  font-family:'Space Mono';font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--coral-soft);display:flex;align-items:center;gap:5px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-canada);
+  font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
 }
-.pedrada .txt{font-size:13px;font-weight:600;margin-top:4px;line-height:1.3}
-.pedrada .share{font-size:11px;color:var(--cream-dim);margin-top:3px;font-family:'Space Mono'}
+.pedrada .txt{
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 4px;
+  line-height: 1.35;
+  color: var(--c-navy);
+}
+.pedrada .share{
+  font-size: 11px;
+  color: var(--c-text-soft);
+  margin-top: 3px;
+  font-family: var(--font-mono);
+}
 
 .profile-line{
-  margin-top:12px;font-size:12.5px;color:var(--cream-dim);line-height:1.45;
-  border-top:1px dashed var(--line);padding-top:11px;
+  margin-top: var(--s-3);
+  font-size: 13px;
+  color: var(--c-text-soft);
+  line-height: 1.5;
+  border-top: 1px dashed var(--c-border);
+  padding-top: var(--s-3);
 }
-.profile-line b{color:var(--cream)}
-.profile-crit{font-size:11.5px;color:var(--cream-dim);font-family:'Space Mono';margin-top:2px}
+.profile-line b{color: var(--c-navy); font-weight: 700}
+.profile-crit{
+  font-size: 11.5px;
+  color: var(--c-text-soft);
+  font-family: var(--font-mono);
+  margin-top: var(--s-1);
+}

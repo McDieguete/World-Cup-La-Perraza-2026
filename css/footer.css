@@ -1,11 +1,24 @@
 /* ===========================================================
-   footer.css — pie de página
+   footer.css — Pie de página
    =========================================================== */
 
 footer{
-  border-top:1px solid var(--line);
-  padding:26px 0 40px;
-  color:var(--cream-dim);
-  font-size:12px;text-align:center;line-height:1.7;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface);
+  padding: var(--s-6) 0 var(--s-7);
+  color: var(--c-text-soft);
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.7;
+  position: relative;
 }
-footer b{color:var(--cream-dim)}
+/* Banda tricolor pequeña arriba del footer */
+footer::before{
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg,
+    var(--c-canada) 0 33.33%,
+    var(--c-mexico) 33.33% 66.66%,
+    var(--c-usa)    66.66% 100%);
+}
+footer b{color: var(--c-navy); font-weight: 700}

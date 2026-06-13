@@ -5,9 +5,11 @@
 const CL = DATA.clasif;
 let clasShowAll = false;
 
+/* Paleta del gráfico — inspirada en la identidad tricolor del Mundial
+   (rojo Canadá, verde México, azul USA, navy + acento dorado). */
 const CHART_COLORS = [
-  '#f2c14e', '#ec4d2a', '#2fb89a', '#9cc0ff', '#c4b1ec',
-  '#86d28f', '#ff9a82', '#e0a92e', '#8a93a0', '#ffd98a'
+  '#E2231A', '#1A4FB8', '#00873E', '#C9A227', '#15163A',
+  '#9aa0c7', '#ff7264', '#5b86d4', '#5db983', '#e0c46a'
 ];
 
 function lastDataIdx() {
@@ -57,7 +59,7 @@ function buildChart(selNames) {
   for (let g = 0; g <= 5; g++) {
     const gy = padT + plotH - g * plotH / 5;
     const val = Math.round(niceMax * g / 5);
-    grid += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="rgba(245,239,226,.08)"/><text x="${padL-8}" y="${gy+4}" text-anchor="end" font-size="10" fill="var(--cream-dim)" font-family="Space Mono">${val}</text>`;
+    grid += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="rgba(21,22,58,.08)"/><text x="${padL-8}" y="${gy+4}" text-anchor="end" font-size="10" fill="#6B7280" font-family="JetBrains Mono">${val}</text>`;
   }
 
   // x labels (thin out if many)
@@ -65,7 +67,7 @@ function buildChart(selNames) {
   const step = Math.ceil(D / 12);
   CL.day_labels.forEach((lb, i) => {
     if (i % step !== 0 && i !== D - 1) return;
-    xl += `<text x="${x(i)}" y="${H-padB+18}" text-anchor="middle" font-size="9.5" fill="var(--cream-dim)" font-family="Space Mono" transform="rotate(0 ${x(i)} ${H-padB+18})">${esc(lb.replace('🏁 ','').replace(' ',' '))}</text>`;
+    xl += `<text x="${x(i)}" y="${H-padB+18}" text-anchor="middle" font-size="9.5" fill="#6B7280" font-family="JetBrains Mono" transform="rotate(0 ${x(i)} ${H-padB+18})">${esc(lb.replace('🏁 ','').replace(' ',' '))}</text>`;
   });
 
   // lines
@@ -81,7 +83,7 @@ function buildChart(selNames) {
   });
 
   const overlay = !CL.started
-    ? `<text x="${padL+plotW/2}" y="${padT+plotH/2}" text-anchor="middle" font-size="13" fill="var(--cream-dim)" font-family="Space Mono">🏁 Línea de salida · todos a 0 pts</text>`
+    ? `<text x="${padL+plotW/2}" y="${padT+plotH/2}" text-anchor="middle" font-size="13" fill="#6B7280" font-family="JetBrains Mono">🏁 Línea de salida · todos a 0 pts</text>`
     : '';
   return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${xl}${lines}${overlay}</svg>`;
 }

@@ -1,27 +1,53 @@
 /* ===========================================================
-   panel.css — paneles, cabeceras de sección y animación fade
+   panel.css — Paneles, cabecera de sección y animación de entrada
    =========================================================== */
 
-.panel{display:none;padding:38px 0 90px;animation:fade .4s ease}
-.panel.active{display:block}
+.panel{display: none; padding: var(--s-7) 0 var(--s-8); animation: fade .35s ease}
+.panel.active{display: block}
 
 @keyframes fade{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:none}
+  from{opacity: 0; transform: translateY(8px)}
+  to{opacity: 1; transform: none}
 }
 
-.sec-head{margin-bottom:26px}
+.sec-head{margin-bottom: var(--s-6); position: relative}
 .sec-head h2{
-  font-family:'Anton';font-weight:400;font-size:clamp(26px,4vw,40px);
-  text-transform:uppercase;letter-spacing:.5px;line-height:1;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+  letter-spacing: -.015em;
+  color: var(--c-navy);
+  line-height: var(--lh-tight);
 }
-.sec-head h2 em{font-style:normal;color:var(--coral-soft)}
+.sec-head h2 em{
+  font-style: normal;
+  color: var(--c-canada);
+}
 .sec-head p{
-  color:var(--cream-dim);max-width:680px;margin-top:8px;
-  font-size:14.5px;line-height:1.55;
+  color: var(--c-text-soft);
+  max-width: 720px;
+  margin-top: var(--s-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
 }
 
+/* Kicker con punto cuadrado tricolor a la izquierda */
 .kicker{
-  font-family:'Space Mono';font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  color:var(--teal);display:block;margin-bottom:6px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-xwide);
+  text-transform: uppercase;
+  color: var(--c-mexico);
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: var(--s-2);
+  font-weight: 700;
+}
+.kicker::before{
+  content: "";
+  width: 14px; height: 14px;
+  background: linear-gradient(135deg,
+    var(--c-canada) 0 33.33%,
+    var(--c-mexico) 33.33% 66.66%,
+    var(--c-usa)    66.66% 100%);
 }

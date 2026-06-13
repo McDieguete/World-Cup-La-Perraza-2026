@@ -1,122 +1,274 @@
 /* ===========================================================
-   modal.css — modal genérico + modal de apuestas por partido
-                + bloque "ver toda la apuesta" desplegable
+   modal.css — Modal genérico + apuestas por partido + ver toda la apuesta
    =========================================================== */
 
 .modal-bg{
-  position:fixed;inset:0;background:rgba(5,7,6,.78);backdrop-filter:blur(6px);
-  z-index:100;display:none;align-items:center;justify-content:center;
-  padding:20px;animation:fade .25s;
+  position: fixed; inset: 0;
+  background: rgba(21,22,58,.55);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: var(--s-5);
+  animation: fade .25s;
 }
-.modal-bg.open{display:flex}
+.modal-bg.open{display: flex}
 
 .modal{
-  background:linear-gradient(165deg,var(--card2),var(--card));
-  border:1px solid rgba(242,193,78,.3);border-radius:22px;
-  max-width:480px;width:100%;padding:26px;position:relative;
-  max-height:88vh;overflow-y:auto;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-top: 6px solid var(--c-navy);
+  border-radius: var(--r-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: var(--s-6);
+  position: relative;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+/* Detalle decorativo: bandita tricolor bajo el borde superior */
+.modal::before{
+  content: "";
+  position: absolute; left: 0; right: 0; top: -1px;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--c-canada) 0 33.33%,
+    var(--c-mexico) 33.33% 66.66%,
+    var(--c-usa)    66.66% 100%);
 }
 .modal .x{
-  position:absolute;top:16px;right:16px;background:rgba(0,0,0,.3);
-  border:1px solid var(--line);color:var(--cream);
-  width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:18px;
+  position: absolute; top: 14px; right: 14px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  color: var(--c-navy);
+  width: 36px; height: 36px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: .15s;
 }
-.modal .x:hover{border-color:var(--coral);color:var(--coral-soft)}
+.modal .x:hover{
+  border-color: var(--c-canada);
+  color: var(--c-canada);
+  background: var(--c-canada-soft);
+}
 
 /* ===== Modal: apuestas por partido ===== */
-.bm-head{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;padding-right:38px}
-.bm-teams{font-family:'Anton';font-size:clamp(20px,4vw,28px);text-transform:uppercase;line-height:1.1}
-.bm-teams .vs{color:var(--cream-dim);font-size:.7em;margin:0 6px}
-.bm-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.bm-chip{
-  font-family:'Space Mono';font-size:10.5px;letter-spacing:.5px;color:var(--cream-dim);
-  background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:7px;padding:4px 9px;
+.bm-head{
+  display: flex; flex-direction: column;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+  padding-right: 40px;
 }
-.bm-chip.trip{color:var(--gold);border-color:rgba(254,221,0,.4);background:rgba(254,221,0,.08)}
+.bm-teams{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(20px, 4vw, 28px);
+  text-transform: uppercase;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  color: var(--c-navy);
+}
+.bm-teams .vs{color: var(--c-text-soft); font-size: .7em; margin: 0 6px}
+.bm-meta{display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap}
+.bm-chip{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .03em;
+  color: var(--c-text-soft);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 4px 9px;
+  font-weight: 600;
+}
+.bm-chip.trip{
+  color: var(--c-gold);
+  border-color: var(--c-gold);
+  background: var(--c-gold-soft);
+}
 
 .bm-summary{
-  font-size:12px;color:var(--cream-dim);font-family:'Space Mono';
-  margin-bottom:14px;text-align:center;
+  font-size: 12px;
+  color: var(--c-text-soft);
+  font-family: var(--font-mono);
+  margin-bottom: var(--s-3);
+  text-align: center;
+  background: var(--c-surface);
+  padding: var(--s-2);
+  border-radius: var(--r-sm);
 }
-.bm-group{margin-bottom:16px}
-.bm-group h4{
-  font-family:'Space Mono';font-size:11px;letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:9px;padding-bottom:6px;border-bottom:1px dashed var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.bm-group.home h4{color:var(--gold)}
-.bm-group.draw h4{color:#9fb4c0}
-.bm-group.away h4{color:var(--coral-soft)}
-.bm-group h4 .cnt{font-size:11px;opacity:.8}
+.bm-summary b{color: var(--c-navy); font-weight: 700}
 
-.bm-rows{display:grid;grid-template-columns:1fr;gap:5px}
-@media(min-width:480px){.bm-rows{grid-template-columns:1fr 1fr}}
+.bm-group{margin-bottom: var(--s-4)}
+.bm-group h4{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--s-2);
+  padding-bottom: 6px;
+  border-bottom: 2px solid;
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 700;
+}
+.bm-group.home h4{color: var(--c-canada); border-color: var(--c-canada)}
+.bm-group.draw h4{color: #6b7480;        border-color: #cfd3d8}
+.bm-group.away h4{color: var(--c-usa);    border-color: var(--c-usa)}
+.bm-group h4 .cnt{font-size: 11px; opacity: .9; font-weight: 600}
+
+.bm-rows{display: grid; grid-template-columns: 1fr; gap: 5px}
+@media(min-width: 480px){.bm-rows{grid-template-columns: 1fr 1fr}}
 
 .bm-row{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  background:rgba(0,0,0,.18);border-radius:8px;padding:7px 11px;font-size:12.5px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2);
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  padding: 7px 11px;
+  font-size: 12.5px;
 }
-.bm-row .pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bm-row .rs{font-family:'Space Mono';font-weight:700;white-space:nowrap}
-.bm-group.home .bm-row .rs{color:var(--gold)}
-.bm-group.draw .bm-row .rs{color:#9fb4c0}
-.bm-group.away .bm-row .rs{color:var(--coral-soft)}
-.bm-row.topres{border:1px solid rgba(0,182,166,.4);background:rgba(0,182,166,.07)}
-.bm-empty{font-size:12px;color:var(--cream-dim);font-style:italic;padding:4px 2px}
+.bm-row .pn{
+  flex: 1; min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--c-navy);
+  font-weight: 500;
+}
+.bm-row .rs{font-family: var(--font-mono); font-weight: 700; white-space: nowrap}
+.bm-group.home .bm-row .rs{color: var(--c-canada)}
+.bm-group.draw .bm-row .rs{color: #6b7480}
+.bm-group.away .bm-row .rs{color: var(--c-usa)}
+.bm-row.topres{
+  border: 1px solid var(--c-gold);
+  background: var(--c-gold-soft);
+}
+.bm-empty{
+  font-size: 12px;
+  color: var(--c-text-soft);
+  font-style: italic;
+  padding: 4px 2px;
+}
 
 /* ===== Botón "Ver toda la apuesta" + bloque expandible ===== */
 .expand-btn{
-  width:100%;margin-top:16px;
-  background:linear-gradient(120deg,rgba(242,193,78,.14),rgba(236,77,42,.1));
-  border:1px solid rgba(242,193,78,.3);color:var(--gold);
-  font-family:'Outfit';font-weight:700;font-size:14px;
-  padding:13px;border-radius:12px;cursor:pointer;transition:.18s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
+  width: 100%;
+  margin-top: var(--s-4);
+  background: var(--c-navy);
+  border: 1.5px solid var(--c-navy);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 13px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: .18s;
+  display: flex; align-items: center; justify-content: center;
+  gap: var(--s-2);
 }
 .expand-btn:hover{
-  border-color:var(--gold);
-  background:linear-gradient(120deg,rgba(242,193,78,.22),rgba(236,77,42,.16));
+  background: var(--c-bg);
+  color: var(--c-navy);
 }
-.expand-btn .pm{font-size:18px;font-weight:800}
+.expand-btn .pm{font-size: 18px; font-weight: 900}
 
-.full-bets{margin-top:14px;display:none;animation:fade .3s}
-.full-bets.open{display:block}
+.full-bets{margin-top: var(--s-3); display: none; animation: fade .3s}
+.full-bets.open{display: block}
 
-.fb-block{margin-bottom:16px}
+.fb-block{margin-bottom: var(--s-4)}
 .fb-block h4{
-  font-family:'Space Mono';font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:9px;border-bottom:1px dashed var(--line);padding-bottom:6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-navy);
+  margin-bottom: var(--s-2);
+  border-bottom: 2px solid var(--c-canada);
+  padding-bottom: 6px;
+  font-weight: 700;
 }
 
-.chiprow{display:flex;flex-wrap:wrap;gap:6px}
+.chiprow{display: flex; flex-wrap: wrap; gap: 6px}
 .tchip{
-  background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;
-  padding:5px 9px;font-size:12px;font-weight:600;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-navy);
 }
 
-.awgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.awcol{background:rgba(0,0,0,.2);border-radius:10px;padding:10px 12px}
+.awgrid{display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2)}
+.awcol{
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
 .awcol .ti{
-  font-family:'Space Mono';font-size:10px;letter-spacing:1px;text-transform:uppercase;
-  color:var(--cream-dim);margin-bottom:5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+  margin-bottom: 5px;
+  font-weight: 700;
 }
-.awcol .rk{font-size:12.5px;margin:2px 0}
-.awcol .rk b{color:var(--gold)}
+.awcol .rk{font-size: 12.5px; margin: 2px 0; color: var(--c-navy)}
+.awcol .rk b{color: var(--c-canada); font-weight: 700}
 
-.ko-list,.gp-list{display:grid;grid-template-columns:1fr;gap:5px}
-@media(min-width:480px){.gp-list{grid-template-columns:1fr 1fr}}
+.ko-list, .gp-list{display: grid; grid-template-columns: 1fr; gap: 5px}
+@media(min-width: 480px){.gp-list{grid-template-columns: 1fr 1fr}}
 .ko-round{
-  font-family:'Space Mono';font-size:10px;letter-spacing:1px;text-transform:uppercase;
-  color:var(--teal);margin:8px 0 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-mexico);
+  margin: var(--s-2) 0 var(--s-1);
+  font-weight: 700;
 }
 
 .betrow{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-  background:rgba(0,0,0,.18);border-radius:8px;padding:6px 10px;font-size:12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2);
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--c-navy);
 }
-.betrow.trip{border:1px solid rgba(242,193,78,.4);background:rgba(242,193,78,.06)}
-.betrow .mt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.betrow .sc{font-family:'Space Mono';font-weight:700;color:var(--gold);white-space:nowrap}
-.betrow .sg{font-family:'Space Mono';font-size:10px;color:var(--cream-dim);width:14px;text-align:center}
+.betrow.trip{
+  border: 1px solid var(--c-gold);
+  background: var(--c-gold-soft);
+}
+.betrow .mt{
+  flex: 1; min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.betrow .sc{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--c-canada);
+  white-space: nowrap;
+}
+.betrow .sg{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--c-text-soft);
+  width: 14px;
+  text-align: center;
+}
 
-.tripflag{color:var(--coral-soft);font-size:10px;font-weight:700;font-family:'Space Mono'}
+.tripflag{
+  color: var(--c-gold);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}

@@ -15,6 +15,7 @@
 'use strict';
 
 const { readDataJs, writeDataJs } = require('./data-io');
+const { recompute } = require('./recompute');
 
 /* Lista canónica entregada por la comisión de la porra (18 partidos). */
 const TRIPLES = [
@@ -89,8 +90,11 @@ function main() {
     missing.forEach(k => console.log('  · ' + k.replace('||', ' vs ')));
   }
 
+  /* --- Recompute para que clasif.series quede al día con los triples --- */
+  recompute(D);
+
   const wrote = writeDataJs(D);
-  console.log(wrote ? '> js/data.js actualizado.' : '> js/data.js sin cambios.');
+  console.log(wrote ? '> js/data.js actualizado (flags + series recomputadas).' : '> js/data.js sin cambios.');
 }
 
 main();

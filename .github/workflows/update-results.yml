@@ -1,10 +1,14 @@
 name: Auto-actualizar resultados y clasificación
 
-# Cada 15 minutos durante el Mundial.
+# Aproximadamente cada 15 minutos, evitando los minutos pico de cron
+# (xx:00 / xx:15 / xx:30 / xx:45) donde GH Actions satura el free tier
+# y descarta ejecuciones. Con offset 7 (xx:07 / xx:22 / xx:37 / xx:52)
+# la ejecución es mucho más fiable.
+# Si la cadencia sigue siendo insuficiente, ver README sección "cron externo".
 # También se puede disparar a mano desde la pestaña "Actions" de GitHub.
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 
 # Permiso necesario para que el GITHUB_TOKEN pueda hacer commit/push.

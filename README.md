@@ -184,7 +184,9 @@ en `scoring.js` para que sólo haya que descomentar).
 - **Nuevos equipos / variantes de nombre**: añade entradas a
   [`scripts/team-mapping.json`](scripts/team-mapping.json). El log del cron
   imprime los equipos sin reconocer.
-- **Cambiar el cron**: edita `cron: '*/15 * * * *'` en `.github/workflows/update-results.yml`.
+- **Cambiar el cron**: edita la línea `cron:` en `.github/workflows/update-results.yml`.
+  Por defecto está `7,22,37,52 * * * *` (cada 15 min con offset 7), evita los
+  minutos pico (`*/15`) donde GitHub Actions free tier satura y descarta ejecuciones.
   Recuerda que el free tier de football-data.org es 10 req/min — no bajes de 6 min.
 - **Paleta**: `:root` en `css/base.css`.
 - **Tipografías**: Google Fonts (Anton, Outfit, Space Mono) declaradas en `<head>`.

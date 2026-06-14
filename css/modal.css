@@ -119,38 +119,184 @@
 .bm-group.away h4{color: var(--c-usa);    border-color: var(--c-usa)}
 .bm-group h4 .cnt{font-size: 11px; opacity: .9; font-weight: 600}
 
-.bm-rows{display: grid; grid-template-columns: 1fr; gap: 5px}
-@media(min-width: 480px){.bm-rows{grid-template-columns: 1fr 1fr}}
-
-.bm-row{
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--s-2);
-  background: var(--c-surface);
-  border-radius: var(--r-sm);
-  padding: 7px 11px;
-  font-size: 12.5px;
-}
-.bm-row .pn{
-  flex: 1; min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--c-navy);
-  font-weight: 500;
-}
-.bm-row .rs{font-family: var(--font-mono); font-weight: 700; white-space: nowrap}
-.bm-group.home .bm-row .rs{color: var(--c-canada)}
-.bm-group.draw .bm-row .rs{color: #6b7480}
-.bm-group.away .bm-row .rs{color: var(--c-usa)}
-.bm-row.topres{
-  border: 1px solid var(--c-gold);
-  background: var(--c-gold-soft);
-}
 .bm-empty{
   font-size: 12px;
   color: var(--c-text-soft);
   font-style: italic;
   padding: 4px 2px;
+}
+
+/* ===== Buscador de porrista dentro del modal ===== */
+.bm-search{
+  position: relative;
+  margin-bottom: var(--s-4);
+}
+.bm-search input{
+  width: 100%;
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-sm);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 36px 10px 38px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.bm-search input::placeholder{color: var(--c-text-soft)}
+.bm-search input:focus{
+  border-color: var(--c-usa);
+  box-shadow: 0 0 0 3px var(--c-usa-soft);
+}
+.bm-search-ico{
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-text-soft);
+  font-size: 15px;
+  pointer-events: none;
+}
+.bm-search-clear{
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--c-surface);
+  color: var(--c-text-soft);
+  display: none;
+  align-items: center; justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  user-select: none;
+}
+.bm-search-clear:hover{background: var(--c-canada-soft); color: var(--c-canada)}
+
+.bm-no-match{
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border-strong);
+  border-radius: var(--r-sm);
+  padding: var(--s-3);
+  text-align: center;
+  color: var(--c-text-soft);
+  font-size: 13px;
+  margin-bottom: var(--s-3);
+}
+
+/* ===== Resultado plegable ===== */
+.bm-results{display: flex; flex-direction: column; gap: 6px}
+
+.bm-result{
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: border-color .15s, background .15s;
+}
+.bm-result.topres{
+  border-color: var(--c-gold);
+  background: var(--c-gold-soft);
+}
+.bm-result.actual{
+  border-color: var(--c-mexico);
+  background: var(--c-mexico-soft);
+}
+.bm-result.search-hit{
+  border-color: var(--c-usa);
+  box-shadow: 0 0 0 2px var(--c-usa-soft);
+}
+
+.bm-result-head{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 9px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-align: left;
+  color: inherit;
+}
+.bm-result-head:hover{background: rgba(21,22,58,.04)}
+
+.bm-res-score{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 15px;
+  min-width: 42px;
+  color: var(--c-navy);
+}
+.bm-group.home .bm-res-score{color: var(--c-canada)}
+.bm-group.draw .bm-res-score{color: #6b7480}
+.bm-group.away .bm-res-score{color: var(--c-usa)}
+
+.bm-res-badge{
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+}
+.bm-res-badge.actual{
+  background: var(--c-mexico);
+  color: #fff;
+}
+.bm-res-badge.top{
+  background: var(--c-gold);
+  color: var(--c-navy);
+}
+
+.bm-res-count{
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--c-text-soft);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.bm-res-toggle{
+  font-size: 12px;
+  color: var(--c-text-soft);
+  transition: transform .18s;
+  margin-left: var(--s-2);
+}
+.bm-result.open .bm-res-toggle{transform: rotate(180deg)}
+
+.bm-result-voters{
+  display: none;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 12px 10px;
+  border-top: 1px dashed var(--c-border);
+  background: var(--c-bg);
+}
+.bm-result.open .bm-result-voters{display: flex}
+
+.bm-voter{
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  color: var(--c-navy);
+  font-weight: 500;
+}
+.bm-voter.search-match{
+  background: var(--c-gold);
+  color: var(--c-navy);
+  border-color: var(--c-gold);
+  font-weight: 700;
+}
+
+/* Chip "Final 2-1" del header del modal cuando ya se jugó */
+.bm-chip.actual{
+  color: var(--c-mexico);
+  border-color: var(--c-mexico);
+  background: var(--c-mexico-soft);
+  font-weight: 700;
 }
 
 /* ===== Botón "Ver toda la apuesta" + bloque expandible ===== */

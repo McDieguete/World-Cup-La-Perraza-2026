@@ -1,14 +1,19 @@
 name: Auto-actualizar resultados y clasificación
 
-# Aproximadamente cada 15 minutos, evitando los minutos pico de cron
-# (xx:00 / xx:15 / xx:30 / xx:45) donde GH Actions satura el free tier
-# y descarta ejecuciones. Con offset 7 (xx:07 / xx:22 / xx:37 / xx:52)
-# la ejecución es mucho más fiable.
-# Si la cadencia sigue siendo insuficiente, ver README sección "cron externo".
+# GitHub Actions free tier descarta schedules cuando los runners están
+# saturados. Para maximizar la probabilidad de que al menos UNA ejecución
+# entre por hora, declaramos 4 schedules independientes en minutos primos
+# (poco cargados, ya que la mayoría de proyectos programan en múltiplos de 5).
+# Si las 4 se descartan en una hora dada, la siguiente vuelve a intentarlo.
+# El cron es idempotente: ejecuciones extra no producen commits si no hay
+# resultados nuevos que añadir.
 # También se puede disparar a mano desde la pestaña "Actions" de GitHub.
 on:
   schedule:
-    - cron: '7,22,37,52 * * * *'
+    - cron: '3 * * * *'
+    - cron: '17 * * * *'
+    - cron: '31 * * * *'
+    - cron: '47 * * * *'
   workflow_dispatch:
 
 # Permiso necesario para que el GITHUB_TOKEN pueda hacer commit/push.

@@ -1,13 +1,13 @@
 name: Auto-actualizar resultados y clasificación
 
-# GitHub Actions free tier descarta schedules cuando los runners están
-# saturados. Para maximizar la probabilidad de que al menos UNA ejecución
-# entre por hora, declaramos 4 schedules independientes en minutos primos
-# (poco cargados, ya que la mayoría de proyectos programan en múltiplos de 5).
-# Si las 4 se descartan en una hora dada, la siguiente vuelve a intentarlo.
-# El cron es idempotente: ejecuciones extra no producen commits si no hay
-# resultados nuevos que añadir.
-# También se puede disparar a mano desde la pestaña "Actions" de GitHub.
+# ─────────────────────────────────────────────────────────────
+# Trigger:
+#   · schedule (4 crons en minutos primos) → sirve de "red de seguridad";
+#     en la práctica GH Actions free tier descarta la mayoría.
+#   · workflow_dispatch → la cadencia REAL la consigue el propio job
+#     reinvocándose al final con un PAT (variable PAT_DISPATCH).
+# Cada ejecución hace 1 actualización inmediata y se autoinvoca tras 15 min.
+# ─────────────────────────────────────────────────────────────
 on:
   schedule:
     - cron: '3 * * * *'
@@ -16,7 +16,6 @@ on:
     - cron: '47 * * * *'
   workflow_dispatch:
 
-# Permiso necesario para que el GITHUB_TOKEN pueda hacer commit/push.
 permissions:
   contents: write
 
@@ -30,9 +29,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          # token con permiso de escritura (el por defecto vale gracias a `permissions: contents: write`)
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node 20
         uses: actions/setup-node@v4
@@ -57,3 +53,24 @@ jobs:
           git add js/data.js
           git commit -m "auto: actualizar resultados y clasificación"
           git push
+
+      - name: Esperar 15 min y re-disparar el workflow (autochain)
+        # Si PAT_DISPATCH no está configurado, este paso se salta silenciosamente
+        # y el workflow termina (volverá a entrar cuando la red de seguridad
+        # del schedule lo coja, lo que puede tardar). Configura PAT_DISPATCH
+        # para que la cadencia sea exacta cada 15 min sin depender del schedule.
+        if: ${{ env.HAS_PAT == 'true' }}
+        env:
+          HAS_PAT: ${{ secrets.PAT_DISPATCH != '' }}
+          PAT_DISPATCH: ${{ secrets.PAT_DISPATCH }}
+        run: |
+          echo "Esperando 15 minutos antes de re-disparar…"
+          sleep 900
+          echo "Disparando siguiente ejecución…"
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${PAT_DISPATCH}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/update-results.yml/dispatches" \
+            -d '{"ref":"main"}'
+          echo "Siguiente ejecución encolada."

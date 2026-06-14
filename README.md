@@ -184,14 +184,30 @@ en `scoring.js` para que sólo haya que descomentar).
 - **Nuevos equipos / variantes de nombre**: añade entradas a
   [`scripts/team-mapping.json`](scripts/team-mapping.json). El log del cron
   imprime los equipos sin reconocer.
-- **Cambiar el cron**: edita las líneas `cron:` en `.github/workflows/update-results.yml`.
-  Por defecto hay **4 schedules independientes** en minutos primos
-  (`3, 17, 31, 47`) — GitHub Actions free tier descarta schedules en periodos
-  de alta carga, así que tener varios disparos por hora maximiza la probabilidad
-  de que al menos uno entre. El script es idempotente.
-- **Si necesitas cadencia garantizada cada N min**: ver sección "Cron externo"
-  abajo (cron-job.org + PAT) o convertir el workflow a "self-dispatching" con
-  `sleep N; curl -X POST .../dispatches` al final del job.
+- **Cadencia del cron**: el workflow se **auto-encadena**. Al final de cada
+  ejecución duerme 15 min y se re-dispara a sí mismo via API. Cada run encadena
+  la siguiente; cadencia exacta sin depender del scheduler de GitHub Actions
+  (que en free tier descarta la mayoría de `schedule` events).
+  El paso de re-dispatch solo se activa si el secret `PAT_DISPATCH` está
+  configurado; sin él, el workflow vuelve a entrar solo cuando alguno de los
+  4 `cron:` declarados consiga arrancar (red de seguridad).
+
+### Configurar el PAT de auto-encadenado (una sola vez)
+
+1. <https://github.com/settings/personal-access-tokens/new> → "Generate new token"
+   → Fine-grained.
+2. **Resource owner**: tu usuario.
+   **Repository access**: "Only select repositories" → marca `World-Cup-La-Perraza-2026`.
+3. **Permissions** → expande "Repository permissions" → busca **`Actions`** y
+   ponlo en **`Read and write`**. Nada más.
+4. **Expiration**: el máximo que te deje (1 año típicamente).
+5. Generate token → copia el `github_pat_…`.
+6. <https://github.com/McDieguete/World-Cup-La-Perraza-2026/settings/secrets/actions/new>
+   → Name: `PAT_DISPATCH`, Secret: pega el token → Add secret.
+
+A partir de la siguiente ejecución manual del workflow, el bucle queda en marcha
+indefinidamente (cada run dispara el siguiente). Si quieres pararlo: borra el
+secret `PAT_DISPATCH` — la cadena se detiene en el próximo ciclo.
   Recuerda que el free tier de football-data.org es 10 req/min — no bajes de 6 min.
 - **Paleta**: `:root` en `css/base.css`.
 - **Tipografías**: Google Fonts (Anton, Outfit, Space Mono) declaradas en `<head>`.

@@ -55,11 +55,13 @@ jobs:
           git push
 
       - name: Esperar 15 min y re-disparar el workflow (autochain)
-        # Si PAT_DISPATCH no está configurado, este paso se salta silenciosamente
-        # y el workflow termina (volverá a entrar cuando la red de seguridad
-        # del schedule lo coja, lo que puede tardar). Configura PAT_DISPATCH
-        # para que la cadencia sea exacta cada 15 min sin depender del schedule.
-        if: ${{ env.HAS_PAT == 'true' }}
+        # CRÍTICO: `if: always()` para que la cadena SOBREVIVA a fallos
+        # transitorios del script (rate limit de la API, blip de red, etc.).
+        # Sin `always()`, un solo run en error mata la cadena para siempre y
+        # hay que rearmarla manualmente desde la pestaña Actions.
+        # Si PAT_DISPATCH no está configurado, este paso se salta y el workflow
+        # termina (caerá la red de seguridad del schedule, que puede tardar).
+        if: ${{ always() && env.HAS_PAT == 'true' }}
         env:
           HAS_PAT: ${{ secrets.PAT_DISPATCH != '' }}
           PAT_DISPATCH: ${{ secrets.PAT_DISPATCH }}

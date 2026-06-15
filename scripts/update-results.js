@@ -79,7 +79,10 @@ async function fetchMatches() {
 function applyMatch(D, apiMatch, log) {
   if (apiMatch.status !== 'FINISHED') return false;
   const sc = apiMatch.score && apiMatch.score.fullTime;
-  if (!sc || sc.home == null || sc.away == null) return false;
+  if (!sc || sc.home == null || sc.away == null) {
+    log.finishedNoScore.push(`${apiMatch.homeTeam && apiMatch.homeTeam.name} vs ${apiMatch.awayTeam && apiMatch.awayTeam.name} (stage=${apiMatch.stage})`);
+    return false;
+  }
 
   const home = apiToEs(apiMatch.homeTeam && apiMatch.homeTeam.name);
   const away = apiToEs(apiMatch.awayTeam && apiMatch.awayTeam.name);
@@ -104,10 +107,21 @@ function applyMatch(D, apiMatch, log) {
 function applyGroupMatch(D, home, away, result, log) {
   for (const [date, matches] of Object.entries(D.matchdays || {})) {
     for (const mc of matches) {
+      // Caso 1: home/away coinciden con la orientación del dataset
       if (mc.home === home && mc.away === away) {
         if (mc.result === result) return false;
         log.groupChanged.push(`${date} ${home} ${result} ${away} (antes: "${mc.result || '—'}")`);
         mc.result = result;
+        return true;
+      }
+      // Caso 2: API devuelve los equipos invertidos respecto al dataset.
+      // Invertimos el marcador para preservar la perspectiva home/away del dataset.
+      if (mc.home === away && mc.away === home) {
+        const [gh, ga] = result.split('-').map(Number);
+        const flipped = `${ga}-${gh}`;
+        if (mc.result === flipped) return false;
+        log.groupChanged.push(`${date} ${mc.home} ${flipped} ${mc.away} (API lo dio invertido: ${home} ${result} ${away}; antes: "${mc.result || '—'}")`);
+        mc.result = flipped;
         return true;
       }
     }
@@ -288,14 +302,29 @@ async function main() {
   }
 
   const log = {
-    groupChanged:  [],
-    koChanged:     [],
-    qualifChanged: [],
-    awardsChanged: [],
-    unmatchedGroup:[],
-    unknownTeams:  new Set(),
-    unknownStages: new Set()
+    groupChanged:    [],
+    koChanged:       [],
+    qualifChanged:   [],
+    awardsChanged:   [],
+    unmatchedGroup:  [],
+    finishedNoScore: [],
+    unknownTeams:    new Set(),
+    unknownStages:   new Set()
   };
+
+  // Diagnóstico: lista de partidos FINISHED tal cual los devuelve la API.
+  // Aparece SIEMPRE en el log del workflow, así futuras sorpresas se ven a la primera.
+  const finished = matches.filter(m => m.status === 'FINISHED');
+  if (finished.length) {
+    console.log(`  partidos FINISHED en la API (${finished.length}):`);
+    finished.forEach(m => {
+      const h = (m.homeTeam && m.homeTeam.name) || '?';
+      const a = (m.awayTeam && m.awayTeam.name) || '?';
+      const ft = m.score && m.score.fullTime;
+      const r = ft ? `${ft.home}-${ft.away}` : '(sin marcador)';
+      console.log(`    · [${m.stage}] ${h} ${r} ${a}`);
+    });
+  }
 
   let touched = false;
   matches.forEach(m => { if (applyMatch(D, m, log)) touched = true; });
@@ -343,6 +372,10 @@ function printReport(log) {
   if (log.unknownStages.size) {
     console.log('  ⚠ Stages desconocidos por scoring.js (FOOTBALL_DATA_STAGE_TO_ROUND):');
     [...log.unknownStages].forEach(l => console.log('    · ' + l));
+  }
+  if (log.finishedNoScore.length) {
+    console.log('  ⚠ Partidos FINISHED sin marcador en la API (probable bug del proveedor):');
+    log.finishedNoScore.forEach(l => console.log('    · ' + l));
   }
 }
 

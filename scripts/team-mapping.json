@@ -1,67 +1,182 @@
 {
-  "_comment": "Mapeo: nombre devuelto por football-data.org → nombre en el dataset (DATA). Si la API devuelve un nombre que aquí no aparece, el partido se ignora en silencio y queda registrado en el log del cron. Añade variantes cuando hagan falta.",
+  "_comment": "Mapeo: nombre/shortName/TLA devuelto por football-data.org → nombre en el dataset (DATA). Soporta varias variantes por equipo. Si la API devuelve algo no listado aquí, el partido se ignora silenciosamente y aparece en el log del cron como 'Equipos no reconocidos'.",
 
   "Algeria":              "Argelia",
+  "ALG":                  "Argelia",
+
   "Argentina":            "Argentina",
+  "ARG":                  "Argentina",
+
   "Australia":            "Australia",
+  "AUS":                  "Australia",
+
   "Austria":              "Austria",
+  "AUT":                  "Austria",
+
   "Belgium":              "Bélgica",
+  "BEL":                  "Bélgica",
+
   "Bosnia and Herzegovina":"Bosnia y Herzegovina",
   "Bosnia-Herzegovina":   "Bosnia y Herzegovina",
+  "BIH":                  "Bosnia y Herzegovina",
+
   "Brazil":               "Brasil",
+  "BRA":                  "Brasil",
+
   "Cabo Verde":             "Cabo Verde",
   "Cape Verde":             "Cabo Verde",
   "Cape Verde Islands":     "Cabo Verde",
   "Cabo Verde Islands":     "Cabo Verde",
   "Republic of Cabo Verde": "Cabo Verde",
   "Republic of Cape Verde": "Cabo Verde",
+  "CPV":                    "Cabo Verde",
+
   "Canada":               "Canadá",
+  "CAN":                  "Canadá",
+
   "Colombia":             "Colombia",
+  "COL":                  "Colombia",
+
   "Costa Rica":           "Costa Rica",
+  "CRC":                  "Costa Rica",
+
   "Côte d'Ivoire":        "Costa de Marfil",
+  "Cote d'Ivoire":        "Costa de Marfil",
   "Ivory Coast":          "Costa de Marfil",
+  "CIV":                  "Costa de Marfil",
+
   "Croatia":              "Croacia",
+  "CRO":                  "Croacia",
+
   "Curaçao":              "Curazao",
   "Curacao":              "Curazao",
+  "CUW":                  "Curazao",
+
   "Czech Republic":       "República Checa",
   "Czechia":              "República Checa",
+  "CZE":                  "República Checa",
+
   "DR Congo":             "RD Congo",
+  "Congo DR":             "RD Congo",
+  "Congo D.R.":           "RD Congo",
+  "Congo (Democratic Republic)": "RD Congo",
+  "Democratic Republic of Congo":"RD Congo",
   "Democratic Republic of the Congo":"RD Congo",
+  "DRC":                  "RD Congo",
+  "COD":                  "RD Congo",
+  "ZAI":                  "RD Congo",
+
   "Ecuador":              "Ecuador",
+  "ECU":                  "Ecuador",
+
   "Egypt":                "Egipto",
+  "EGY":                  "Egipto",
+
   "England":              "Inglaterra",
+  "ENG":                  "Inglaterra",
+
   "France":               "Francia",
+  "FRA":                  "Francia",
+
   "Germany":              "Alemania",
+  "GER":                  "Alemania",
+
   "Ghana":                "Ghana",
+  "GHA":                  "Ghana",
+
   "Haiti":                "Haití",
+  "HAI":                  "Haití",
+
   "Iran":                 "Irán",
   "IR Iran":              "Irán",
+  "Islamic Republic of Iran": "Irán",
+  "IRN":                  "Irán",
+
   "Iraq":                 "Irak",
+  "IRQ":                  "Irak",
+
   "Japan":                "Japón",
+  "JPN":                  "Japón",
+
   "Jordan":               "Jordania",
+  "JOR":                  "Jordania",
+
   "Korea Republic":       "Corea del Sur",
+  "Republic of Korea":    "Corea del Sur",
   "South Korea":          "Corea del Sur",
+  "KOR":                  "Corea del Sur",
+
   "Mexico":               "México",
+  "MEX":                  "México",
+
   "Morocco":              "Marruecos",
+  "MAR":                  "Marruecos",
+  "MOR":                  "Marruecos",
+
   "Netherlands":          "Países Bajos",
+  "Holland":              "Países Bajos",
+  "NED":                  "Países Bajos",
+  "NLD":                  "Países Bajos",
+
   "New Zealand":          "Nueva Zelanda",
+  "NZL":                  "Nueva Zelanda",
+
   "Norway":               "Noruega",
+  "NOR":                  "Noruega",
+
   "Panama":               "Panamá",
+  "PAN":                  "Panamá",
+
   "Paraguay":             "Paraguay",
+  "PAR":                  "Paraguay",
+  "PRY":                  "Paraguay",
+
   "Portugal":             "Portugal",
+  "POR":                  "Portugal",
+  "PRT":                  "Portugal",
+
   "Qatar":                "Catar",
+  "QAT":                  "Catar",
+
   "Saudi Arabia":         "Arabia Saudita",
+  "KSA":                  "Arabia Saudita",
+  "SAU":                  "Arabia Saudita",
+
   "Scotland":             "Escocia",
+  "SCO":                  "Escocia",
+
   "Senegal":              "Senegal",
+  "SEN":                  "Senegal",
+
   "South Africa":         "Sudáfrica",
+  "RSA":                  "Sudáfrica",
+  "ZAF":                  "Sudáfrica",
+
   "Spain":                "España",
+  "ESP":                  "España",
+
   "Sweden":               "Suecia",
+  "SWE":                  "Suecia",
+
   "Switzerland":          "Suiza",
+  "SUI":                  "Suiza",
+  "CHE":                  "Suiza",
+
   "Tunisia":              "Túnez",
+  "TUN":                  "Túnez",
+
   "Turkey":               "Turquía",
   "Türkiye":              "Turquía",
+  "TUR":                  "Turquía",
+
   "United States":        "Estados Unidos",
+  "United States of America":"Estados Unidos",
   "USA":                  "Estados Unidos",
+
   "Uruguay":              "Uruguay",
-  "Uzbekistan":           "Uzbekistán"
+  "URU":                  "Uruguay",
+  "URY":                  "Uruguay",
+
+  "Uzbekistan":           "Uzbekistán",
+  "UZB":                  "Uzbekistán"
 }

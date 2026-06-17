@@ -61,6 +61,17 @@ function apiToEs(apiName) {
   return null;  // desconocido — quien llame decide qué hacer
 }
 
+/* Versión resiliente: prueba name, luego shortName, luego TLA.
+   football-data.org devuelve los 3 campos por equipo. Si name varía
+   entre temporadas, tla siempre es estable (código FIFA de 3 letras). */
+function apiTeamToEs(team) {
+  if (!team) return null;
+  return apiToEs(team.name)
+      || apiToEs(team.shortName)
+      || apiToEs(team.tla)
+      || null;
+}
+
 /* ===== Fetch ===== */
 
 async function fetchMatches() {
@@ -84,10 +95,15 @@ function applyMatch(D, apiMatch, log) {
     return false;
   }
 
-  const home = apiToEs(apiMatch.homeTeam && apiMatch.homeTeam.name);
-  const away = apiToEs(apiMatch.awayTeam && apiMatch.awayTeam.name);
+  const home = apiTeamToEs(apiMatch.homeTeam);
+  const away = apiTeamToEs(apiMatch.awayTeam);
   if (!home || !away) {
-    log.unknownTeams.add(`${apiMatch.homeTeam && apiMatch.homeTeam.name} vs ${apiMatch.awayTeam && apiMatch.awayTeam.name}`);
+    const ht = apiMatch.homeTeam || {};
+    const at = apiMatch.awayTeam || {};
+    log.unknownTeams.add(
+      `${ht.name || '?'} [shortName="${ht.shortName||''}" tla="${ht.tla||''}"]` +
+      ` vs ${at.name || '?'} [shortName="${at.shortName||''}" tla="${at.tla||''}"]`
+    );
     return false;
   }
 

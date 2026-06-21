@@ -1,0 +1,254 @@
+/* ===========================================================
+   resultados.css — Panel "Mis resultados"
+   --------------------------------------------------------------
+   Buscador, chips de porristas, detalle día a día con filas
+   colapsables. Reusa tokens y look del modal (bm-result).
+   =========================================================== */
+
+/* ===== Buscador ===== */
+#resultados .searchbar {margin-bottom: var(--s-4)}
+
+/* ===== Grid de chips de porristas ===== */
+.res-chips{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: var(--s-2);
+  margin-bottom: var(--s-6);
+}
+.res-chip{
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-sm);
+  padding: var(--s-3) var(--s-3);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2);
+  cursor: pointer;
+  transition: .15s;
+  font-family: var(--font-body);
+}
+.res-chip:hover{
+  border-color: var(--c-usa);
+  background: var(--c-usa-soft);
+}
+.res-chip.active{
+  border-color: var(--c-navy);
+  background: var(--c-navy);
+  color: #fff;
+}
+.res-chip.active .res-chip-pts{color: var(--c-gold)}
+.res-chip-name{font-weight: 700; color: var(--c-navy); font-size: 14px}
+.res-chip.active .res-chip-name{color: #fff}
+.res-chip-pts{font-family: var(--font-mono); font-size: 12.5px; color: var(--c-canada); font-weight: 700}
+
+/* ===== Estado vacío ===== */
+.res-empty{
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--s-5);
+  text-align: center;
+  color: var(--c-text-soft);
+}
+.res-empty-day{
+  padding: var(--s-3);
+  color: var(--c-text-soft);
+  font-style: italic;
+}
+
+/* ===== Cabecera del porrista seleccionado ===== */
+.res-detail-head{
+  background: var(--c-navy);
+  color: #fff;
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin-bottom: var(--s-3);
+  display: flex; flex-wrap: wrap;
+  align-items: center; justify-content: space-between;
+  gap: var(--s-3);
+  position: relative;
+  overflow: hidden;
+}
+.res-detail-head::after{
+  content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg,
+    var(--c-canada) 0 33.33%,
+    var(--c-mexico) 33.33% 66.66%,
+    var(--c-usa)    66.66% 100%);
+}
+.res-detail-name{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(22px, 3vw, 30px);
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+}
+.res-detail-pill{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+}
+.res-detail-pill b{color: var(--c-gold); font-weight: 700}
+
+/* ===== Bloques por día ===== */
+.res-days{display: flex; flex-direction: column; gap: 6px}
+
+.res-day{
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.res-day.open{
+  background: var(--c-bg);
+  border-color: var(--c-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.res-day-head{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr auto auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: none; border: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: var(--font-body);
+}
+.res-day-head:hover{background: rgba(21,22,58,.04)}
+
+.res-day-info{display: flex; flex-direction: column; gap: 2px}
+.res-day-date{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 17px;
+  text-transform: uppercase;
+  color: var(--c-navy);
+  line-height: 1;
+}
+.res-day-dow{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+}
+.res-day-meta{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--c-text-soft);
+}
+.res-day-pts{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--c-canada);
+  min-width: 60px;
+  text-align: right;
+}
+.res-day-toggle{
+  font-size: 12px;
+  color: var(--c-text-soft);
+  transition: transform .18s;
+}
+.res-day.open .res-day-toggle{transform: rotate(180deg)}
+
+.res-day-matches{
+  display: none;
+  background: var(--c-bg);
+  border-top: 1px dashed var(--c-border);
+  padding: var(--s-3) var(--s-4);
+  flex-direction: column;
+  gap: 6px;
+}
+.res-day.open .res-day-matches{display: flex}
+
+/* ===== Filas de partido ===== */
+.res-row{
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 9px 12px;
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  border-left: 3px solid var(--c-usa);
+}
+.res-row-left{
+  display: flex; align-items: center; gap: var(--s-2);
+  font-size: 13.5px;
+  min-width: 0;
+}
+.res-time{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-text-soft);
+  min-width: 38px;
+}
+.res-trip{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-gold);
+  padding: 1px 5px;
+  border: 1px solid var(--c-gold);
+  border-radius: 4px;
+}
+.res-teams{
+  display: inline-flex; gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--c-navy);
+  font-weight: 600;
+}
+.res-vs{color: var(--c-text-soft); font-weight: 400}
+
+.res-row-mid{
+  display: flex; flex-direction: column;
+  gap: 1px;
+  font-size: 12px;
+}
+.res-label{
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+}
+.res-pred, .res-actual{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--c-navy);
+}
+.res-pending{color: var(--c-text-soft); font-style: italic; font-weight: 400}
+
+.res-pts{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14.5px;
+  min-width: 50px;
+  text-align: right;
+  padding: 5px 8px;
+  border-radius: var(--r-sm);
+}
+.res-pts.win    {background: var(--c-mexico-soft); color: var(--c-mexico)}
+.res-pts.zero   {background: var(--c-canada-soft); color: var(--c-canada)}
+.res-pts.pending{background: var(--c-surface);     color: var(--c-text-soft)}
+
+/* ===== Responsive (móvil) ===== */
+@media(max-width: 720px){
+  .res-day-head{grid-template-columns: 1fr auto auto; gap: var(--s-2)}
+  .res-day-meta{display: none}
+  .res-row{grid-template-columns: 1fr auto; gap: var(--s-2); padding: 8px 10px}
+  .res-row-mid{flex-direction: row; gap: 4px; align-items: baseline}
+  .res-row-mid .res-label::after{content: ":"}
+  .res-pts{min-width: 42px}
+}

@@ -21,17 +21,20 @@
   <link rel="stylesheet" href="css/clasif.css">
   <link rel="stylesheet" href="css/jornada.css">
   <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/resultados.css">
   <link rel="stylesheet" href="css/footer.css">
 
   <!-- Scripts: dataset primero, luego módulos por responsabilidad -->
   <script defer src="js/data.js"></script>
   <script defer src="js/helpers.js"></script>
+  <script defer src="js/scoring-client.js"></script>
   <script defer src="js/nav.js"></script>
   <script defer src="js/players.js"></script>
   <script defer src="js/stats.js"></script>
   <script defer src="js/clasif.js"></script>
   <script defer src="js/modal.js"></script>
   <script defer src="js/jornada.js"></script>
+  <script defer src="js/resultados.js"></script>
 </head>
 <body>
 
@@ -63,6 +66,7 @@
       <button class="tab active" data-tab="quien"><span class="ico">🕵️</span>¿Quién es quién?</button>
       <button class="tab"        data-tab="stats"><span class="ico">📊</span>Estadísticas</button>
       <button class="tab"        data-tab="clasif"><span class="ico">🏆</span>Clasificación</button>
+      <button class="tab"        data-tab="resultados"><span class="ico">🎟️</span>Mis resultados</button>
       <button class="tab"        data-tab="jornada"><span class="ico">📅</span>Próxima jornada</button>
     </div>
   </nav>
@@ -162,6 +166,21 @@
       </div>
       <div class="clas-day-sel"><label>Cambios del día:</label><select id="clasDaySel"></select></div>
       <div class="clas-table-wrap"><table class="clas-table" id="clasTable"></table></div>
+    </section>
+
+    <!-- ===== MIS RESULTADOS (porrista buscable) ===== -->
+    <section class="panel" id="resultados" aria-label="Mis resultados">
+      <div class="sec-head">
+        <span class="kicker">El boletín del porrista</span>
+        <h2>Mis <em>resultados</em></h2>
+        <p>Busca a cualquier porrista y mira lo que firmó día a día contra el resultado real. Cada día se despliega para ver los partidos uno a uno y los puntos ganados. El día de hoy aparece abierto por defecto.</p>
+      </div>
+      <div class="searchbar">
+        <span class="mag">🔍</span>
+        <input id="resBmSearch" type="search" placeholder="Busca un porrista… (p. ej. Chema, Pi, Diego)" autocomplete="off" name="res-porrista-search-no-autofill">
+      </div>
+      <div class="res-chips" id="resChips"></div>
+      <div id="resDetail"></div>
     </section>
 
     <!-- ===== PRÓXIMA JORNADA ===== -->

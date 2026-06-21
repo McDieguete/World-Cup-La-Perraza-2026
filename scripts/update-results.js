@@ -125,6 +125,10 @@ function applyGroupMatch(D, home, away, result, log) {
     for (const mc of matches) {
       // Caso 1: home/away coinciden con la orientación del dataset
       if (mc.home === home && mc.away === away) {
+        if (mc.result_manual) {
+          log.manualLocked.push(`${date} ${mc.home}-${mc.away}: manual=${mc.result} (API: ${result}) — no sobrescribo`);
+          return false;
+        }
         if (mc.result === result) return false;
         log.groupChanged.push(`${date} ${home} ${result} ${away} (antes: "${mc.result || '—'}")`);
         mc.result = result;
@@ -135,6 +139,10 @@ function applyGroupMatch(D, home, away, result, log) {
       if (mc.home === away && mc.away === home) {
         const [gh, ga] = result.split('-').map(Number);
         const flipped = `${ga}-${gh}`;
+        if (mc.result_manual) {
+          log.manualLocked.push(`${date} ${mc.home}-${mc.away}: manual=${mc.result} (API: ${flipped}) — no sobrescribo`);
+          return false;
+        }
         if (mc.result === flipped) return false;
         log.groupChanged.push(`${date} ${mc.home} ${flipped} ${mc.away} (API lo dio invertido: ${home} ${result} ${away}; antes: "${mc.result || '—'}")`);
         mc.result = flipped;
@@ -324,6 +332,7 @@ async function main() {
     awardsChanged:   [],
     unmatchedGroup:  [],
     finishedNoScore: [],
+    manualLocked:    [],
     unknownTeams:    new Set(),
     unknownStages:   new Set()
   };
@@ -392,6 +401,10 @@ function printReport(log) {
   if (log.finishedNoScore.length) {
     console.log('  ⚠ Partidos FINISHED sin marcador en la API (probable bug del proveedor):');
     log.finishedNoScore.forEach(l => console.log('    · ' + l));
+  }
+  if (log.manualLocked.length) {
+    console.log('  🔒 Resultados bloqueados manualmente (result_manual: true) — la API no los pisa:');
+    log.manualLocked.forEach(l => console.log('    · ' + l));
   }
 }
 

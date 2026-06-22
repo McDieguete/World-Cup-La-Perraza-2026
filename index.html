@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="css/jornada.css">
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/resultados.css">
+  <link rel="stylesheet" href="css/mundial.css">
   <link rel="stylesheet" href="css/footer.css">
 
   <!-- Scripts: dataset primero, luego módulos por responsabilidad -->
@@ -35,6 +36,7 @@
   <script defer src="js/modal.js"></script>
   <script defer src="js/jornada.js"></script>
   <script defer src="js/resultados.js"></script>
+  <script defer src="js/mundial.js"></script>
 </head>
 <body>
 
@@ -66,6 +68,7 @@
       <button class="tab active" data-tab="quien"><span class="ico">🕵️</span>¿Quién es quién?</button>
       <button class="tab"        data-tab="stats"><span class="ico">📊</span>Estadísticas</button>
       <button class="tab"        data-tab="clasif"><span class="ico">🏆</span>Clasificación</button>
+      <button class="tab"        data-tab="mundial"><span class="ico">🌍</span>Mundial</button>
       <button class="tab"        data-tab="resultados"><span class="ico">🎟️</span>Mis resultados</button>
       <button class="tab"        data-tab="jornada"><span class="ico">📅</span>Próxima jornada</button>
     </div>
@@ -166,6 +169,16 @@
       </div>
       <div class="clas-day-sel"><label>Cambios del día:</label><select id="clasDaySel"></select></div>
       <div class="clas-table-wrap"><table class="clas-table" id="clasTable"></table></div>
+    </section>
+
+    <!-- ===== MUNDIAL (stats reales via API-Football) ===== -->
+    <section class="panel" id="mundial" aria-label="Estadísticas reales del Mundial">
+      <div class="sec-head">
+        <span class="kicker">Datos oficiales del torneo</span>
+        <h2>El <em>Mundial</em> de verdad</h2>
+        <p>Estadísticas reales del torneo (no de la porra) con clasificación de los 12 grupos, máximos goleadores y asistentes, tarjetas y radiografía detallada de cada selección. Se refresca cuatro veces al día desde la API oficial de proveedor.</p>
+      </div>
+      <div id="mundial-container"></div>
     </section>
 
     <!-- ===== MIS RESULTADOS (porrista buscable) ===== -->

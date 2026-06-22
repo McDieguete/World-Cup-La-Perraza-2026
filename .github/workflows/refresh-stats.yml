@@ -1,0 +1,65 @@
+name: Refrescar estadísticas del Mundial
+
+# 4 oportunidades de disparo al día (en minuto :07 para evitar el throttling
+# de GH Actions en los minutos pico). Cada slot se ejecutará de forma
+# independiente; el script es idempotente y respeta una TTL de 23 h para los
+# stats por equipo (que son caros: 48 req por refresco).
+#
+# Slots planificados (UTC):
+#   05:07  ≈ 07:07 hora España CEST  ← refresco "matutino"
+#   11:07  ≈ 13:07
+#   17:07  ≈ 19:07
+#   23:07  ≈ 01:07
+on:
+  schedule:
+    - cron: '7 5 * * *'
+    - cron: '7 11 * * *'
+    - cron: '7 17 * * *'
+    - cron: '7 23 * * *'
+  workflow_dispatch:
+    inputs:
+      force_team_stats:
+        description: 'Forzar refresco de stats por equipo (48 req)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false','true']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-stats
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Pedir stats a API-Football
+        env:
+          API_FOOTBALL_KEY:    ${{ secrets.API_FOOTBALL_KEY }}
+          API_FOOTBALL_LEAGUE: ${{ vars.API_FOOTBALL_LEAGUE || '1' }}
+          API_FOOTBALL_SEASON: ${{ vars.API_FOOTBALL_SEASON || '2026' }}
+          FORCE_TEAM_STATS:    ${{ github.event.inputs.force_team_stats == 'true' && '1' || '' }}
+        run: node scripts/generate-stats.js
+
+      - name: Commit si hubo cambios
+        run: |
+          if git diff --quiet -- data/stats.json; then
+            echo "Sin cambios — no se hace commit."
+            exit 0
+          fi
+          git config user.name  "perraza-bot"
+          git config user.email "perraza-bot@users.noreply.github.com"
+          git add data/stats.json
+          git commit -m "auto: refrescar estadísticas del Mundial"
+          git push

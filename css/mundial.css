@@ -1,0 +1,388 @@
+/* ===========================================================
+   mundial.css — Pestaña "Mundial" (stats reales via API-Football)
+   --------------------------------------------------------------
+   Mantiene los tokens del sistema (--c-navy, --c-canada, etc.).
+   =========================================================== */
+
+#mundial-container{display: flex; flex-direction: column; gap: var(--s-6)}
+
+.mu-loading,
+.mu-empty,
+.mu-empty-block{
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--s-5);
+  text-align: center;
+  color: var(--c-text-soft);
+}
+.mu-empty-ic{font-size: 36px; margin-bottom: var(--s-2)}
+.mu-empty-title{font-weight: 700; color: var(--c-navy); margin-bottom: var(--s-2)}
+.mu-empty-msg code{
+  background: var(--c-surface-alt);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.mu-meta{
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+.mu-meta-pill{
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-soft);
+}
+.mu-meta-pill-team{background: var(--c-mexico-soft); border-color: var(--c-mexico); color: var(--c-mexico)}
+
+/* ===== Encabezados de bloque ===== */
+.mu-block{display: flex; flex-direction: column; gap: var(--s-3)}
+.mu-h3{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  color: var(--c-navy);
+}
+.mu-h4{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--c-navy);
+  font-weight: 700;
+  margin-bottom: var(--s-2);
+}
+.mu-grid-2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+@media(max-width: 760px){.mu-grid-2{grid-template-columns: 1fr}}
+
+/* ===== Clasificación de grupos ===== */
+.mu-groups{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: var(--s-3);
+}
+.mu-group{
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.mu-group-head{
+  background: var(--c-navy);
+  color: #fff;
+  padding: 8px var(--s-3);
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-display);
+}
+.mu-group-letter{
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.mu-group-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-family: var(--font-body);
+}
+.mu-group-table th,
+.mu-group-table td{padding: 6px 4px; text-align: center}
+.mu-group-table thead th{
+  background: var(--c-surface);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+  font-weight: 700;
+  border-bottom: 1px solid var(--c-border);
+}
+.mu-group-table .mu-tn{text-align: left; padding-left: 8px; width: 42%}
+.mu-group-table .mu-rank{width: 26px; color: var(--c-text-soft); font-family: var(--font-mono)}
+.mu-group-table .mu-pts{color: var(--c-canada); font-weight: 700; font-family: var(--font-mono)}
+.mu-group-table tbody tr{border-bottom: 1px solid var(--c-border)}
+.mu-group-table tbody tr:hover{background: var(--c-usa-soft)}
+.mu-group-table tbody tr.mu-top td.mu-tn{font-weight: 700; color: var(--c-mexico)}
+.mu-group-table tbody tr.mu-bot td.mu-tn{color: var(--c-canada)}
+.mu-tn img.mu-flag{
+  width: 18px; height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.mu-tn span{vertical-align: middle}
+
+.mu-form-row td{padding: 0 var(--s-3) 6px}
+.mu-form{display: flex; gap: 3px}
+.mu-form-pip{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+}
+.mu-form-w{background: var(--c-mexico)}
+.mu-form-d{background: #8a93a0}
+.mu-form-l{background: var(--c-canada)}
+
+/* ===== Top listas (goleadores, asistentes, tarjetas) ===== */
+.mu-toplist{
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--s-3) var(--s-4);
+  box-shadow: var(--shadow-sm);
+}
+.mu-toplist-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+.mu-seg{
+  display: inline-flex;
+  gap: 0;
+  background: var(--c-surface);
+  border-radius: var(--r-sm);
+  padding: 2px;
+}
+.mu-seg-btn{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  color: var(--c-text-soft);
+  transition: .15s;
+}
+.mu-seg-btn:hover{color: var(--c-navy)}
+.mu-seg-btn.active{
+  background: var(--c-navy);
+  color: #fff;
+}
+
+.mu-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.mu-table thead th{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--c-border);
+  font-weight: 700;
+}
+.mu-table tbody tr{border-bottom: 1px solid var(--c-border)}
+.mu-table tbody tr:hover{background: var(--c-surface-alt)}
+.mu-table td{padding: 8px}
+.mu-table .mu-rank{
+  width: 30px;
+  color: var(--c-text-soft);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.mu-player{display: flex; flex-direction: column; gap: 1px}
+.mu-player-name{font-weight: 700; color: var(--c-navy)}
+.mu-player-team{font-size: 11.5px; color: var(--c-text-soft); font-family: var(--font-mono)}
+.mu-stat-val{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--c-canada);
+  text-align: right;
+}
+.mu-stat-meta{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-text-soft);
+  text-align: right;
+}
+
+/* ===== Detalle por equipo ===== */
+.mu-team-sel{
+  display: flex; align-items: center; gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+.mu-team-sel label{
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+}
+.mu-team-sel select{
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-border-strong);
+  border-radius: var(--r-sm);
+  color: var(--c-navy);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 7px 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+.mu-team-detail{display: flex; flex-direction: column; gap: var(--s-4)}
+.mu-team-head{
+  display: flex; align-items: center; gap: var(--s-3);
+  background: var(--c-navy);
+  color: #fff;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+}
+.mu-team-logo{
+  width: 56px; height: 56px;
+  background: #fff;
+  padding: 6px;
+  border-radius: var(--r-sm);
+  object-fit: contain;
+}
+.mu-team-name{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+}
+.mu-team-meta{
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+
+.mu-team-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--s-2);
+}
+.mu-kpi{
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: var(--s-3);
+  text-align: center;
+}
+.mu-kpi-val{
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--c-canada);
+  line-height: 1;
+}
+.mu-kpi-lbl{
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-soft);
+  margin-top: 5px;
+}
+
+.mu-team-cols{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-3);
+}
+@media(max-width: 720px){.mu-team-cols{grid-template-columns: 1fr}}
+
+.mu-team-card{
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--s-3) var(--s-4);
+}
+
+.mu-bars{display: flex; flex-direction: column; gap: 6px}
+.mu-bar{
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 12px;
+}
+.mu-bar-lbl{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-text-soft);
+}
+.mu-bar-track{
+  height: 8px;
+  background: var(--c-surface);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.mu-bar-fill{
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-mexico), var(--c-usa));
+  border-radius: 4px;
+}
+.mu-bar-val{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--c-navy);
+}
+.mu-bar-pct{
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 10.5px;
+  color: var(--c-text-soft);
+  margin-left: 4px;
+}
+
+.mu-chiprow{display: flex; flex-wrap: wrap; gap: 6px}
+.mu-lineup-chip{
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 5px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mu-lineup-form{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--c-navy);
+}
+.mu-lineup-played{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-canada);
+}
+
+.mu-biggest{width: 100%; font-size: 13px}
+.mu-biggest td{padding: 6px 8px; border-bottom: 1px dashed var(--c-border)}
+.mu-biggest td:first-child{color: var(--c-text-soft)}
+.mu-biggest td:last-child{font-family: var(--font-mono); color: var(--c-navy); text-align: right}

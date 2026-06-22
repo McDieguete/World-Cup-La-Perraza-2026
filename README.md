@@ -110,18 +110,22 @@ Una vez levantado: <http://localhost:8765> (o el puerto que elijas).
 
 ### Stats reales del Mundial (pestaña "Mundial")
 
-Para la pestaña "🌍 Mundial" usa **API-Football** (api-sports.io):
+Reutiliza el mismo secret `FOOTBALL_DATA_KEY` del cron de resultados.
+**No necesitas secrets nuevos.**
 
-1. Registro gratuito en <https://dashboard.api-football.com/register>.
-2. **Añade el secret** `API_FOOTBALL_KEY` en GitHub Settings → Secrets → Actions.
-3. **(Opcional)** si el league ID / season ID cambian, créalos como *variables*:
-   `API_FOOTBALL_LEAGUE` (default `1`), `API_FOOTBALL_SEASON` (default `2026`).
-4. **Comprueba** desde Actions → "Refrescar estadísticas del Mundial" → "Run workflow".
+Cobertura ofrecida:
+- Clasificación por grupos (12 grupos)
+- Top goleadores con sus partidos jugados
+
+NO cubierto por el free tier de football-data.org (las secciones se ocultan):
+- Asistentes, tarjetas amarillas/rojas, stats por selección (goles por minuto,
+  formaciones, clean sheets…)
+
+Si necesitas esa profundidad, **API-Football Pro (~€9/mes)** sí cubre todo —
+hay un comentario en `scripts/generate-stats.js` sobre cómo cambiar la fuente.
 
 El cron `refresh-stats.yml` corre 4 veces al día (`07:07 / 13:07 / 19:07 / 01:07`
 hora España). Genera `data/stats.json` y solo commitea si hay cambios.
-Las stats por selección (caras: 48 req/refresco) se refrescan solo si han
-pasado más de 23 h desde la última vez — protege la cuota de 100 req/día.
 
 ### Probarlo en local
 

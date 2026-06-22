@@ -41,6 +41,19 @@
   color: var(--c-text-soft);
 }
 .mu-meta-pill-team{background: var(--c-mexico-soft); border-color: var(--c-mexico); color: var(--c-mexico)}
+.mu-meta-pill-source{background: var(--c-usa-soft); border-color: var(--c-usa); color: var(--c-usa)}
+
+.mu-note{
+  background: var(--c-gold-soft);
+  border: 1px solid var(--c-gold);
+  border-left-width: 3px;
+  border-radius: var(--r-sm);
+  padding: var(--s-3) var(--s-4);
+  color: var(--c-navy);
+  font-size: 13px;
+  line-height: var(--lh-normal);
+}
+.mu-note b{color: var(--c-canada); font-weight: 700}
 
 /* ===== Encabezados de bloque ===== */
 .mu-block{display: flex; flex-direction: column; gap: var(--s-3)}

@@ -1,21 +1,23 @@
 /* ===========================================================
-   generate-stats.js — Mundial stats vía API-Football
+   generate-stats.js — Mundial stats vía football-data.org
    --------------------------------------------------------------
-   Llama a api-sports.io con `league=1&season=2026` y compone
-   `data/stats.json` para que el frontend lo sirva como estático.
+   API-Football free tier no expone WC 2026 (solo 2022-2024).
+   Pivot a football-data.org, donde tu FOOTBALL_DATA_KEY YA tiene
+   acceso a WC 2026 (es la que usa el cron de resultados).
 
-   Estrategia de cuota (free tier 100 req/día):
-     · CHEAPS (cada corrida): 5 endpoints — standings + 4 listas top
-       (goleadores, asistentes, amarillas, rojas) = 5 req
-     · TEAM_STATS (solo si la última carga fue hace >23 h): 48 req,
-       uno por equipo, secuencial respetando el rate-limit de 10 req/min
-     · Total/día con 4 corridas: 4×5 + 1×48 = 68 req
+   Cobertura ofrecida con esta fuente:
+     · Clasificación por grupos (12 grupos)
+     · Top goleadores
+   No cubre con free tier:
+     · Asistentes detallados, tarjetas por jugador, stats por
+       selección (goles por minuto, formaciones…). Sus secciones
+       en la UI quedan ocultas/vacías y se indica la fuente.
+
    Variables de entorno:
-     API_FOOTBALL_KEY            (obligatoria)
-     API_FOOTBALL_LEAGUE         (opcional, default '1')
-     API_FOOTBALL_SEASON         (opcional, default '2026')
-     FORCE_TEAM_STATS=1          (opcional, fuerza el refresh de equipos)
-     DRY_RUN=1                   (opcional, no escribe)
+     FOOTBALL_DATA_KEY            (obligatoria)
+     FOOTBALL_DATA_COMPETITION    (opcional, default 'WC')
+     FOOTBALL_DATA_SEASON         (opcional, default '2026')
+     DRY_RUN=1                    (opcional)
    =========================================================== */
 
 'use strict';
@@ -23,20 +25,17 @@
 const fs   = require('fs');
 const path = require('path');
 
-const KEY       = process.env.API_FOOTBALL_KEY;
-const LEAGUE    = process.env.API_FOOTBALL_LEAGUE || '1';
-const SEASON    = process.env.API_FOOTBALL_SEASON || '2026';
-const FORCE_TS  = process.env.FORCE_TEAM_STATS === '1';
-const DRY_RUN   = process.env.DRY_RUN === '1';
+const KEY    = process.env.FOOTBALL_DATA_KEY;
+const COMP   = process.env.FOOTBALL_DATA_COMPETITION || 'WC';
+const SEASON = process.env.FOOTBALL_DATA_SEASON || '2026';
+const DRY_RUN= process.env.DRY_RUN === '1';
 
-const BASE    = 'https://v3.football.api-sports.io';
-const HEADERS = { 'x-apisports-key': KEY };
+const BASE    = 'https://api.football-data.org/v4';
+const HEADERS = { 'X-Auth-Token': KEY };
 const OUT     = path.join(__dirname, '..', 'data', 'stats.json');
-const TEAM_STATS_TTL_MS = 23 * 60 * 60 * 1000;        // refresca equipos cada 23 h
-const RATE_LIMIT_DELAY_MS = 6500;                      // 10 req/min ⇒ 6.5 s entre llamadas
 
 if (!KEY) {
-  console.error('ERROR: API_FOOTBALL_KEY no definido. Añade el secret en GitHub.');
+  console.error('ERROR: FOOTBALL_DATA_KEY no definido.');
   process.exit(2);
 }
 
@@ -48,81 +47,89 @@ async function callAPI(endpoint) {
     const body = await res.text().catch(() => '');
     throw new Error(`${endpoint} → ${res.status} ${res.statusText}: ${body.slice(0, 200)}`);
   }
-  const json = await res.json();
-  if (json.errors && Object.keys(json.errors).length) {
-    console.warn(`  ⚠ ${endpoint} errors:`, JSON.stringify(json.errors));
-  }
-  return json;
+  return res.json();
+}
+
+/* ===== Mapping al esquema que espera el frontend (mundial.js) =====
+   El esquema se diseñó originalmente para API-Football. Mantenemos
+   la forma para no tocar el frontend. */
+
+function mapStanding(row) {
+  return {
+    rank: row.position,
+    team: {
+      id:   row.team && row.team.id,
+      name: row.team && (row.team.name || row.team.shortName),
+      logo: (row.team && row.team.crest) || ''
+    },
+    all: {
+      played: row.playedGames,
+      win:    row.won,
+      draw:   row.draw,
+      lose:   row.lost,
+      goals: { for: row.goalsFor, against: row.goalsAgainst }
+    },
+    goalsDiff: row.goalDifference,
+    points:    row.points,
+    /* football-data devuelve 'W,W,D' separado por comas; mundial.js
+       espera 'WWD' (sin separadores). */
+    form: (row.form || '').replace(/,/g, '')
+  };
+}
+
+function mapScorer(s) {
+  return {
+    player: { name: (s.player && s.player.name) || '?' },
+    statistics: [{
+      team: { name: (s.team && (s.team.shortName || s.team.name)) || '?' },
+      games: { appearences: s.playedMatches || 0, minutes: 0 },
+      goals: { total: s.goals || 0, assists: s.assists }
+    }]
+  };
 }
 
 /* ===== Main ===== */
 async function main() {
-  console.log(`> ${new Date().toISOString()} · API-Football pull (league=${LEAGUE} season=${SEASON})`);
+  console.log(`> ${new Date().toISOString()} · football-data.org pull (${COMP} ${SEASON})`);
 
-  /* 1. Cargar stats existentes (para decidir si tocan team_stats) */
-  let existing = {};
-  try { existing = JSON.parse(fs.readFileSync(OUT, 'utf8')); } catch (_) { /* primera vez */ }
-
-  /* 2. Endpoints baratos en paralelo */
-  console.log('  → fetch endpoints "baratos" en paralelo (5 req)…');
-  const [standings, scorers, assists, yellow, red] = await Promise.all([
-    callAPI(`/standings?league=${LEAGUE}&season=${SEASON}`),
-    callAPI(`/players/topscorers?league=${LEAGUE}&season=${SEASON}`),
-    callAPI(`/players/topassists?league=${LEAGUE}&season=${SEASON}`),
-    callAPI(`/players/topyellowcards?league=${LEAGUE}&season=${SEASON}`),
-    callAPI(`/players/topredcards?league=${LEAGUE}&season=${SEASON}`)
-  ]);
-
-  const groups = (standings.response && standings.response[0] && standings.response[0].league && standings.response[0].league.standings) || [];
-  const teamIds = [];
-  groups.forEach(g => g.forEach(row => { if (row.team && row.team.id) teamIds.push(row.team.id); }));
-
-  console.log(`  · ${groups.length} grupos · ${teamIds.length} equipos · ${(scorers.response||[]).length} goleadores`);
-
-  /* 3. Team stats: refresca sólo si toca o si se fuerza */
-  const lastTeamStatsTs = existing.team_stats_generated_at ? new Date(existing.team_stats_generated_at).getTime() : 0;
-  const tsStale = Date.now() - lastTeamStatsTs > TEAM_STATS_TTL_MS;
-  const needTeamStats = FORCE_TS || tsStale;
-
-  let teamStats = existing.team_stats || {};
-  let teamStatsGeneratedAt = existing.team_stats_generated_at;
-
-  if (needTeamStats && teamIds.length) {
-    console.log(`  → refrescando team_stats para ${teamIds.length} equipos (${(teamIds.length * RATE_LIMIT_DELAY_MS / 60000).toFixed(1)} min aprox.)…`);
-    teamStats = {};
-    for (let i = 0; i < teamIds.length; i++) {
-      const id = teamIds[i];
-      try {
-        const r = await callAPI(`/teams/statistics?league=${LEAGUE}&season=${SEASON}&team=${id}`);
-        teamStats[id] = r.response || null;
-        if ((i+1) % 12 === 0) console.log(`    · ${i+1}/${teamIds.length} equipos`);
-      } catch (err) {
-        console.warn(`    ⚠ team ${id}: ${err.message}`);
-        teamStats[id] = null;
-      }
-      if (i < teamIds.length - 1) {
-        await new Promise(r => setTimeout(r, RATE_LIMIT_DELAY_MS));
-      }
+  /* Standings: el endpoint devuelve un array de stages × type × group.
+     Para fase de grupos tenemos `stage: 'GROUP_STAGE'` y `type: 'TOTAL'`. */
+  console.log('  → /competitions/' + COMP + '/standings');
+  const stdRes = await callAPI(`/competitions/${COMP}/standings`);
+  const groups = [];
+  (stdRes.standings || []).forEach(block => {
+    if (block.stage === 'GROUP_STAGE' && block.type === 'TOTAL' && Array.isArray(block.table)) {
+      const groupLetter = (block.group || '').replace(/^GROUP_/, '');
+      const mapped = block.table.map(row => {
+        const out = mapStanding(row);
+        out.group = `Group ${groupLetter}`;
+        return out;
+      });
+      if (mapped.length) groups.push(mapped);
     }
-    teamStatsGeneratedAt = new Date().toISOString();
-    console.log(`  · team_stats refrescado (${Object.keys(teamStats).length} equipos)`);
-  } else {
-    const ageH = ((Date.now() - lastTeamStatsTs) / 3600000).toFixed(1);
-    console.log(`  · team_stats vigente (refresco hace ${ageH} h, TTL 23 h) — se omite`);
-  }
+  });
 
-  /* 4. Componer output */
+  console.log(`  → /competitions/${COMP}/scorers`);
+  const scoRes = await callAPI(`/competitions/${COMP}/scorers?limit=20`);
+  const scorers = (scoRes.scorers || []).map(mapScorer);
+
+  console.log(`  · ${groups.length} grupos · ${scorers.length} goleadores`);
+
   const out = {
     generated_at: new Date().toISOString(),
-    team_stats_generated_at: teamStatsGeneratedAt,
+    team_stats_generated_at: null,
+    source: 'football-data.org',
+    notes: {
+      coverage: 'Free tier: standings + top goleadores. Asistentes, tarjetas y stats por equipo NO disponibles en esta fuente.'
+    },
     season: SEASON,
-    league: LEAGUE,
+    league: COMP,
     groups,
-    scorers: scorers.response || [],
-    assists: assists.response || [],
-    yellow:  yellow.response  || [],
-    red:     red.response     || [],
-    team_stats: teamStats
+    scorers,
+    assists: [],
+    yellow:  [],
+    red:     [],
+    team_stats: {}
   };
 
   if (DRY_RUN) {
@@ -130,7 +137,6 @@ async function main() {
     return;
   }
 
-  /* 5. Escribir solo si cambió (idempotente) */
   const json = JSON.stringify(out, null, 2);
   let prev = null;
   try { prev = fs.readFileSync(OUT, 'utf8'); } catch (_) {}

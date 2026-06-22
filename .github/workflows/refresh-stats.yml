@@ -17,13 +17,6 @@ on:
     - cron: '7 17 * * *'
     - cron: '7 23 * * *'
   workflow_dispatch:
-    inputs:
-      force_team_stats:
-        description: 'Forzar refresco de stats por equipo (48 req)'
-        required: false
-        default: 'false'
-        type: choice
-        options: ['false','true']
 
 permissions:
   contents: write
@@ -44,12 +37,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Pedir stats a API-Football
+      - name: Pedir stats a football-data.org
+        # Reutilizamos FOOTBALL_DATA_KEY (la misma del cron de resultados).
+        # API-Football free tier no expone WC 2026, así que pivotamos a
+        # football-data.org que sí tiene cobertura completa de 2026.
         env:
-          API_FOOTBALL_KEY:    ${{ secrets.API_FOOTBALL_KEY }}
-          API_FOOTBALL_LEAGUE: ${{ vars.API_FOOTBALL_LEAGUE || '1' }}
-          API_FOOTBALL_SEASON: ${{ vars.API_FOOTBALL_SEASON || '2026' }}
-          FORCE_TEAM_STATS:    ${{ github.event.inputs.force_team_stats == 'true' && '1' || '' }}
+          FOOTBALL_DATA_KEY:         ${{ secrets.FOOTBALL_DATA_KEY }}
+          FOOTBALL_DATA_COMPETITION: ${{ vars.FOOTBALL_DATA_COMPETITION || 'WC' }}
+          FOOTBALL_DATA_SEASON:      ${{ vars.FOOTBALL_DATA_SEASON || '2026' }}
         run: node scripts/generate-stats.js
 
       - name: Commit si hubo cambios

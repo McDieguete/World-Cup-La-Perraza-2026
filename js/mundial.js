@@ -61,23 +61,34 @@
   function render() {
     if (!STATS) return;
     const mount = $('#mundial-container');
+    const hasTeamStats = STATS.team_stats && Object.keys(STATS.team_stats).length > 0;
+    const hasAssists = (STATS.assists || []).length > 0;
+    const hasYellow  = (STATS.yellow  || []).length > 0;
+    const hasRed     = (STATS.red     || []).length > 0;
+    const source = STATS.source || '—';
+
     mount.innerHTML = `
       <div class="mu-meta">
         <span class="mu-meta-pill">📅 Datos: ${ago(STATS.generated_at)}</span>
-        <span class="mu-meta-pill mu-meta-pill-team">🛡️ Stats por selección: ${ago(STATS.team_stats_generated_at)}</span>
+        <span class="mu-meta-pill mu-meta-pill-source">📡 Fuente: ${esc(source)}</span>
+        ${hasTeamStats
+          ? `<span class="mu-meta-pill mu-meta-pill-team">🛡️ Stats por selección: ${ago(STATS.team_stats_generated_at)}</span>`
+          : ''}
       </div>
       ${renderStandings(STATS.groups || [])}
-      ${renderTopBlocks()}
-      ${renderCards()}
-      ${renderTeamSelector()}
-      <div id="mu-team-detail"></div>
+      ${renderTopBlocks(hasAssists)}
+      ${(hasYellow || hasRed) ? renderCards() : ''}
+      ${hasTeamStats ? (renderTeamSelector() + '<div id="mu-team-detail"></div>') : ''}
+      ${(!hasAssists || !hasYellow || !hasRed || !hasTeamStats)
+        ? `<div class="mu-note">ℹ️ Asistentes, tarjetas y stats por selección no están disponibles en el plan free de <b>${esc(source)}</b>. Para esa profundidad necesitarías un plan premium.</div>`
+        : ''}
     `;
     wire();
-    if (teamStatsSelectedId == null && STATS.team_stats) {
+    if (hasTeamStats && teamStatsSelectedId == null) {
       const firstId = Object.keys(STATS.team_stats)[0];
       if (firstId) { teamStatsSelectedId = +firstId; }
     }
-    if (teamStatsSelectedId != null) renderTeamDetail();
+    if (hasTeamStats && teamStatsSelectedId != null) renderTeamDetail();
   }
 
   /* ===== 1. Standings (grid 12 grupos) ===== */
@@ -133,15 +144,30 @@
   }
 
   /* ===== 2. Top scorers + assists con toggle Total / Por 90' ===== */
-  function renderTopBlocks() {
-    return `<section class="mu-block mu-grid-2">
+  function renderTopBlocks(hasAssists) {
+    if (hasAssists) {
+      return `<section class="mu-block mu-grid-2">
+        ${renderTopList('scorers', '⚽ Top goleadores', STATS.scorers || [], scoreToggle, 'goals')}
+        ${renderTopList('assists', '🎯 Top asistentes', STATS.assists || [], assistToggle, 'assists')}
+      </section>`;
+    }
+    /* Sin asistentes: goleadores a ancho completo */
+    return `<section class="mu-block">
       ${renderTopList('scorers', '⚽ Top goleadores', STATS.scorers || [], scoreToggle, 'goals')}
-      ${renderTopList('assists', '🎯 Top asistentes', STATS.assists || [], assistToggle, 'assists')}
     </section>`;
   }
 
   function renderTopList(key, title, players, toggle, statKind) {
     if (!players.length) return `<div class="mu-empty-block"><h3 class="mu-h3">${title}</h3>Sin datos.</div>`;
+    /* ¿Hay datos de minutos jugados? Si todos son 0, el toggle Total / Por 90'
+       no aporta nada — lo ocultamos. football-data.org no expone minutos. */
+    const anyMinutes = players.some(p => {
+      const s = (p.statistics && p.statistics[0]) || {};
+      return (s.games && s.games.minutes) > 0;
+    });
+    const showToggle = anyMinutes;
+    const effectiveToggle = anyMinutes ? toggle : 'total';
+
     const rows = players.slice(0, 10).map((p, i) => {
       const pl = p.player || {};
       const stat = (p.statistics && p.statistics[0]) || {};
@@ -152,7 +178,7 @@
         ? ((stat.goals && stat.goals.total) || 0)
         : ((stat.goals && stat.goals.assists) || 0);
       const per90 = minutes > 0 ? (total / (minutes / 90)) : 0;
-      const value = toggle === 'p90' ? per90.toFixed(2) : total;
+      const value = effectiveToggle === 'p90' ? per90.toFixed(2) : total;
       return `<tr>
         <td class="mu-rank">${i + 1}</td>
         <td class="mu-player">
@@ -166,10 +192,10 @@
     return `<div class="mu-toplist">
       <div class="mu-toplist-head">
         <h3 class="mu-h3">${title}</h3>
-        <div class="mu-seg" data-key="${key}">
+        ${showToggle ? `<div class="mu-seg" data-key="${key}">
           <button class="mu-seg-btn ${toggle==='total'?'active':''}" data-val="total">Total</button>
           <button class="mu-seg-btn ${toggle==='p90'?'active':''}" data-val="p90">Por 90'</button>
-        </div>
+        </div>` : ''}
       </div>
       <table class="mu-table">
         <thead><tr><th>#</th><th>Jugador</th><th>${statKind === 'goals' ? 'Goles' : 'Asist.'}</th><th>PJ</th></tr></thead>

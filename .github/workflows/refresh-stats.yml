@@ -53,13 +53,17 @@ jobs:
         run: node scripts/generate-stats.js
 
       - name: Commit si hubo cambios
+        # Importante: `git add` primero y luego `git diff --cached` para detectar
+        # también archivos NUEVOS (no sólo modificaciones de archivos ya tracked).
+        # En la primera ejecución data/stats.json no existe en el repo, por eso
+        # el `git diff --quiet -- data/stats.json` plano no ve el archivo nuevo.
         run: |
-          if git diff --quiet -- data/stats.json; then
+          git add data/stats.json 2>/dev/null || true
+          if git diff --cached --quiet -- data/stats.json; then
             echo "Sin cambios — no se hace commit."
             exit 0
           fi
           git config user.name  "perraza-bot"
           git config user.email "perraza-bot@users.noreply.github.com"
-          git add data/stats.json
           git commit -m "auto: refrescar estadísticas del Mundial"
           git push

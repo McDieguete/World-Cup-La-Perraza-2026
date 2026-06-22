@@ -1,9 +1,415 @@
 {
-  "generated_at": "2026-06-22T18:56:11.147Z",
+  "generated_at": "2026-06-22T19:06:17.856Z",
+  "team_stats_generated_at": null,
+  "source": "football-data.org",
+  "notes": {
+    "coverage": "Free tier: standings + top goleadores. Asistentes, tarjetas y stats por equipo NO disponibles en esta fuente."
+  },
   "season": "2026",
-  "league": "1",
+  "league": "WC",
   "groups": [],
-  "scorers": [],
+  "scorers": [
+    {
+      "player": {
+        "name": "Lionel Messi"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Argentina"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 5,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Deniz Undav"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Germany"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 3,
+            "assists": 2
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Jonathan David"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Canada"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 3,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Cyle Larin"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Canada"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Folarin Balogun"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "USA"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Ismael Saibari"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Morocco"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Vinicius Junior"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Brazil"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": 2
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Kai Havertz"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Germany"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Daichi Kamada"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Japan"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Yasin Ayari"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Sweden"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Maximiliano Araújo"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Uruguay"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": 1
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Elijah Just"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "New Zealand"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Kylian Mbappé"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "France"
+          },
+          "games": {
+            "appearences": 1,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Erling Haaland"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Norway"
+          },
+          "games": {
+            "appearences": 1,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Harry Kane"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "England"
+          },
+          "games": {
+            "appearences": 1,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Johan Manzambi"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Switzerland"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Matheus Cunha"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Brazil"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Brian Brobbey"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Netherlands"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Cody Gakpo"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Netherlands"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": 2
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Ayase Ueda"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Japan"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": 1
+          }
+        }
+      ]
+    }
+  ],
   "assists": [],
   "yellow": [],
   "red": [],

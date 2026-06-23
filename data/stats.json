@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T10:50:33.533Z",
+  "generated_at": "2026-06-23T14:05:44.483Z",
   "team_stats_generated_at": null,
   "source": "football-data.org",
   "notes": {
@@ -211,6 +211,26 @@
     },
     {
       "player": {
+        "name": "Crysencio Summerville"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Netherlands"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 2,
+            "assists": 1
+          }
+        }
+      ]
+    },
+    {
+      "player": {
         "name": "Daichi Kamada"
       },
       "statistics": [
@@ -377,26 +397,6 @@
         {
           "team": {
             "name": "Netherlands"
-          },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": 2
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Ayase Ueda"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Japan"
           },
           "games": {
             "appearences": 2,

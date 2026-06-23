@@ -1,23 +1,12 @@
 /* ===========================================================
    generate-stats.js — Mundial stats vía football-data.org
    --------------------------------------------------------------
-   API-Football free tier no expone WC 2026 (solo 2022-2024).
-   Pivot a football-data.org, donde tu FOOTBALL_DATA_KEY YA tiene
-   acceso a WC 2026 (es la que usa el cron de resultados).
-
-   Cobertura ofrecida con esta fuente:
-     · Clasificación por grupos (12 grupos)
-     · Top goleadores
-   No cubre con free tier:
-     · Asistentes detallados, tarjetas por jugador, stats por
-       selección (goles por minuto, formaciones…). Sus secciones
-       en la UI quedan ocultas/vacías y se indica la fuente.
-
-   Variables de entorno:
-     FOOTBALL_DATA_KEY            (obligatoria)
-     FOOTBALL_DATA_COMPETITION    (opcional, default 'WC')
-     FOOTBALL_DATA_SEASON         (opcional, default '2026')
-     DRY_RUN=1                    (opcional)
+   Fuente: football-data.org (reutiliza FOOTBALL_DATA_KEY).
+   Endpoints:
+     · /competitions/WC/standings → 12 grupos (con goalsFor/goalsAgainst)
+     · /competitions/WC/scorers   → top goleadores
+   Salida: data/stats.json — minimalista, sin enriquecimientos
+   ni cálculos derivados (lo decide el frontend a la hora de pintar).
    =========================================================== */
 
 'use strict';
@@ -39,10 +28,8 @@ if (!KEY) {
   process.exit(2);
 }
 
-/* ===== HTTP wrapper ===== */
 async function callAPI(endpoint) {
-  const url = `${BASE}${endpoint}`;
-  const res = await fetch(url, { headers: HEADERS });
+  const res = await fetch(`${BASE}${endpoint}`, { headers: HEADERS });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`${endpoint} → ${res.status} ${res.statusText}: ${body.slice(0, 200)}`);
@@ -50,86 +37,69 @@ async function callAPI(endpoint) {
   return res.json();
 }
 
-/* ===== Mapping al esquema que espera el frontend (mundial.js) =====
-   El esquema se diseñó originalmente para API-Football. Mantenemos
-   la forma para no tocar el frontend. */
-
-function mapStanding(row) {
-  return {
-    rank: row.position,
-    team: {
-      id:   row.team && row.team.id,
-      name: row.team && (row.team.name || row.team.shortName),
-      logo: (row.team && row.team.crest) || ''
-    },
-    all: {
-      played: row.playedGames,
-      win:    row.won,
-      draw:   row.draw,
-      lose:   row.lost,
-      goals: { for: row.goalsFor, against: row.goalsAgainst }
-    },
-    goalsDiff: row.goalDifference,
-    points:    row.points,
-    /* football-data devuelve 'W,W,D' separado por comas; mundial.js
-       espera 'WWD' (sin separadores). */
-    form: (row.form || '').replace(/,/g, '')
-  };
-}
-
-function mapScorer(s) {
-  return {
-    player: { name: (s.player && s.player.name) || '?' },
-    statistics: [{
-      team: { name: (s.team && (s.team.shortName || s.team.name)) || '?' },
-      games: { appearences: s.playedMatches || 0, minutes: 0 },
-      goals: { total: s.goals || 0, assists: s.assists }
-    }]
-  };
-}
-
-/* ===== Main ===== */
 async function main() {
-  console.log(`> ${new Date().toISOString()} · football-data.org pull (${COMP} ${SEASON})`);
+  console.log(`> ${new Date().toISOString()} · football-data.org (${COMP} ${SEASON})`);
 
-  /* Standings: el endpoint devuelve un array de stages × type × group.
-     Para fase de grupos tenemos `stage: 'GROUP_STAGE'` y `type: 'TOTAL'`. */
-  console.log('  → /competitions/' + COMP + '/standings');
+  /* ===== 1. Standings ===== */
+  console.log(`  → /competitions/${COMP}/standings`);
   const stdRes = await callAPI(`/competitions/${COMP}/standings`);
-  const groups = [];
-  (stdRes.standings || []).forEach(block => {
-    if (block.stage === 'GROUP_STAGE' && block.type === 'TOTAL' && Array.isArray(block.table)) {
-      const groupLetter = (block.group || '').replace(/^GROUP_/, '');
-      const mapped = block.table.map(row => {
-        const out = mapStanding(row);
-        out.group = `Group ${groupLetter}`;
-        return out;
-      });
-      if (mapped.length) groups.push(mapped);
-    }
+  const rawStandings = stdRes.standings || [];
+  console.log(`  · respuesta: ${rawStandings.length} bloques`);
+  rawStandings.forEach((b, i) => {
+    console.log(`    [${i}] stage=${b.stage || '?'} type=${b.type || '?'} group=${b.group || '?'} rows=${(b.table||[]).length}`);
   });
 
+  /* Filtro permisivo: preferimos type=TOTAL pero aceptamos null/missing.
+     Aceptamos cualquier bloque con `group` definido y `table` con filas. */
+  const groups = [];
+  rawStandings.forEach(block => {
+    if (block.type && block.type !== 'TOTAL') return;
+    if (!Array.isArray(block.table) || !block.table.length) return;
+    if (!block.group) return;
+    const groupLetter = String(block.group).replace(/^GROUP_/i, '');
+    const table = block.table.map(row => ({
+      position:  row.position,
+      team: {
+        id:    row.team && row.team.id,
+        name:  row.team && (row.team.name || row.team.shortName),
+        tla:   row.team && row.team.tla,
+        crest: row.team && (row.team.crest || '')
+      },
+      playedGames:    row.playedGames,
+      won:            row.won,
+      draw:           row.draw,
+      lost:           row.lost,
+      points:         row.points,
+      goalsFor:       row.goalsFor,
+      goalsAgainst:   row.goalsAgainst,
+      goalDifference: row.goalDifference,
+      form: (row.form || '').replace(/,/g, '')
+    }));
+    groups.push({ group: groupLetter, table });
+  });
+
+  /* ===== 2. Scorers ===== */
   console.log(`  → /competitions/${COMP}/scorers`);
   const scoRes = await callAPI(`/competitions/${COMP}/scorers?limit=20`);
-  const scorers = (scoRes.scorers || []).map(mapScorer);
+  const scorers = (scoRes.scorers || []).map(s => ({
+    player:        (s.player && s.player.name) || '?',
+    team:          (s.team && (s.team.shortName || s.team.name)) || '?',
+    teamCrest:     (s.team && s.team.crest) || '',
+    goals:         s.goals || 0,
+    assists:       s.assists,
+    penalties:     s.penalties,
+    playedMatches: s.playedMatches || 0
+  }));
 
   console.log(`  · ${groups.length} grupos · ${scorers.length} goleadores`);
 
   const out = {
     generated_at: new Date().toISOString(),
-    team_stats_generated_at: null,
     source: 'football-data.org',
-    notes: {
-      coverage: 'Free tier: standings + top goleadores. Asistentes, tarjetas y stats por equipo NO disponibles en esta fuente.'
-    },
+    competition: COMP,
     season: SEASON,
-    league: COMP,
     groups,
-    scorers,
-    assists: [],
-    yellow:  [],
-    red:     [],
-    team_stats: {}
+    scorers
   };
 
   if (DRY_RUN) {

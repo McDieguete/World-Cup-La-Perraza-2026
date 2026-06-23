@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T17:09:18.933Z",
+  "generated_at": "2026-06-23T18:17:59.834Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -780,6 +780,24 @@
         {
           "position": 1,
           "team": {
+            "id": 765,
+            "name": "Portugal",
+            "tla": "POR",
+            "crest": "https://crests.football-data.org/765.svg"
+          },
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "goalDifference": 3,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
             "id": 818,
             "name": "Colombia",
             "tla": "COL",
@@ -793,24 +811,6 @@
           "goalsFor": 3,
           "goalsAgainst": 1,
           "goalDifference": 2,
-          "form": ""
-        },
-        {
-          "position": 2,
-          "team": {
-            "id": 765,
-            "name": "Portugal",
-            "tla": "POR",
-            "crest": "https://crests.football-data.org/765.svg"
-          },
-          "playedGames": 2,
-          "won": 0,
-          "draw": 2,
-          "lost": 0,
-          "points": 2,
-          "goalsFor": 1,
-          "goalsAgainst": 1,
-          "goalDifference": 0,
           "form": ""
         },
         {
@@ -841,12 +841,12 @@
           },
           "playedGames": 2,
           "won": 0,
-          "draw": 1,
-          "lost": 1,
-          "points": 1,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
           "goalsFor": 1,
-          "goalsAgainst": 3,
-          "goalDifference": -2,
+          "goalsAgainst": 6,
+          "goalDifference": -5,
           "form": ""
         }
       ]
@@ -1007,7 +1007,7 @@
       "team": "Brazil",
       "teamCrest": "https://crests.football-data.org/764.svg",
       "goals": 2,
-      "assists": 2,
+      "assists": 1,
       "penalties": null,
       "playedMatches": 2
     },

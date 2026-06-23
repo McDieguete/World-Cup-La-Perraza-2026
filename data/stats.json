@@ -1,417 +1,1114 @@
 {
-  "generated_at": "2026-06-23T14:05:44.483Z",
-  "team_stats_generated_at": null,
+  "generated_at": "2026-06-23T17:09:18.933Z",
   "source": "football-data.org",
-  "notes": {
-    "coverage": "Free tier: standings + top goleadores. Asistentes, tarjetas y stats por equipo NO disponibles en esta fuente."
-  },
+  "competition": "WC",
   "season": "2026",
-  "league": "WC",
-  "groups": [],
-  "scorers": [
+  "groups": [
     {
-      "player": {
-        "name": "Lionel Messi"
-      },
-      "statistics": [
+      "group": "Group A",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Argentina"
+            "id": 769,
+            "name": "Mexico",
+            "tla": "MEX",
+            "crest": "https://crests.football-data.org/769.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "goalDifference": 3,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 772,
+            "name": "South Korea",
+            "tla": "KOR",
+            "crest": "https://crests.football-data.org/772.png"
           },
-          "goals": {
-            "total": 5,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 798,
+            "name": "Czechia",
+            "tla": "CZE",
+            "crest": "https://crests.football-data.org/798.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 3,
+          "goalDifference": -1,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 774,
+            "name": "South Africa",
+            "tla": "RSA",
+            "crest": "https://crests.football-data.org/9396.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 3,
+          "goalDifference": -2,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Kylian Mbappé"
-      },
-      "statistics": [
+      "group": "Group B",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "France"
+            "id": 828,
+            "name": "Canada",
+            "tla": "CAN",
+            "crest": "https://crests.football-data.org/canada.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 7,
+          "goalsAgainst": 1,
+          "goalDifference": 6,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 788,
+            "name": "Switzerland",
+            "tla": "SUI",
+            "crest": "https://crests.football-data.org/788.svg"
           },
-          "goals": {
-            "total": 4,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 5,
+          "goalsAgainst": 2,
+          "goalDifference": 3,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 1060,
+            "name": "Bosnia-Herzegovina",
+            "tla": "BIH",
+            "crest": "https://crests.football-data.org/bosnia.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 5,
+          "goalDifference": -3,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 8030,
+            "name": "Qatar",
+            "tla": "QAT",
+            "crest": "https://crests.football-data.org/8030.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 7,
+          "goalDifference": -6,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Erling Haaland"
-      },
-      "statistics": [
+      "group": "Group C",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Norway"
+            "id": 764,
+            "name": "Brazil",
+            "tla": "BRA",
+            "crest": "https://crests.football-data.org/764.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "goalDifference": 3,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 815,
+            "name": "Morocco",
+            "tla": "MAR",
+            "crest": "https://crests.football-data.org/morocco.svg"
           },
-          "goals": {
-            "total": 4,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "goalDifference": 1,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 8873,
+            "name": "Scotland",
+            "tla": "SCO",
+            "crest": "https://crests.football-data.org/814.svg"
+          },
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 836,
+            "name": "Haiti",
+            "tla": "HAI",
+            "crest": "https://crests.football-data.org/haiti.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 4,
+          "goalDifference": -4,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Deniz Undav"
-      },
-      "statistics": [
+      "group": "Group D",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Germany"
+            "id": 771,
+            "name": "United States",
+            "tla": "USA",
+            "crest": "https://crests.football-data.org/usa.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "goalDifference": 5,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 779,
+            "name": "Australia",
+            "tla": "AUS",
+            "crest": "https://crests.football-data.org/779.svg"
           },
-          "goals": {
-            "total": 3,
-            "assists": 2
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 761,
+            "name": "Paraguay",
+            "tla": "PAR",
+            "crest": "https://crests.football-data.org/761.svg"
+          },
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 4,
+          "goalDifference": -2,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 803,
+            "name": "Turkey",
+            "tla": "TUR",
+            "crest": "https://crests.football-data.org/803.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 3,
+          "goalDifference": -3,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Jonathan David"
-      },
-      "statistics": [
+      "group": "Group E",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Canada"
+            "id": 759,
+            "name": "Germany",
+            "tla": "GER",
+            "crest": "https://crests.football-data.org/759.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 9,
+          "goalsAgainst": 2,
+          "goalDifference": 7,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 1935,
+            "name": "Ivory Coast",
+            "tla": "CIV",
+            "crest": "https://crests.football-data.org/787.svg"
           },
-          "goals": {
-            "total": 3,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 791,
+            "name": "Ecuador",
+            "tla": "ECU",
+            "crest": "https://crests.football-data.org/791.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 0,
+          "goalsAgainst": 1,
+          "goalDifference": -1,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 9460,
+            "name": "Curaçao",
+            "tla": "CUW",
+            "crest": "https://crests.football-data.org/curacao.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 7,
+          "goalDifference": -6,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Cyle Larin"
-      },
-      "statistics": [
+      "group": "Group F",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Canada"
+            "id": 8601,
+            "name": "Netherlands",
+            "tla": "NED",
+            "crest": "https://crests.football-data.org/8601.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 7,
+          "goalsAgainst": 3,
+          "goalDifference": 4,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 766,
+            "name": "Japan",
+            "tla": "JPN",
+            "crest": "https://crests.football-data.org/766.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 6,
+          "goalsAgainst": 2,
+          "goalDifference": 4,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 792,
+            "name": "Sweden",
+            "tla": "SWE",
+            "crest": "https://crests.football-data.org/792.svg"
+          },
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 6,
+          "goalsAgainst": 6,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 802,
+            "name": "Tunisia",
+            "tla": "TUN",
+            "crest": "https://crests.football-data.org/tunisia.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 9,
+          "goalDifference": -8,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Folarin Balogun"
-      },
-      "statistics": [
+      "group": "Group G",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "USA"
+            "id": 825,
+            "name": "Egypt",
+            "tla": "EGY",
+            "crest": "https://crests.football-data.org/825.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 4,
+          "goalsAgainst": 2,
+          "goalDifference": 2,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 840,
+            "name": "Iran",
+            "tla": "IRN",
+            "crest": "https://crests.football-data.org/iran.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 0,
+          "draw": 2,
+          "lost": 0,
+          "points": 2,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 805,
+            "name": "Belgium",
+            "tla": "BEL",
+            "crest": "https://crests.football-data.org/805.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 2,
+          "lost": 0,
+          "points": 2,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 783,
+            "name": "New Zealand",
+            "tla": "NZL",
+            "crest": "https://crests.football-data.org/783.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 3,
+          "goalsAgainst": 5,
+          "goalDifference": -2,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Ismael Saibari"
-      },
-      "statistics": [
+      "group": "Group H",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Morocco"
+            "id": 760,
+            "name": "Spain",
+            "tla": "ESP",
+            "crest": "https://crests.football-data.org/760.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 1,
+          "draw": 1,
+          "lost": 0,
+          "points": 4,
+          "goalsFor": 4,
+          "goalsAgainst": 0,
+          "goalDifference": 4,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 758,
+            "name": "Uruguay",
+            "tla": "URU",
+            "crest": "https://crests.football-data.org/758.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 0,
+          "draw": 2,
+          "lost": 0,
+          "points": 2,
+          "goalsFor": 3,
+          "goalsAgainst": 3,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 1930,
+            "name": "Cape Verde Islands",
+            "tla": "CPV",
+            "crest": "https://crests.football-data.org/cape_verde.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 2,
+          "lost": 0,
+          "points": 2,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 801,
+            "name": "Saudi Arabia",
+            "tla": "KSA",
+            "crest": "https://crests.football-data.org/saudi_arabia.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 5,
+          "goalDifference": -4,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Vinicius Junior"
-      },
-      "statistics": [
+      "group": "Group I",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Brazil"
+            "id": 773,
+            "name": "France",
+            "tla": "FRA",
+            "crest": "https://crests.football-data.org/773.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "goalDifference": 5,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 8872,
+            "name": "Norway",
+            "tla": "NOR",
+            "crest": "https://crests.football-data.org/813.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": 2
-          }
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 7,
+          "goalsAgainst": 3,
+          "goalDifference": 4,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 804,
+            "name": "Senegal",
+            "tla": "SEN",
+            "crest": "https://crests.football-data.org/senegal.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 6,
+          "goalDifference": -3,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 8062,
+            "name": "Iraq",
+            "tla": "IRQ",
+            "crest": "https://crests.football-data.org/iraq.svg"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 7,
+          "goalDifference": -6,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Kai Havertz"
-      },
-      "statistics": [
+      "group": "Group J",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Germany"
+            "id": 762,
+            "name": "Argentina",
+            "tla": "ARG",
+            "crest": "https://crests.football-data.org/762.png"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "goalDifference": 5,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 816,
+            "name": "Austria",
+            "tla": "AUT",
+            "crest": "https://crests.football-data.org/816.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 3,
+          "goalsAgainst": 3,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 778,
+            "name": "Algeria",
+            "tla": "ALG",
+            "crest": "https://crests.football-data.org/algeria.svg"
+          },
+          "playedGames": 2,
+          "won": 1,
+          "draw": 0,
+          "lost": 1,
+          "points": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 4,
+          "goalDifference": -2,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 8049,
+            "name": "Jordan",
+            "tla": "JOR",
+            "crest": "https://crests.football-data.org/8049.png"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 0,
+          "lost": 2,
+          "points": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 5,
+          "goalDifference": -3,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Crysencio Summerville"
-      },
-      "statistics": [
+      "group": "Group K",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Netherlands"
+            "id": 818,
+            "name": "Colombia",
+            "tla": "COL",
+            "crest": "https://crests.football-data.org/818.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
+          "playedGames": 1,
+          "won": 1,
+          "draw": 0,
+          "lost": 0,
+          "points": 3,
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "goalDifference": 2,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
+            "id": 765,
+            "name": "Portugal",
+            "tla": "POR",
+            "crest": "https://crests.football-data.org/765.svg"
           },
-          "goals": {
-            "total": 2,
-            "assists": 1
-          }
+          "playedGames": 2,
+          "won": 0,
+          "draw": 2,
+          "lost": 0,
+          "points": 2,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 1934,
+            "name": "Congo DR",
+            "tla": "COD",
+            "crest": "https://crests.football-data.org/congo_dr.svg"
+          },
+          "playedGames": 1,
+          "won": 0,
+          "draw": 1,
+          "lost": 0,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 4,
+          "team": {
+            "id": 8070,
+            "name": "Uzbekistan",
+            "tla": "UZB",
+            "crest": "https://crests.football-data.org/8070.png"
+          },
+          "playedGames": 2,
+          "won": 0,
+          "draw": 1,
+          "lost": 1,
+          "points": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 3,
+          "goalDifference": -2,
+          "form": ""
         }
       ]
     },
     {
-      "player": {
-        "name": "Daichi Kamada"
-      },
-      "statistics": [
+      "group": "Group L",
+      "table": [
         {
+          "position": 1,
           "team": {
-            "name": "Japan"
+            "id": 770,
+            "name": "England",
+            "tla": "ENG",
+            "crest": "https://crests.football-data.org/770.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Yasin Ayari"
-      },
-      "statistics": [
+          "playedGames": 1,
+          "won": 1,
+          "draw": 0,
+          "lost": 0,
+          "points": 3,
+          "goalsFor": 4,
+          "goalsAgainst": 2,
+          "goalDifference": 2,
+          "form": ""
+        },
         {
+          "position": 2,
           "team": {
-            "name": "Sweden"
+            "id": 763,
+            "name": "Ghana",
+            "tla": "GHA",
+            "crest": "https://crests.football-data.org/ghana.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Maximiliano Araújo"
-      },
-      "statistics": [
+          "playedGames": 1,
+          "won": 1,
+          "draw": 0,
+          "lost": 0,
+          "points": 3,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "goalDifference": 1,
+          "form": ""
+        },
         {
+          "position": 3,
           "team": {
-            "name": "Uruguay"
+            "id": 1836,
+            "name": "Panama",
+            "tla": "PAN",
+            "crest": "https://crests.football-data.org/panama.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": 1
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Elijah Just"
-      },
-      "statistics": [
+          "playedGames": 1,
+          "won": 0,
+          "draw": 0,
+          "lost": 1,
+          "points": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 1,
+          "goalDifference": -1,
+          "form": ""
+        },
         {
+          "position": 4,
           "team": {
-            "name": "New Zealand"
+            "id": 799,
+            "name": "Croatia",
+            "tla": "CRO",
+            "crest": "https://crests.football-data.org/799.svg"
           },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Harry Kane"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "England"
-          },
-          "games": {
-            "appearences": 1,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Johan Manzambi"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Switzerland"
-          },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Matheus Cunha"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Brazil"
-          },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Brian Brobbey"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Netherlands"
-          },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Cody Gakpo"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Netherlands"
-          },
-          "games": {
-            "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": 1
-          }
+          "playedGames": 1,
+          "won": 0,
+          "draw": 0,
+          "lost": 1,
+          "points": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 4,
+          "goalDifference": -2,
+          "form": ""
         }
       ]
     }
   ],
-  "assists": [],
-  "yellow": [],
-  "red": [],
-  "team_stats": {}
+  "scorers": [
+    {
+      "player": "Lionel Messi",
+      "team": "Argentina",
+      "teamCrest": "https://crests.football-data.org/762.png",
+      "goals": 5,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Kylian Mbappé",
+      "team": "France",
+      "teamCrest": "https://crests.football-data.org/773.svg",
+      "goals": 4,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Erling Haaland",
+      "team": "Norway",
+      "teamCrest": "https://crests.football-data.org/813.svg",
+      "goals": 4,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Deniz Undav",
+      "team": "Germany",
+      "teamCrest": "https://crests.football-data.org/759.svg",
+      "goals": 3,
+      "assists": 2,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Jonathan David",
+      "team": "Canada",
+      "teamCrest": "https://crests.football-data.org/canada.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Cyle Larin",
+      "team": "Canada",
+      "teamCrest": "https://crests.football-data.org/canada.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Folarin Balogun",
+      "team": "USA",
+      "teamCrest": "https://crests.football-data.org/usa.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Ismael Saibari",
+      "team": "Morocco",
+      "teamCrest": "https://crests.football-data.org/morocco.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Vinicius Junior",
+      "team": "Brazil",
+      "teamCrest": "https://crests.football-data.org/764.svg",
+      "goals": 2,
+      "assists": 2,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Kai Havertz",
+      "team": "Germany",
+      "teamCrest": "https://crests.football-data.org/759.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": 1,
+      "playedMatches": 2
+    },
+    {
+      "player": "Crysencio Summerville",
+      "team": "Netherlands",
+      "teamCrest": "https://crests.football-data.org/8601.svg",
+      "goals": 2,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Daichi Kamada",
+      "team": "Japan",
+      "teamCrest": "https://crests.football-data.org/766.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Yasin Ayari",
+      "team": "Sweden",
+      "teamCrest": "https://crests.football-data.org/792.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Maximiliano Araújo",
+      "team": "Uruguay",
+      "teamCrest": "https://crests.football-data.org/758.svg",
+      "goals": 2,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Elijah Just",
+      "team": "New Zealand",
+      "teamCrest": "https://crests.football-data.org/783.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Harry Kane",
+      "team": "England",
+      "teamCrest": "https://crests.football-data.org/770.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": 1,
+      "playedMatches": 1
+    },
+    {
+      "player": "Johan Manzambi",
+      "team": "Switzerland",
+      "teamCrest": "https://crests.football-data.org/788.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Matheus Cunha",
+      "team": "Brazil",
+      "teamCrest": "https://crests.football-data.org/764.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Brian Brobbey",
+      "team": "Netherlands",
+      "teamCrest": "https://crests.football-data.org/8601.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 2
+    },
+    {
+      "player": "Cody Gakpo",
+      "team": "Netherlands",
+      "teamCrest": "https://crests.football-data.org/8601.svg",
+      "goals": 2,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 2
+    }
+  ]
 }

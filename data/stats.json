@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T19:06:17.856Z",
+  "generated_at": "2026-06-23T10:50:33.533Z",
   "team_stats_generated_at": null,
   "source": "football-data.org",
   "notes": {
@@ -24,6 +24,46 @@
           },
           "goals": {
             "total": 5,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Kylian Mbappé"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "France"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 4,
+            "assists": null
+          }
+        }
+      ]
+    },
+    {
+      "player": {
+        "name": "Erling Haaland"
+      },
+      "statistics": [
+        {
+          "team": {
+            "name": "Norway"
+          },
+          "games": {
+            "appearences": 2,
+            "minutes": 0
+          },
+          "goals": {
+            "total": 4,
             "assists": null
           }
         }
@@ -240,46 +280,6 @@
           },
           "games": {
             "appearences": 2,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Kylian Mbappé"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "France"
-          },
-          "games": {
-            "appearences": 1,
-            "minutes": 0
-          },
-          "goals": {
-            "total": 2,
-            "assists": null
-          }
-        }
-      ]
-    },
-    {
-      "player": {
-        "name": "Erling Haaland"
-      },
-      "statistics": [
-        {
-          "team": {
-            "name": "Norway"
-          },
-          "games": {
-            "appearences": 1,
             "minutes": 0
           },
           "goals": {

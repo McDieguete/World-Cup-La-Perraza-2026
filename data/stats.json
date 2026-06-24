@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T12:35:33.283Z",
+  "generated_at": "2026-06-24T18:13:30.159Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -973,7 +973,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Cyle Larin",
@@ -982,7 +982,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Folarin Balogun",
@@ -1090,7 +1090,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Matheus Cunha",

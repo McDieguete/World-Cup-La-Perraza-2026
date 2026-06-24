@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T22:04:50.455Z",
+  "generated_at": "2026-06-24T10:35:14.157Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -780,6 +780,24 @@
         {
           "position": 1,
           "team": {
+            "id": 818,
+            "name": "Colombia",
+            "tla": "COL",
+            "crest": "https://crests.football-data.org/818.svg"
+          },
+          "playedGames": 2,
+          "won": 2,
+          "draw": 0,
+          "lost": 0,
+          "points": 6,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "goalDifference": 3,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
             "id": 765,
             "name": "Portugal",
             "tla": "POR",
@@ -796,24 +814,6 @@
           "form": ""
         },
         {
-          "position": 2,
-          "team": {
-            "id": 818,
-            "name": "Colombia",
-            "tla": "COL",
-            "crest": "https://crests.football-data.org/818.svg"
-          },
-          "playedGames": 1,
-          "won": 1,
-          "draw": 0,
-          "lost": 0,
-          "points": 3,
-          "goalsFor": 3,
-          "goalsAgainst": 1,
-          "goalDifference": 2,
-          "form": ""
-        },
-        {
           "position": 3,
           "team": {
             "id": 1934,
@@ -821,14 +821,14 @@
             "tla": "COD",
             "crest": "https://crests.football-data.org/congo_dr.svg"
           },
-          "playedGames": 1,
+          "playedGames": 2,
           "won": 0,
           "draw": 1,
-          "lost": 0,
+          "lost": 1,
           "points": 1,
           "goalsFor": 1,
-          "goalsAgainst": 1,
-          "goalDifference": 0,
+          "goalsAgainst": 2,
+          "goalDifference": -1,
           "form": ""
         },
         {
@@ -893,36 +893,36 @@
         {
           "position": 3,
           "team": {
-            "id": 1836,
-            "name": "Panama",
-            "tla": "PAN",
-            "crest": "https://crests.football-data.org/panama.svg"
+            "id": 799,
+            "name": "Croatia",
+            "tla": "CRO",
+            "crest": "https://crests.football-data.org/799.svg"
           },
-          "playedGames": 1,
-          "won": 0,
+          "playedGames": 2,
+          "won": 1,
           "draw": 0,
           "lost": 1,
-          "points": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 1,
+          "points": 3,
+          "goalsFor": 3,
+          "goalsAgainst": 4,
           "goalDifference": -1,
           "form": ""
         },
         {
           "position": 4,
           "team": {
-            "id": 799,
-            "name": "Croatia",
-            "tla": "CRO",
-            "crest": "https://crests.football-data.org/799.svg"
+            "id": 1836,
+            "name": "Panama",
+            "tla": "PAN",
+            "crest": "https://crests.football-data.org/panama.svg"
           },
-          "playedGames": 1,
+          "playedGames": 2,
           "won": 0,
           "draw": 0,
-          "lost": 1,
+          "lost": 2,
           "points": 0,
-          "goalsFor": 2,
-          "goalsAgainst": 4,
+          "goalsFor": 0,
+          "goalsAgainst": 2,
           "goalDifference": -2,
           "form": ""
         }
@@ -1075,6 +1075,15 @@
       "playedMatches": 2
     },
     {
+      "player": "Daniel Muñoz",
+      "team": "Colombia",
+      "teamCrest": "https://crests.football-data.org/818.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 1
+    },
+    {
       "player": "Johan Manzambi",
       "team": "Switzerland",
       "teamCrest": "https://crests.football-data.org/788.svg",
@@ -1098,15 +1107,6 @@
       "teamCrest": "https://crests.football-data.org/8601.svg",
       "goals": 2,
       "assists": null,
-      "penalties": null,
-      "playedMatches": 2
-    },
-    {
-      "player": "Cody Gakpo",
-      "team": "Netherlands",
-      "teamCrest": "https://crests.football-data.org/8601.svg",
-      "goals": 2,
-      "assists": 1,
       "penalties": null,
       "playedMatches": 2
     }

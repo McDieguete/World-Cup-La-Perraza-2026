@@ -27,6 +27,13 @@ const ROUND_POINTS = {
   final:      { signo: 5, diferencia: 6, exacto: 7 }
 };
 
+/* Puntos por acertar la POSICIÓN EXACTA de un equipo dentro de su grupo.
+   El porrista firma el orden 1º-4º de cada grupo en bets.group_standings.
+   Baremo del Excel ADMIN: 5 pts por cada posición clavada (1º, 2º, 3º, 4º).
+   Timing (en recompute.js): 1º y 2º se otorgan al cerrar el grupo; 3º y 4º
+   al terminar TODA la fase de grupos (igual que los mejores 3os). */
+const POSITION_POINTS = { 1: 5, 2: 5, 3: 5, 4: 5 };
+
 /* Puntos por equipo en cada lista de clasificados.
    Se otorgan cuando termina la ronda que valida esa clasificación. */
 const QUALIFIER_POINTS = {
@@ -121,8 +128,88 @@ function predictionPoints(round, pred, actual, triple = false) {
   return triple ? pts * 3 : pts;
 }
 
+/* ===== Clasificación de la fase de grupos ===== */
+
+/** Orden de clasificación dentro de un grupo: puntos, diferencia de goles,
+ *  goles a favor y, a igualdad total, alfabético (criterio estable). */
+function cmpGroupTeam(a, b) {
+  return b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team, 'es');
+}
+
+/** Acumula un resultado (gf-ga) de `team` en la tabla `st` de su grupo. */
+function addGroupResult(st, team, gf, ga) {
+  let row = st[team];
+  if (!row) { row = st[team] = { team, pts: 0, gd: 0, gf: 0 }; }
+  row.gf += gf;
+  row.gd += gf - ga;
+  if (gf > ga) row.pts += 3;
+  else if (gf === ga) row.pts += 1;
+}
+
+/**
+ * Reconstruye la clasificación de cada grupo a partir de los resultados ya
+ * cargados en DATA.matchdays. NO asume que la fase de grupos esté completa:
+ * un grupo sólo se marca `complete` cuando tiene cargados TODOS sus partidos.
+ *
+ * @param {object} DATA  Dataset (usa DATA.gp_matches y DATA.matchdays).
+ * @returns {Object<string, {
+ *     expected:number, played:number, complete:boolean,
+ *     lastDate:string|null, standings:Array<{team,pts,gd,gf}>
+ *   }>}  Mapa letra-de-grupo → metadatos + tabla ordenada (1º…4º).
+ */
+function computeGroupStandings(DATA) {
+  const groupOfMatch = {};   // nombre de partido → letra de grupo
+  const meta = {};           // letra → { expected, played, lastDate, st }
+
+  (DATA.gp_matches || []).forEach(g => {
+    const letter = String(g.group || '').replace(/[0-9]/g, '');
+    groupOfMatch[g.name] = letter;
+    if (!meta[letter]) meta[letter] = { expected: 0, played: 0, lastDate: null, st: {} };
+    meta[letter].expected++;
+  });
+
+  Object.entries(DATA.matchdays || {}).forEach(([date, matches]) => {
+    matches.forEach(m => {
+      const letter = groupOfMatch[m.name];
+      if (!letter) return;
+      const sc = (m.result || '').match(/^(-?\d+)-(-?\d+)$/);
+      if (!sc) return;
+      const gh = +sc[1], ga = +sc[2];
+      const md = meta[letter];
+      md.played++;
+      if (!md.lastDate || date > md.lastDate) md.lastDate = date;
+      addGroupResult(md.st, m.home, gh, ga);
+      addGroupResult(md.st, m.away, ga, gh);
+    });
+  });
+
+  const out = {};
+  Object.entries(meta).forEach(([letter, md]) => {
+    out[letter] = {
+      expected: md.expected,
+      played:   md.played,
+      complete: md.expected > 0 && md.played >= md.expected,
+      lastDate: md.lastDate,
+      standings: Object.values(md.st).sort(cmpGroupTeam)
+    };
+  });
+  return out;
+}
+
+/** Dados los grupos de computeGroupStandings, devuelve los N mejores 3os.
+ *  Sólo tiene sentido cuando TODOS los grupos están completos. */
+function pickBestThirds(groupStandings, n = 8) {
+  const thirds = [];
+  Object.values(groupStandings).forEach(g => {
+    if (g.standings[2]) thirds.push(g.standings[2]);
+  });
+  thirds.sort(cmpGroupTeam);
+  return thirds.slice(0, n).map(r => r.team);
+}
+
 module.exports = {
   ROUND_POINTS,
+  POSITION_POINTS,
   QUALIFIER_POINTS,
   AWARD_POINTS,
   PHASE_KEY,
@@ -130,5 +217,8 @@ module.exports = {
   parsePred,
   parseScore,
   scoreSign,
-  predictionPoints
+  predictionPoints,
+  cmpGroupTeam,
+  computeGroupStandings,
+  pickBestThirds
 };

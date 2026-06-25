@@ -19,8 +19,9 @@
 'use strict';
 
 const {
-  QUALIFIER_POINTS, AWARD_POINTS, PHASE_KEY,
-  parsePred, parseScore, predictionPoints
+  QUALIFIER_POINTS, POSITION_POINTS, AWARD_POINTS, PHASE_KEY,
+  parsePred, parseScore, predictionPoints,
+  computeGroupStandings, pickBestThirds
 } = require('./scoring');
 
 /** Punto de entrada principal. Muta y devuelve el mismo DATA. */
@@ -40,10 +41,6 @@ function recompute(DATA) {
   players.forEach(p => { delta[p.name] = new Array(dayKeys.length).fill(0); });
 
   // -------- 1) Fase de grupos: puntos por partido en su fecha --------
-  let groupMatchesPlayed = 0;
-  const totalGroupMatches = (DATA.gp_matches || []).length;
-  const seenResultExactByName = {};
-
   Object.entries(DATA.matchdays || {}).forEach(([dateKey, matches]) => {
     const dayIdx = dayKeys.indexOf(dateKey);
     if (dayIdx < 0) return;
@@ -52,7 +49,6 @@ function recompute(DATA) {
       if (!actual) return;
       const gpIdx = gpIdxByName[mc.name];
       if (gpIdx == null) return;  // partido no es de grupos (no debería pasar con datos limpios)
-      groupMatchesPlayed++;
 
       let exactCount = 0;
       players.forEach(p => {
@@ -62,7 +58,6 @@ function recompute(DATA) {
         if (pred && pred.gh === actual.gh && pred.ga === actual.ga) exactCount++;
       });
       mc.result_exact = exactCount;
-      seenResultExactByName[mc.name] = exactCount;
     });
   });
 
@@ -83,13 +78,29 @@ function recompute(DATA) {
     });
   });
 
-  // -------- 3) "Equipo clasificado a X" --------
-  // a) r32 (a 1/16) → se otorga el día del último partido de grupos
-  if (groupMatchesPlayed >= totalGroupMatches && totalGroupMatches > 0) {
-    const lastGroupDay = lastGroupDateIdx(DATA, dayKeys);
-    if (lastGroupDay >= 0 && DATA.actual_qualifiers && DATA.actual_qualifiers.r32) {
-      addQualifierPoints(players, delta, lastGroupDay, 'r32', DATA.actual_qualifiers.r32);
-    }
+  // -------- 3) Fase de grupos: clasificados a 1/16 y posición exacta --------
+  //   Al CERRAR cada grupo (todos sus partidos jugados) ya se conoce su tabla
+  //   1º-4º completa, así que ese mismo día se otorgan:
+  //     · "Posición exacta" (5 pts) de las 4 posiciones (1º, 2º, 3º y 4º).
+  //     · "Equipo clasificado a 1/16" (10 pts) por el 1º y el 2º.
+  //   Lo ÚNICO que se difiere a que termine TODA la fase de grupos es el
+  //   "Equipo clasificado a 1/16" de los 8 mejores 3os: hasta cerrarse todos
+  //   los grupos no se sabe qué terceros se cuelan en 1/16.
+  const groupStandings = computeGroupStandings(DATA);
+  const allGroupsDone = Object.values(groupStandings).every(g => g.complete);
+  const lastGroupDay = lastGroupDateIdx(DATA, dayKeys);
+
+  Object.entries(groupStandings).forEach(([letter, g]) => {
+    if (!g.complete) return;
+    const dayIdx = dayKeys.indexOf(g.lastDate);
+    if (dayIdx < 0) return;
+    const order = g.standings.map(r => r.team);   // [1º, 2º, 3º, 4º] reales
+    addQualifierPoints(players, delta, dayIdx, 'r32', order.slice(0, 2));
+    addPositionPoints(players, delta, dayIdx, letter, order, [0, 1, 2, 3]);
+  });
+
+  if (allGroupsDone && lastGroupDay >= 0) {
+    addQualifierPoints(players, delta, lastGroupDay, 'r32', pickBestThirds(groupStandings, 8));
   }
   // b) r16, qf, sf, final, thirdPlace → cada uno en su PHASE_KEY
   ['r16', 'qf', 'sf', 'thirdPlace', 'final'].forEach(key => {
@@ -184,6 +195,20 @@ function addQualifierPoints(players, delta, dayIdx, key, actualList) {
     let hits = 0;
     picks.forEach(team => { if (set.has(team)) hits++; });
     if (hits) delta[p.name][dayIdx] += hits * pts;
+  });
+}
+
+/** Añade los puntos de "Posición exacta" de un grupo al delta del día indicado.
+ *  @param letter     Letra del grupo (clave de p.bets.group_standings).
+ *  @param realOrder  [1º, 2º, 3º, 4º] reales del grupo.
+ *  @param positions  Índices 0..3 a evaluar (0 = 1º … 3 = 4º). */
+function addPositionPoints(players, delta, dayIdx, letter, realOrder, positions) {
+  players.forEach(p => {
+    const pred = p.bets && p.bets.group_standings && p.bets.group_standings[letter];
+    if (!pred) return;
+    positions.forEach(i => {
+      if (pred[i] && pred[i] === realOrder[i]) delta[p.name][dayIdx] += POSITION_POINTS[i + 1];
+    });
   });
 }
 

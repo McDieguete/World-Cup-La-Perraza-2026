@@ -30,7 +30,7 @@ const path = require('path');
 
 const { readDataJs, writeDataJs } = require('./data-io');
 const { recompute } = require('./recompute');
-const { FOOTBALL_DATA_STAGE_TO_ROUND } = require('./scoring');
+const { FOOTBALL_DATA_STAGE_TO_ROUND, computeGroupStandings, pickBestThirds } = require('./scoring');
 
 const API_BASE   = 'https://api.football-data.org/v4';
 const KEY        = process.env.FOOTBALL_DATA_KEY;
@@ -248,59 +248,18 @@ function setIfDifferent(obj, key, value, log, label) {
 /** Calcula los 32 clasificados de la fase de grupos:
  *    · top 2 de cada uno de los 12 grupos = 24
  *    · 8 mejores 3os
- *  Sólo se llama cuando ya están jugados los 72. */
+ *  Sólo se llama cuando ya están jugados los 72.
+ *  Comparte la lógica de clasificación con recompute.js vía scoring.js. */
 function computeR32(D) {
-  const standings = {}; // group letter → [{team, pts, gd, gf}]
-  // Para cada grupo, los 4 equipos. Necesitamos partidos jugados ↔ qué grupo.
-  // Cada partido en matchdays.name está también en gp_matches con group "A1".
-  const groupOfMatch = {};
-  const groupOfTeam = {};
-  (D.gp_matches || []).forEach(g => {
-    const letter = String(g.group || '').replace(/[0-9]/g, '');
-    groupOfMatch[g.name] = letter;
-    const [a, b] = g.name.split('-').map(s => s.trim());
-    groupOfTeam[a] = letter;
-    groupOfTeam[b] = letter;
+  const groups = computeGroupStandings(D);
+  const r32 = [];
+  Object.keys(groups).sort().forEach(letter => {
+    const arr = groups[letter].standings;
+    if (arr[0]) r32.push(arr[0].team);
+    if (arr[1]) r32.push(arr[1].team);
   });
-
-  Object.values(D.matchdays || {}).flat().forEach(m => {
-    const g = groupOfMatch[m.name];
-    if (!g) return;
-    const sc = (m.result || '').match(/^(-?\d+)-(-?\d+)$/);
-    if (!sc) return;
-    const gh = +sc[1], ga = +sc[2];
-    addResult(standings, g, m.home, gh, ga);
-    addResult(standings, g, m.away, ga, gh);
-  });
-
-  // Top 2 de cada grupo
-  const groups = Object.keys(standings).sort();
-  const top2 = [];
-  const thirds = [];
-  groups.forEach(g => {
-    const arr = standings[g].sort(cmpTeam);
-    if (arr[0]) top2.push(arr[0].team);
-    if (arr[1]) top2.push(arr[1].team);
-    if (arr[2]) thirds.push(arr[2]);
-  });
-  // 8 mejores 3os
-  thirds.sort(cmpTeam);
-  thirds.slice(0, 8).forEach(t => top2.push(t.team));
-  return top2;
-}
-
-function addResult(st, group, team, gf, ga) {
-  if (!st[group]) st[group] = [];
-  let row = st[group].find(r => r.team === team);
-  if (!row) { row = { team, pts: 0, gd: 0, gf: 0 }; st[group].push(row); }
-  row.gf += gf;
-  row.gd += gf - ga;
-  if (gf > ga) row.pts += 3;
-  else if (gf === ga) row.pts += 1;
-}
-
-function cmpTeam(a, b) {
-  return b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team, 'es');
+  pickBestThirds(groups, 8).forEach(t => r32.push(t));
+  return r32;
 }
 
 /* ===== Main ===== */

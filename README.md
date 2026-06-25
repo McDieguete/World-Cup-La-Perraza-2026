@@ -172,6 +172,25 @@ Todas viven en [`scripts/scoring.js`](scripts/scoring.js). Resumen:
 | `sf` (perdedores)     | Clasif. a 3º-4º puesto  | 40         |
 | `final`               | Clasif. a final         | 50         |
 
+> **Timing de los clasificados a 1/16 (`r32`).** El 1º y el 2º de cada grupo se
+> suman **en cuanto ese grupo juega todos sus partidos** (no se espera al resto
+> de la fase). Los **8 mejores 3os** se suman al **cerrarse toda la fase de
+> grupos**, porque hasta entonces no se sabe qué terceros se cuelan en 1/16.
+
+**Posición exacta de grupo (`bets.group_standings[grupo] = [1º,2º,3º,4º]`):**
+
+| Concepto         | Pts | Cuándo se otorga         |
+|------------------|----:|--------------------------|
+| Posición exacta 1º | 5 | al cerrar ese grupo      |
+| Posición exacta 2º | 5 | al cerrar ese grupo      |
+| Posición exacta 3º | 5 | al cerrar ese grupo      |
+| Posición exacta 4º | 5 | al cerrar ese grupo      |
+
+> 5 pts por cada posición clavada dentro del grupo. Las **cuatro** posiciones se
+> otorgan en cuanto el grupo juega todos sus partidos (su tabla 1º-4º ya está
+> fijada). Lo único que se difiere al cierre de TODA la fase de grupos es el
+> *clasificado a 1/16* de los 8 mejores 3os (no se sabe antes qué 3os pasan).
+
 **Premios al cierre del Mundial:**
 
 | Premio           | Pts | Premio           | Pts |
@@ -182,15 +201,14 @@ Todas viven en [`scripts/scoring.js`](scripts/scoring.js). Resumen:
 | Bota de Oro      | 20  | Bota de Plata    | 15  |
 | Bota de Bronce   | 10  |                  |     |
 
-### Pendiente: "Posición exacta (1º/2º/3º/4º)" de la fase de grupos
+### Posición exacta (1º/2º/3º/4º) de la fase de grupos — implementado
 
-La tabla original incluye una regla de 5 pts por cada posición exacta del
-porrista dentro de cada grupo (1º, 2º, 3º, 4º). El dataset actual **no guarda**
-el ranking por grupo que firmó cada porrista — sólo guarda la lista r32 (qué 32
-equipos pasarán a 1/16). Cuando añadáis ese campo (por ejemplo
-`p.bets.group_standings[group_letter] = [1º, 2º, 3º, 4º]`), añadid el bloque
-correspondiente en `recompute.js` (los puntos por posición ya están comentados
-en `scoring.js` para que sólo haya que descomentar).
+Cada porrista firma el orden 1º-4º de cada grupo en
+`p.bets.group_standings[grupo] = [1º, 2º, 3º, 4º]` (importado del Excel ADMIN).
+El baremo (`POSITION_POINTS` en `scoring.js`) da 5 pts por posición clavada y el
+reparto temporal vive en `recompute.js` (bloque 3): la clasificación real de
+cada grupo se calcula con `computeGroupStandings` (pts → dif → GF → alfabético,
+que coincide con los 3 primeros criterios oficiales FIFA).
 
 ## Mantenimiento
 

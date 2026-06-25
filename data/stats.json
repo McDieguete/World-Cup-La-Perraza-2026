@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T22:00:26.457Z",
+  "generated_at": "2026-06-25T10:24:58.187Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -15,47 +15,47 @@
             "tla": "MEX",
             "crest": "https://crests.football-data.org/769.svg"
           },
-          "playedGames": 2,
-          "won": 2,
+          "playedGames": 3,
+          "won": 3,
           "draw": 0,
           "lost": 0,
-          "points": 6,
-          "goalsFor": 3,
+          "points": 9,
+          "goalsFor": 6,
           "goalsAgainst": 0,
-          "goalDifference": 3,
+          "goalDifference": 6,
           "form": ""
         },
         {
           "position": 2,
+          "team": {
+            "id": 774,
+            "name": "South Africa",
+            "tla": "RSA",
+            "crest": "https://crests.football-data.org/9396.svg"
+          },
+          "playedGames": 3,
+          "won": 1,
+          "draw": 1,
+          "lost": 1,
+          "points": 4,
+          "goalsFor": 2,
+          "goalsAgainst": 3,
+          "goalDifference": -1,
+          "form": ""
+        },
+        {
+          "position": 3,
           "team": {
             "id": 772,
             "name": "South Korea",
             "tla": "KOR",
             "crest": "https://crests.football-data.org/772.png"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 1,
           "draw": 0,
-          "lost": 1,
+          "lost": 2,
           "points": 3,
-          "goalsFor": 2,
-          "goalsAgainst": 2,
-          "goalDifference": 0,
-          "form": ""
-        },
-        {
-          "position": 3,
-          "team": {
-            "id": 798,
-            "name": "Czechia",
-            "tla": "CZE",
-            "crest": "https://crests.football-data.org/798.svg"
-          },
-          "playedGames": 2,
-          "won": 0,
-          "draw": 1,
-          "lost": 1,
-          "points": 1,
           "goalsFor": 2,
           "goalsAgainst": 3,
           "goalDifference": -1,
@@ -64,19 +64,19 @@
         {
           "position": 4,
           "team": {
-            "id": 774,
-            "name": "South Africa",
-            "tla": "RSA",
-            "crest": "https://crests.football-data.org/9396.svg"
+            "id": 798,
+            "name": "Czechia",
+            "tla": "CZE",
+            "crest": "https://crests.football-data.org/798.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 1,
-          "lost": 1,
+          "lost": 2,
           "points": 1,
-          "goalsFor": 1,
-          "goalsAgainst": 3,
-          "goalDifference": -2,
+          "goalsFor": 2,
+          "goalsAgainst": 6,
+          "goalDifference": -4,
           "form": ""
         }
       ]
@@ -170,13 +170,13 @@
             "crest": "https://crests.football-data.org/764.svg"
           },
           "playedGames": 3,
-          "won": 1,
-          "draw": 2,
+          "won": 2,
+          "draw": 1,
           "lost": 0,
-          "points": 5,
-          "goalsFor": 4,
+          "points": 7,
+          "goalsFor": 7,
           "goalsAgainst": 1,
-          "goalDifference": 3,
+          "goalDifference": 6,
           "form": ""
         },
         {
@@ -188,13 +188,13 @@
             "crest": "https://crests.football-data.org/morocco.svg"
           },
           "playedGames": 3,
-          "won": 1,
-          "draw": 2,
+          "won": 2,
+          "draw": 1,
           "lost": 0,
-          "points": 5,
-          "goalsFor": 2,
-          "goalsAgainst": 1,
-          "goalDifference": 1,
+          "points": 7,
+          "goalsFor": 6,
+          "goalsAgainst": 3,
+          "goalDifference": 3,
           "form": ""
         },
         {
@@ -207,12 +207,12 @@
           },
           "playedGames": 3,
           "won": 1,
-          "draw": 1,
-          "lost": 1,
-          "points": 4,
+          "draw": 0,
+          "lost": 2,
+          "points": 3,
           "goalsFor": 1,
-          "goalsAgainst": 1,
-          "goalDifference": 0,
+          "goalsAgainst": 4,
+          "goalDifference": -3,
           "form": ""
         },
         {
@@ -225,12 +225,12 @@
           },
           "playedGames": 3,
           "won": 0,
-          "draw": 1,
-          "lost": 2,
-          "points": 1,
-          "goalsFor": 0,
-          "goalsAgainst": 4,
-          "goalDifference": -4,
+          "draw": 0,
+          "lost": 3,
+          "points": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 8,
+          "goalDifference": -6,
           "form": ""
         }
       ]
@@ -940,6 +940,15 @@
       "playedMatches": 2
     },
     {
+      "player": "Vinicius Junior",
+      "team": "Brazil",
+      "teamCrest": "https://crests.football-data.org/764.svg",
+      "goals": 4,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 3
+    },
+    {
       "player": "Kylian Mbappé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
@@ -956,6 +965,15 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 2
+    },
+    {
+      "player": "Ismael Saibari",
+      "team": "Morocco",
+      "teamCrest": "https://crests.football-data.org/morocco.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 3
     },
     {
       "player": "Deniz Undav",
@@ -985,6 +1003,24 @@
       "playedMatches": 3
     },
     {
+      "player": "Matheus Cunha",
+      "team": "Brazil",
+      "teamCrest": "https://crests.football-data.org/764.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 3
+    },
+    {
+      "player": "Julián Quiñones",
+      "team": "Mexico",
+      "teamCrest": "https://crests.football-data.org/769.svg",
+      "goals": 2,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 3
+    },
+    {
       "player": "Cyle Larin",
       "team": "Canada",
       "teamCrest": "https://crests.football-data.org/canada.svg",
@@ -1001,24 +1037,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 2
-    },
-    {
-      "player": "Ismael Saibari",
-      "team": "Morocco",
-      "teamCrest": "https://crests.football-data.org/morocco.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 3
-    },
-    {
-      "player": "Vinicius Junior",
-      "team": "Brazil",
-      "teamCrest": "https://crests.football-data.org/764.svg",
-      "goals": 2,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 3
     },
     {
       "player": "Kai Havertz",
@@ -1091,24 +1109,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 1
-    },
-    {
-      "player": "Ruben Vargas",
-      "team": "Switzerland",
-      "teamCrest": "https://crests.football-data.org/788.svg",
-      "goals": 2,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 3
-    },
-    {
-      "player": "Ermin Mahmic",
-      "team": "Bosnia-H.",
-      "teamCrest": "https://crests.football-data.org/bosnia.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 3
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T18:35:52.474Z",
+  "generated_at": "2026-06-25T22:11:47.679Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -323,14 +323,14 @@
             "tla": "GER",
             "crest": "https://crests.football-data.org/759.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 2,
           "draw": 0,
-          "lost": 0,
+          "lost": 1,
           "points": 6,
-          "goalsFor": 9,
-          "goalsAgainst": 2,
-          "goalDifference": 7,
+          "goalsFor": 10,
+          "goalsAgainst": 4,
+          "goalDifference": 6,
           "form": ""
         },
         {
@@ -341,14 +341,14 @@
             "tla": "CIV",
             "crest": "https://crests.football-data.org/787.svg"
           },
-          "playedGames": 2,
-          "won": 1,
+          "playedGames": 3,
+          "won": 2,
           "draw": 0,
           "lost": 1,
-          "points": 3,
-          "goalsFor": 2,
+          "points": 6,
+          "goalsFor": 4,
           "goalsAgainst": 2,
-          "goalDifference": 0,
+          "goalDifference": 2,
           "form": ""
         },
         {
@@ -359,14 +359,14 @@
             "tla": "ECU",
             "crest": "https://crests.football-data.org/791.svg"
           },
-          "playedGames": 2,
-          "won": 0,
+          "playedGames": 3,
+          "won": 1,
           "draw": 1,
           "lost": 1,
-          "points": 1,
-          "goalsFor": 0,
-          "goalsAgainst": 1,
-          "goalDifference": -1,
+          "points": 4,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
           "form": ""
         },
         {
@@ -377,14 +377,14 @@
             "tla": "CUW",
             "crest": "https://crests.football-data.org/curacao.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 1,
-          "lost": 1,
+          "lost": 2,
           "points": 1,
           "goalsFor": 1,
-          "goalsAgainst": 7,
-          "goalDifference": -6,
+          "goalsAgainst": 9,
+          "goalDifference": -8,
           "form": ""
         }
       ]
@@ -982,7 +982,7 @@
       "goals": 3,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Johan Manzambi",
@@ -1045,7 +1045,7 @@
       "goals": 2,
       "assists": null,
       "penalties": 1,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Crysencio Summerville",
@@ -1063,7 +1063,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Yasin Ayari",
@@ -1072,7 +1072,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Maximiliano Araújo",

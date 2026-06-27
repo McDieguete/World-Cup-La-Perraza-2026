@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/nav.css">
   <link rel="stylesheet" href="css/panel.css">
   <link rel="stylesheet" href="css/search.css">
+  <link rel="stylesheet" href="css/buscador.css">
   <link rel="stylesheet" href="css/players.css">
   <link rel="stylesheet" href="css/stats.css">
   <link rel="stylesheet" href="css/clasif.css">
@@ -31,6 +32,7 @@
   <script defer src="js/scoring-client.js"></script>
   <script defer src="js/nav.js"></script>
   <script defer src="js/players.js"></script>
+  <script defer src="js/buscador.js"></script>
   <script defer src="js/stats.js"></script>
   <script defer src="js/clasif.js"></script>
   <script defer src="js/modal.js"></script>
@@ -67,6 +69,7 @@
     <div class="nav-inner">
       <button class="tab active" data-tab="quien"><span class="ico">🕵️</span>¿Quién es quién?</button>
       <button class="tab"        data-tab="stats"><span class="ico">📊</span>Estadísticas</button>
+      <button class="tab"        data-tab="buscador"><span class="ico">🔎</span>Buscador</button>
       <button class="tab"        data-tab="clasif"><span class="ico">🏆</span>Clasificación</button>
       <button class="tab"        data-tab="mundial"><span class="ico">🌍</span>Mundial</button>
       <button class="tab"        data-tab="resultados"><span class="ico">🎟️</span>Mis resultados</button>
@@ -152,6 +155,40 @@
         <p class="sub">Selecciones más veces colocadas en el último puesto de su grupo. Sin rencores: alguien tiene que cerrar la tabla.</p>
         <div class="worst-grid" id="worstGrid"></div>
       </div>
+    </section>
+
+    <!-- ===== BUSCADOR (preguntas sobre la porra) ===== -->
+    <section class="panel" id="buscador" aria-label="Buscador de la porra">
+      <div class="sec-head">
+        <span class="kicker">Pregúntale a la porra</span>
+        <h2>El <em>buscador</em></h2>
+        <p>Resuelve cualquier duda sobre las quinielas: qué porristas hacen llegar a una selección a una ronda, qué equipos firmó cada uno a dieciseisavos, octavos, cuartos, semis o final, y —cuando haya resultados oficiales— cuáles ha acertado. Escribe la pregunta o usa los desplegables.</p>
+      </div>
+      <div class="searchbar">
+        <span class="mag">🔎</span>
+        <input id="qInput" type="text" placeholder="Pregunta… p. ej. ¿Quién ha puesto a Ecuador en cuartos?" autocomplete="off">
+      </div>
+      <div class="q-examples">
+        <button class="q-example" data-q="¿Qué jugadores han apostado que se clasifica Ecuador en cuartos?">¿Quién pone a Ecuador en cuartos?</button>
+        <button class="q-example" data-q="¿Qué equipos a dieciseisavos ha acertado Diego Morgado?">Lo que acertó Diego Morgado en dieciseisavos</button>
+        <button class="q-example" data-q="¿Qué equipos puso Chema a semifinales?">Semifinalistas de Chema</button>
+        <button class="q-example" data-q="¿Quién apuesta que Marruecos es campeón?">¿Quién ve a Marruecos campeón?</button>
+        <button class="q-example" data-q="¿Hasta dónde llega Argentina?">¿Hasta dónde llega Argentina?</button>
+      </div>
+      <div class="q-builder">
+        <div class="q-field"><label for="qPlayer">Porrista</label><select id="qPlayer"></select></div>
+        <div class="q-field"><label for="qTeam">Equipo</label><select id="qTeam"></select></div>
+        <div class="q-field"><label for="qRound">Ronda</label><select id="qRound"></select></div>
+        <div class="q-field"><label for="qMode">Mostrar</label>
+          <select id="qMode">
+            <option value="all">Todo</option>
+            <option value="hits">Solo aciertos</option>
+            <option value="misses">Solo fallos</option>
+          </select>
+        </div>
+        <button class="q-clear" id="qClear">Limpiar</button>
+      </div>
+      <div id="qResults"></div>
     </section>
 
     <!-- ===== CLASIFICACIÓN ===== -->

@@ -10,6 +10,7 @@ $$('.tab').forEach(t => t.addEventListener('click', () => {
   $('#' + t.dataset.tab).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (t.dataset.tab === 'stats')   setTimeout(animateBars, 80);
+  if (t.dataset.tab === 'buscador' && window.__initBuscador) setTimeout(window.__initBuscador, 30);
   if (t.dataset.tab === 'clasif')  setTimeout(renderClasif, 60);
   if (t.dataset.tab === 'mundial' && window.__initMundial) setTimeout(window.__initMundial, 60);
 }));

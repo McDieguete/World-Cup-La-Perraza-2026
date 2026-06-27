@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T21:50:04.678Z",
+  "generated_at": "2026-06-27T09:14:41.900Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -472,54 +472,54 @@
         {
           "position": 1,
           "team": {
+            "id": 805,
+            "name": "Belgium",
+            "tla": "BEL",
+            "crest": "https://crests.football-data.org/805.svg"
+          },
+          "playedGames": 3,
+          "won": 1,
+          "draw": 2,
+          "lost": 0,
+          "points": 5,
+          "goalsFor": 6,
+          "goalsAgainst": 2,
+          "goalDifference": 4,
+          "form": ""
+        },
+        {
+          "position": 2,
+          "team": {
             "id": 825,
             "name": "Egypt",
             "tla": "EGY",
             "crest": "https://crests.football-data.org/825.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 1,
-          "draw": 1,
+          "draw": 2,
           "lost": 0,
-          "points": 4,
-          "goalsFor": 4,
-          "goalsAgainst": 2,
+          "points": 5,
+          "goalsFor": 5,
+          "goalsAgainst": 3,
           "goalDifference": 2,
           "form": ""
         },
         {
-          "position": 2,
+          "position": 3,
           "team": {
             "id": 840,
             "name": "Iran",
             "tla": "IRN",
             "crest": "https://crests.football-data.org/iran.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
-          "draw": 2,
+          "draw": 3,
           "lost": 0,
-          "points": 2,
-          "goalsFor": 2,
-          "goalsAgainst": 2,
-          "goalDifference": 0,
-          "form": ""
-        },
-        {
-          "position": 3,
-          "team": {
-            "id": 805,
-            "name": "Belgium",
-            "tla": "BEL",
-            "crest": "https://crests.football-data.org/805.svg"
-          },
-          "playedGames": 2,
-          "won": 0,
-          "draw": 2,
-          "lost": 0,
-          "points": 2,
-          "goalsFor": 1,
-          "goalsAgainst": 1,
+          "points": 3,
+          "goalsFor": 3,
+          "goalsAgainst": 3,
           "goalDifference": 0,
           "form": ""
         },
@@ -531,14 +531,14 @@
             "tla": "NZL",
             "crest": "https://crests.football-data.org/783.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 1,
-          "lost": 1,
+          "lost": 2,
           "points": 1,
-          "goalsFor": 3,
-          "goalsAgainst": 5,
-          "goalDifference": -2,
+          "goalsFor": 4,
+          "goalsAgainst": 10,
+          "goalDifference": -6,
           "form": ""
         }
       ]
@@ -554,50 +554,50 @@
             "tla": "ESP",
             "crest": "https://crests.football-data.org/760.svg"
           },
-          "playedGames": 2,
-          "won": 1,
+          "playedGames": 3,
+          "won": 2,
           "draw": 1,
           "lost": 0,
-          "points": 4,
-          "goalsFor": 4,
+          "points": 7,
+          "goalsFor": 5,
           "goalsAgainst": 0,
-          "goalDifference": 4,
+          "goalDifference": 5,
           "form": ""
         },
         {
           "position": 2,
-          "team": {
-            "id": 758,
-            "name": "Uruguay",
-            "tla": "URU",
-            "crest": "https://crests.football-data.org/758.svg"
-          },
-          "playedGames": 2,
-          "won": 0,
-          "draw": 2,
-          "lost": 0,
-          "points": 2,
-          "goalsFor": 3,
-          "goalsAgainst": 3,
-          "goalDifference": 0,
-          "form": ""
-        },
-        {
-          "position": 3,
           "team": {
             "id": 1930,
             "name": "Cape Verde Islands",
             "tla": "CPV",
             "crest": "https://crests.football-data.org/cape_verde.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
-          "draw": 2,
+          "draw": 3,
           "lost": 0,
-          "points": 2,
+          "points": 3,
           "goalsFor": 2,
           "goalsAgainst": 2,
           "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 758,
+            "name": "Uruguay",
+            "tla": "URU",
+            "crest": "https://crests.football-data.org/758.svg"
+          },
+          "playedGames": 3,
+          "won": 0,
+          "draw": 2,
+          "lost": 1,
+          "points": 2,
+          "goalsFor": 3,
+          "goalsAgainst": 4,
+          "goalDifference": -1,
           "form": ""
         },
         {
@@ -608,11 +608,11 @@
             "tla": "KSA",
             "crest": "https://crests.football-data.org/saudi_arabia.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
-          "draw": 1,
+          "draw": 2,
           "lost": 1,
-          "points": 1,
+          "points": 2,
           "goalsFor": 1,
           "goalsAgainst": 5,
           "goalDifference": -4,
@@ -994,6 +994,15 @@
       "playedMatches": 3
     },
     {
+      "player": "Elijah Just",
+      "team": "New Zealand",
+      "teamCrest": "https://crests.football-data.org/783.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 3
+    },
+    {
       "player": "Johan Manzambi",
       "team": "Switzerland",
       "teamCrest": "https://crests.football-data.org/788.svg",
@@ -1100,15 +1109,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 3
-    },
-    {
-      "player": "Maximiliano Araújo",
-      "team": "Uruguay",
-      "teamCrest": "https://crests.football-data.org/758.svg",
-      "goals": 2,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 2
     }
   ]
 }

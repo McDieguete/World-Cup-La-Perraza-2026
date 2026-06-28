@@ -265,6 +265,13 @@
   line-height: 1.3;
 }
 
+/* ===== Filas pendientes (apuestas de días aún no jugados) ===== */
+.res-row-pending{
+  background: var(--c-surface);
+  border-left-style: dashed;
+}
+.res-row-pending .res-concept-title{color: var(--c-text-soft)}
+
 /* ===== Filas de eliminatorias ===== */
 .res-row-ko{border-left-color: var(--c-gold)}
 .res-ko-tag{

@@ -180,6 +180,22 @@ function scComputePlayerBreakdown(DATA, p) {
     add(phase, { kind: 'komatch', round: ko.round, home: ko.home, away: ko.away, result: `${ko.gh}-${ko.ga}`, pred, pts });
   });
 
+  // 2b) Cruces KO firmados por el porrista (su propio cuadro) que AÚN no se han
+  //     jugado → se muestran como pendientes (0 pts) en su ronda. bets.ko va
+  //     ordenado por ronda: 16 (1/16) + 8 (1/8) + 4 (1/4) + 2 (semis) + 1 (3º) + 1 (final).
+  const koPlayed = new Set((DATA.ko_results || []).map(k => [k.home, k.away].sort().join('|')));
+  const koRoundByIdx = i => (i < 16 ? 'r32' : i < 24 ? 'r16' : i < 28 ? 'quarters' : i < 30 ? 'semis' : i < 31 ? 'thirdPlace' : 'final');
+  ((p.bets && p.bets.ko) || []).forEach((k, i) => {
+    if (!k || !k.match) return;
+    const parts = k.match.split('-').map(s => s.trim());
+    if (parts.length !== 2) return;
+    if (koPlayed.has([parts[0], parts[1]].sort().join('|'))) return;   // ya cubierto por komatch
+    const round = koRoundByIdx(i);
+    const phase = SC_PHASE_KEY[round];
+    if (!byKey[phase]) return;
+    add(phase, { kind: 'kobet', round, home: parts[0], away: parts[1], pred: { signo: k.signo, gh: k.gh, ga: k.ga }, pts: 0 });
+  });
+
   // 3) Clasificados y posición exacta
   const gs = scComputeGroupStandings(DATA);
   const allGroupsDone = Object.values(gs).every(g => g.complete);
@@ -211,7 +227,12 @@ function scComputePlayerBreakdown(DATA, p) {
     const phaseKey = SC_PHASE_KEY[scPhaseForQualifier(round)];
     if (!byKey[phaseKey]) return;
     const list = DATA.actual_qualifiers && DATA.actual_qualifiers[round];
-    if (list && list.length) addQualifier(phaseKey, round, list);
+    if (list && list.length) {
+      addQualifier(phaseKey, round, list);            // ya resuelto: puntos reales
+    } else {
+      const picks = (p.bets && p.bets[round]) || [];   // pendiente: equipos firmados
+      if (picks.length) add(phaseKey, { kind: 'qualbet', round, teams: picks, pts: 0 });
+    }
   });
 
   // 4) Premios (bucket de la final)

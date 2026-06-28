@@ -169,6 +169,10 @@
       case 'qualifier': return conceptRow('qual', '✅',
                           `Equipos clasificados a ${esc(KO_QUAL_LABEL[it.round] || it.round)}`,
                           `${it.teams.map(esc).join(', ')} · ${it.teams.length} × ${SC_QUALIFIER_POINTS[it.round]} pts`, it.pts);
+      case 'qualbet':   return pendingConceptRow('qual', '🔖',
+                          `Equipos firmados a ${esc(KO_QUAL_LABEL[it.round] || it.round)}`,
+                          `${it.teams.map(esc).join(', ')} · +${SC_QUALIFIER_POINTS[it.round]} por equipo que pase`);
+      case 'kobet':     return koRowMarkup(it, true);
       case 'award':     return conceptRow('award', '⭐', esc(it.label), '', it.pts);
       default:          return '';
     }
@@ -218,9 +222,11 @@
     </div>`;
   }
 
-  function koRowMarkup(it) {
+  function koRowMarkup(it, pending) {
     const predStr = it.pred ? `${it.pred.signo}|${it.pred.gh}-${it.pred.ga}` : '—';
-    const ptsClass = it.pts > 0 ? 'res-pts win' : 'res-pts zero';
+    const ptsClass = pending ? 'res-pts pending' : (it.pts > 0 ? 'res-pts win' : 'res-pts zero');
+    const real = pending ? '<span class="res-pending">pdte.</span>' : esc(it.result);
+    const ptsCell = pending ? '—' : (it.pts > 0 ? '+' + it.pts : it.pts);
     return `<div class="res-row res-row-ko">
       <div class="res-row-left">
         <span class="res-time res-ko-tag">${esc(KO_MATCH_LABEL[it.round] || 'KO')}</span>
@@ -236,9 +242,22 @@
       </div>
       <div class="res-row-mid">
         <span class="res-label">real</span>
-        <span class="res-actual">${esc(it.result)}</span>
+        <span class="res-actual">${real}</span>
       </div>
-      <div class="${ptsClass}">${it.pts > 0 ? '+' + it.pts : it.pts}</div>
+      <div class="${ptsClass}">${ptsCell}</div>
+    </div>`;
+  }
+
+  function pendingConceptRow(cls, icon, title, detail) {
+    return `<div class="res-row res-row-concept res-${cls} res-row-pending">
+      <div class="res-row-left">
+        <span class="res-concept-ic">${icon}</span>
+        <span class="res-teams">
+          <span class="res-concept-title">${title}</span>
+          ${detail ? `<span class="res-concept-detail">${detail}</span>` : ''}
+        </span>
+      </div>
+      <div class="res-pts pending">—</div>
     </div>`;
   }
 

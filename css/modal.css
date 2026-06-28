@@ -275,6 +275,14 @@
 }
 .bm-result.open .bm-result-voters{display: flex}
 
+/* Lista plana de votantes (cruces KO: aciertos de selección local/visitante) */
+.bm-voters-flat{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 2px 4px;
+}
+
 .bm-voter{
   font-size: 12px;
   padding: 3px 9px;

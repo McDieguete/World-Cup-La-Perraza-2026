@@ -62,6 +62,37 @@ function computeGroupStandings() {
 }
 const GROUP_STANDINGS = computeGroupStandings();
 
+/* Clave de la combinación de los 8 mejores terceros (grupos, alfabético) —
+   sólo cuando la fase de grupos está completa. Resuelve qué tercero ocupa cada
+   slot "Mejor 3º (…)" vía la tabla oficial DATA.thirds_alloc (FIFA). */
+const THIRDS_KEY = (function () {
+  const gs = GROUP_STANDINGS;
+  if (!Object.values(gs).every(g => g.complete)) return null;
+  if (typeof scPickBestThirds !== 'function') return null;
+  const teamGroup = {};
+  Object.entries(gs).forEach(([L, g]) => g.standings.forEach(r => { teamGroup[r.team] = L; }));
+  const thirds = scPickBestThirds(gs, 8);
+  if (thirds.length < 8) return null;
+  return thirds.map(t => teamGroup[t]).sort().join('');
+})();
+
+/** Tercero real que enfrenta al cabeza de serie local `hostRef` (p. ej. "1E"),
+ *  según la combinación de terceros clasificados. null si aún no se resuelve. */
+function resolveThird(hostRef) {
+  const alloc = DATA.thirds_alloc;
+  if (!alloc || !THIRDS_KEY) return null;
+  const row = alloc.map[THIRDS_KEY];
+  if (!row) return null;
+  const idx = alloc.order.indexOf(hostRef);
+  if (idx < 0) return null;
+  const g = GROUP_STANDINGS[row[idx]];
+  return (g && g.complete && g.standings[2]) ? g.standings[2].team : null;
+}
+
+/* Índices de bets.ko por ronda (el cuadro firmado va ordenado:
+   16 de 1/16 · 8 de 1/8 · 4 de 1/4 · 2 de semis · 1 de 3º · 1 de final). */
+const KO_ROUND_SLICE = { r32: [0, 16], r16: [16, 24], quarters: [24, 28], semis: [28, 30], thirdPlace: [30, 31], final: [31, 32] };
+
 /** Ganador/perdedor real de un partido KO, si ya tiene marcador resuelto. */
 function koOutcome(num, which) {
   const e = koByNum[num];
@@ -98,28 +129,38 @@ function resolveSlot(ref) {
   return { team: ref, label: ref };                  // ya viene un nombre literal
 }
 
-/** Lado de un cruce KO: prioriza el equipo que el cron haya fijado (home_team/away_team). */
+/** Lado de un cruce KO: prioriza el equipo que el cron haya fijado (home_team/away_team).
+ *  Para un slot "Mejor 3º (…)" usa el cabeza de serie local del rival para resolverlo. */
 function koSide(entry, side) {
   const fixed = entry[side + '_team'];
   if (fixed) return { team: fixed, label: fixed, tbd: false };
-  const r = resolveSlot(entry[side]);
+  const ref = entry[side];
+  if (/^3[A-L]+$/.test(ref)) {
+    const otherRef = entry[side === 'home' ? 'away' : 'home'];
+    const t = /^1[A-L]$/.test(otherRef) ? resolveThird(otherRef) : null;
+    if (t) return { team: t, label: t, tbd: false };
+    return { team: null, label: `Mejor 3º (${ref.slice(1).split('').join('/')})`, tbd: true };
+  }
+  const r = resolveSlot(ref);
   return { team: r.team, label: r.team || r.label, tbd: !r.team };
 }
 
-/** Nº de porristas que firmaron exactamente este cruce (en cualquier orden). */
-function koBetsCount(homeTeam, awayTeam) {
-  if (!homeTeam || !awayTeam) return 0;
+/** Nº de porristas que firmaron exactamente este cruce EN ESTA RONDA (cualquier orden).
+ *  Restringido al tramo de bets.ko de la ronda para que cuadre con el modal. */
+function koCrossCount(round, homeTeam, awayTeam) {
+  const sl = KO_ROUND_SLICE[round];
+  if (!sl || !homeTeam || !awayTeam) return 0;
   let n = 0;
   DATA.players.forEach(p => {
-    const ko = p.bets && p.bets.ko;
-    if (!Array.isArray(ko)) return;
-    if (ko.some(k => {
-      if (!k || !k.match) return false;
+    const ko = (p.bets && p.bets.ko) || [];
+    for (let i = sl[0]; i < sl[1]; i++) {
+      const k = ko[i];
+      if (!k || !k.match) continue;
       const parts = k.match.split('-').map(s => s.trim());
-      return parts.length === 2 &&
+      if (parts.length === 2 &&
         ((parts[0] === homeTeam && parts[1] === awayTeam) ||
-         (parts[0] === awayTeam && parts[1] === homeTeam));
-    })) n++;
+         (parts[0] === awayTeam && parts[1] === homeTeam))) { n++; break; }
+    }
   });
   return n;
 }
@@ -222,7 +263,8 @@ function renderDay() {
     ? '<div class="ko-sep">🏆 Eliminatorias</div>' : '';
 
   $('#matchList').innerHTML = groupCards + koHeader + koCards;
-  $$('.bets-btn').forEach(b => b.addEventListener('click', () => openMatchBets(+b.dataset.num)));
+  $$('.bets-btn[data-num]').forEach(b => b.addEventListener('click', () => openMatchBets(+b.dataset.num)));
+  $$('.bets-btn[data-ko]').forEach(b => b.addEventListener('click', () => openKoBets(+b.dataset.ko)));
 }
 
 function renderKoCard(e) {
@@ -232,7 +274,7 @@ function renderKoCard(e) {
   const time = e.time || (e.dt ? String(e.dt).slice(11, 16) : '');
   const fin = e.result ? String(e.result).split('-').map(Number) : null;
   const both = home.team && away.team;
-  const betsN = both ? koBetsCount(home.team, away.team) : 0;
+  const betsN = both ? koCrossCount(e.round, home.team, away.team) : 0;
 
   return `<div class="match-card ko${fin?' played':''}">
     <div class="mc-head">
@@ -245,8 +287,96 @@ function renderKoCard(e) {
       ${fin?`<div class="mc-score"><b>${fin[0]}</b><span>–</span><b>${fin[1]}</b></div>`:'<div class="mc-vs">vs</div>'}
       <div class="mc-team"><div class="nm${away.tbd?' tbd':''}">${esc(away.label)}</div></div>
     </div>
-    ${betsN ? `<div class="mc-real">👥 <b>${betsN}</b> porrista${betsN===1?'':'s'} firmaron este cruce en su quiniela.</div>` : ''}
+    ${both
+      ? `<button class="bets-btn" data-ko="${e.num}"><span class="bb-ic">👥</span> Ver apuestas a este cruce${betsN ? ` · ${betsN} clavaron el cruce` : ''}</button>`
+      : (betsN ? `<div class="mc-real">👥 <b>${betsN}</b> porrista${betsN===1?'':'s'} firmaron este cruce en su quiniela.</div>` : '')}
   </div>`;
+}
+
+/* Modal de apuestas a un cruce KO. Como cada porrista firma su propio cuadro,
+   se muestra: quién clavó el cruce exacto (con su marcador, como en grupos),
+   quién acertó sólo la selección local y quién sólo la visitante. */
+function openKoBets(num) {
+  const e = koByNum[num];
+  if (!e) return;
+  const home = koSide(e, 'home'), away = koSide(e, 'away');
+  if (!home.team || !away.team) return;
+  const H = home.team, A = away.team;
+  const [s0, s1] = KO_ROUND_SLICE[e.round] || [0, 0];
+
+  const byScore = {};                 // marcador "gh-ga" (orientado H-A) → nombres
+  let bothN = 0;
+  const homeOnly = [], awayOnly = [];
+
+  DATA.players.forEach(p => {
+    const ko = (p.bets && p.bets.ko) || [];
+    let hasH = false, hasA = false, exact = null;
+    for (let i = s0; i < s1; i++) {
+      const k = ko[i];
+      if (!k || !k.match) continue;
+      const parts = k.match.split('-').map(s => s.trim());
+      if (parts.length !== 2) continue;
+      const [h, w] = parts;
+      if (h === H || w === H) hasH = true;
+      if (h === A || w === A) hasA = true;
+      if ((h === H && w === A) || (h === A && w === H)) exact = (h === H) ? `${k.gh}-${k.ga}` : `${k.ga}-${k.gh}`;
+    }
+    if (exact != null) { (byScore[exact] = byScore[exact] || []).push(p.name); bothN++; }
+    else { if (hasH) homeOnly.push(p.name); if (hasA) awayOnly.push(p.name); }
+  });
+
+  const sortNames = a => a.sort((x, y) => x.localeCompare(y, 'es'));
+  sortNames(homeOnly); sortNames(awayOnly);
+  Object.values(byScore).forEach(sortNames);
+
+  const fin = e.result ? String(e.result) : null;
+  const resultRows = Object.entries(byScore)
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'es'))
+    .map(([res, names]) => {
+      const isReal = fin && res === fin;
+      return `<div class="bm-result${isReal ? ' actual' : ''}">
+        <button class="bm-result-head" type="button">
+          <span class="bm-res-score">${esc(res)}</span>
+          ${isReal ? '<span class="bm-res-badge actual">✓ resultado real</span>' : ''}
+          <span class="bm-res-count">${names.length} ${names.length === 1 ? 'voto' : 'votos'}</span>
+          <span class="bm-res-toggle" aria-hidden="true">▾</span>
+        </button>
+        <div class="bm-result-voters">${names.map(n => `<span class="bm-voter">${esc(n)}</span>`).join('')}</div>
+      </div>`;
+    }).join('');
+
+  const flatVoters = names => names.length
+    ? `<div class="bm-voters-flat">${names.map(n => `<span class="bm-voter">${esc(n)}</span>`).join('')}</div>`
+    : '<div class="bm-empty">Nadie lo firmó.</div>';
+
+  $('#modalContent').innerHTML = `
+    <button class="x" id="closeModal">✕</button>
+    <div class="bm-head">
+      <div class="bm-teams">${esc(H)} <span class="vs">vs</span> ${esc(A)}</div>
+      <div class="bm-meta">
+        <span class="bm-chip">🏆 Eliminatorias · ${esc(KO_ROUND_LABEL[e.round] || '')}</span>
+        <span class="bm-chip">🗓️ ${esc(fmtDate(e.date))}</span>
+        <span class="bm-chip">Partido ${e.num}</span>
+        ${fin ? `<span class="bm-chip actual">✓ Final ${esc(fin)}</span>` : ''}
+      </div>
+    </div>
+    <div class="bm-summary">Cada porrista firma su propio cuadro: aquí ves quién clavó este cruce exacto y quién acertó cada selección por separado.</div>
+    <div class="bm-group draw">
+      <h4><span>✅ Clavaron el cruce (ambas selecciones)</span><span class="cnt">${bothN} ${bothN === 1 ? 'porrista' : 'porristas'}</span></h4>
+      ${bothN ? `<div class="bm-results">${resultRows}</div>` : '<div class="bm-empty">Nadie firmó este cruce exacto.</div>'}
+    </div>
+    <div class="bm-group home">
+      <h4><span>🏠 Acertaron a ${esc(H)}</span><span class="cnt">${homeOnly.length} ${homeOnly.length === 1 ? 'porrista' : 'porristas'}</span></h4>
+      ${flatVoters(homeOnly)}
+    </div>
+    <div class="bm-group away">
+      <h4><span>🛫 Acertaron a ${esc(A)}</span><span class="cnt">${awayOnly.length} ${awayOnly.length === 1 ? 'porrista' : 'porristas'}</span></h4>
+      ${flatVoters(awayOnly)}
+    </div>`;
+
+  $('#modalBg').classList.add('open');
+  $('#closeModal').addEventListener('click', closeModal);
+  $$('.bm-result-head').forEach(btn => btn.addEventListener('click', () => btn.parentElement.classList.toggle('open')));
 }
 
 $('#prevDay').addEventListener('click', () => { if (curIdx > 0)                  { curIdx--; renderDay(); } });

@@ -361,18 +361,52 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, log) {
   return false;
 }
 
-/** Propaga al bracket los equipos ya deducibles (1º/2º de grupos cerrados y
- *  ganadores/perdedores de partidos ya resueltos), aunque la API no haya
- *  publicado todavía ese cruce. Varias pasadas: Wn depende de la ronda previa. */
+/** Clave de la combinación de los 8 mejores terceros (grupos, alfabético). */
+function thirdsKeyCron(standings) {
+  if (!Object.values(standings).every(g => g.complete)) return null;
+  const teamGroup = {};
+  Object.entries(standings).forEach(([L, g]) => g.standings.forEach(r => { teamGroup[r.team] = L; }));
+  const thirds = pickBestThirds(standings, 8);
+  if (thirds.length < 8) return null;
+  return thirds.map(t => teamGroup[t]).sort().join('');
+}
+
+/** Tercero real que enfrenta al cabeza de serie local `hostRef` (p. ej. "1E")
+ *  según DATA.thirds_alloc (tabla oficial FIFA). */
+function resolveThirdCron(D, hostRef, standings, key) {
+  const alloc = D.thirds_alloc;
+  if (!alloc || !key) return null;
+  const row = alloc.map[key];
+  if (!row) return null;
+  const idx = alloc.order.indexOf(hostRef);
+  if (idx < 0) return null;
+  const g = standings[row[idx]];
+  return (g && g.complete && g.standings[2]) ? g.standings[2].team : null;
+}
+
+/** Propaga al bracket los equipos ya deducibles (1º/2º de grupos cerrados, mejor
+ *  3º vía la tabla de combinaciones, y ganadores/perdedores de partidos ya
+ *  resueltos), aunque la API no haya publicado todavía ese cruce.
+ *  Varias pasadas: Wn depende de la ronda previa. */
 function resolveKoBracket(D, log) {
   if (!Array.isArray(D.ko_bracket)) return false;
   const standings = computeGroupStandings(D);
+  const tkey = thirdsKeyCron(standings);
   let changed = false;
-  for (let pass = 0; pass < 4; pass++) {
-    for (const e of D.ko_bracket) {
-      if (!e.home_team) { const t = slotTeam(D, e.home, standings); if (t) { e.home_team = t; changed = true; } }
-      if (!e.away_team) { const t = slotTeam(D, e.away, standings); if (t) { e.away_team = t; changed = true; } }
+  const resolveSide = (e, side) => {
+    if (e[side + '_team']) return;
+    const ref = e[side];
+    let t = null;
+    if (/^3[A-L]+$/.test(ref)) {
+      const other = e[side === 'home' ? 'away' : 'home'];
+      if (/^1[A-L]$/.test(other)) t = resolveThirdCron(D, other, standings, tkey);
+    } else {
+      t = slotTeam(D, ref, standings);
     }
+    if (t) { e[side + '_team'] = t; changed = true; }
+  };
+  for (let pass = 0; pass < 4; pass++) {
+    for (const e of D.ko_bracket) { resolveSide(e, 'home'); resolveSide(e, 'away'); }
   }
   if (changed) log.qualifChanged.push('ko_bracket: equipos deducibles propagados');
   return changed;

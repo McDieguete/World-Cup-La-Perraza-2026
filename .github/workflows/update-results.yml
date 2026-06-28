@@ -54,6 +54,33 @@ jobs:
           git commit -m "auto: actualizar resultados y clasificación"
           git push
 
+      # Refresca también las stats del Mundial en el MISMO ciclo (~15 min), así
+      # se actualizan a la par que los resultados en vez de 4 veces al día.
+      # Sólo +2 peticiones por ciclo (standings + scorers) → muy por debajo del
+      # límite de 10 req/min. `continue-on-error` para que un fallo de stats
+      # NUNCA afecte a los resultados ni rompa el autochain de abajo.
+      - name: Refrescar estadísticas del Mundial (mismo ciclo)
+        continue-on-error: true
+        env:
+          FOOTBALL_DATA_KEY:         ${{ secrets.FOOTBALL_DATA_KEY }}
+          FOOTBALL_DATA_COMPETITION: ${{ vars.FOOTBALL_DATA_COMPETITION || 'WC' }}
+          FOOTBALL_DATA_SEASON:      ${{ vars.FOOTBALL_DATA_SEASON || '2026' }}
+        run: node scripts/generate-stats.js
+
+      - name: Commit stats si hubo cambios
+        continue-on-error: true
+        run: |
+          git add data/stats.json 2>/dev/null || true
+          if git diff --cached --quiet -- data/stats.json; then
+            echo "Stats sin cambios — no se hace commit."
+            exit 0
+          fi
+          git config user.name  "perraza-bot"
+          git config user.email "perraza-bot@users.noreply.github.com"
+          git commit -m "auto: refrescar estadísticas del Mundial"
+          git pull --rebase --autostash || true
+          git push
+
       - name: Esperar 15 min y re-disparar el workflow (autochain)
         # CRÍTICO: `if: always()` para que la cadena SOBREVIVA a fallos
         # transitorios del script (rate limit de la API, blip de red, etc.).

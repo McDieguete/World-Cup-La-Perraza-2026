@@ -124,8 +124,17 @@ NO cubierto por el free tier de football-data.org (las secciones se ocultan):
 Si necesitas esa profundidad, **API-Football Pro (~€9/mes)** sí cubre todo —
 hay un comentario en `scripts/generate-stats.js` sobre cómo cambiar la fuente.
 
-El cron `refresh-stats.yml` corre 4 veces al día (`07:07 / 13:07 / 19:07 / 01:07`
-hora España). Genera `data/stats.json` y solo commitea si hay cambios.
+Las stats (`data/stats.json`) se refrescan por dos vías complementarias:
+- **En el mismo ciclo de resultados** (`update-results.yml`): tras actualizar los
+  resultados, el job ejecuta también `generate-stats.js`, así que las stats van
+  a la par que los resultados (~cada 15 min con el autochain). Solo añade 2
+  peticiones por ciclo (standings + scorers) y es `continue-on-error`, de modo
+  que un fallo de stats nunca afecta a los resultados.
+- **Red de seguridad** `refresh-stats.yml`: 4 veces al día (`07:07 / 13:07 /
+  19:07 / 01:07` hora España) por si el bucle de resultados estuviera parado.
+
+`generate-stats.js` solo pide `/standings` y `/scorers` (2 req) y solo commitea
+si `data/stats.json` cambió.
 
 ### Probarlo en local
 

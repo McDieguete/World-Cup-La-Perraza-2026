@@ -329,6 +329,9 @@ function openKoBets(num) {
   sortNames(homeOnly); sortNames(awayOnly);
   Object.values(byScore).forEach(sortNames);
 
+  // Todos los que acertaron las dos selecciones (el cruce), sin importar el marcador.
+  const allBoth = sortNames([].concat(...Object.values(byScore)));
+
   const fin = e.result ? String(e.result) : null;
   const resultRows = Object.entries(byScore)
     .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], 'es'))
@@ -362,8 +365,12 @@ function openKoBets(num) {
     </div>
     <div class="bm-summary">Cada porrista firma su propio cuadro: aquí ves quién clavó este cruce exacto y quién acertó cada selección por separado.</div>
     <div class="bm-group draw">
-      <h4><span>✅ Clavaron el cruce (ambas selecciones)</span><span class="cnt">${bothN} ${bothN === 1 ? 'porrista' : 'porristas'}</span></h4>
-      ${bothN ? `<div class="bm-results">${resultRows}</div>` : '<div class="bm-empty">Nadie firmó este cruce exacto.</div>'}
+      <h4><span>✅ Acertaron las dos selecciones (el cruce)</span><span class="cnt">${bothN} ${bothN === 1 ? 'porrista' : 'porristas'}</span></h4>
+      ${bothN
+        ? `${flatVoters(allBoth)}
+           <div class="bm-subhead">🎯 …y su marcador exacto firmado</div>
+           <div class="bm-results">${resultRows}</div>`
+        : '<div class="bm-empty">Nadie firmó este cruce exacto.</div>'}
     </div>
     <div class="bm-group home">
       <h4><span>🏠 Acertaron a ${esc(H)}</span><span class="cnt">${homeOnly.length} ${homeOnly.length === 1 ? 'porrista' : 'porristas'}</span></h4>

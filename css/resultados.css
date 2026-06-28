@@ -243,6 +243,51 @@
 .res-pts.zero   {background: var(--c-canada-soft); color: var(--c-canada)}
 .res-pts.pending{background: var(--c-surface);     color: var(--c-text-soft)}
 
+/* ===== Filas de concepto (clasificados, posición exacta, premios) ===== */
+.res-row-concept{
+  grid-template-columns: 1fr auto;
+  border-left-color: var(--c-mexico);
+  background: var(--c-mexico-soft);
+}
+.res-row-concept.res-pos  {border-left-color: var(--c-gold);   background: rgba(245,183,0,.08)}
+.res-row-concept.res-award{border-left-color: var(--c-gold);   background: rgba(245,183,0,.12)}
+.res-concept-ic{font-size: 16px; line-height: 1; flex-shrink: 0}
+.res-row-concept .res-teams{
+  flex-direction: column; align-items: flex-start;
+  gap: 1px; white-space: normal;
+}
+.res-concept-title{font-weight: 700; color: var(--c-navy); font-size: 13.5px; line-height: 1.2}
+.res-concept-detail{
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--c-text-soft);
+  white-space: normal;
+  line-height: 1.3;
+}
+
+/* ===== Filas de eliminatorias ===== */
+.res-row-ko{border-left-color: var(--c-gold)}
+.res-ko-tag{
+  font-family: var(--font-mono);
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--c-navy);
+  background: rgba(245,183,0,.18);
+  border: 1px solid var(--c-gold);
+  padding: 2px 6px; border-radius: 4px;
+  min-width: 0;
+}
+
+/* ===== Fase KO en cabecera de bloque ===== */
+.res-day-ko .res-day-date{color: var(--c-canada)}
+
+.res-detail-note{
+  font-size: 12.5px;
+  color: var(--c-text-soft);
+  margin: 0 0 var(--s-3);
+  font-style: italic;
+}
+
 /* ===== Responsive (móvil) ===== */
 @media(max-width: 720px){
   .res-day-head{grid-template-columns: 1fr auto auto; gap: var(--s-2)}

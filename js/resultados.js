@@ -86,41 +86,60 @@
     }));
   }
 
+  /* Etiquetas de ronda KO */
+  const KO_MATCH_LABEL = { r32: '1/16', r16: '1/8', quarters: '1/4', semis: 'Semifinal', thirdPlace: '3º y 4º puesto', final: 'Final' };
+  const KO_QUAL_LABEL  = { r32: 'dieciseisavos (1/16)', r16: 'octavos', qf: 'cuartos', sf: 'semifinales', thirdPlace: '3º y 4º puesto', final: 'la final' };
+
   function renderDetail(name) {
     const p = players.find(x => x.name === name);
     if (!p) { $('#resDetail').innerHTML = ''; return; }
 
     const today = todayKey();
-    const totals = [];
-    let grandTotal = 0;
+    const dayKeysAll = DATA.clasif.day_keys;
+    const dayLabels  = DATA.clasif.day_labels;
+    const bd = scComputePlayerBreakdown(DATA, p);
 
-    const dayBlocks = dayKeys.map(dateKey => {
-      const matches = matchdays[dateKey] || [];
-      let dayPts = 0;
-      let played = 0;
-      const rows = matches.map(mc => {
-        const gpIdx = gpIdxByName[mc.name];
-        const pred = (gpIdx != null) ? scParsePred(p.bets && p.bets.gp ? p.bets.gp[gpIdx] : null) : null;
-        const actual = scParseScore(mc.result);
-        const pts = scPredictionPoints('group', pred, actual, !!mc.triple);
-        if (actual) played++;
-        dayPts += pts;
-        return rowMarkup(mc, pred, actual, pts);
-      }).join('');
-      grandTotal += dayPts;
-      totals.push({ dateKey, dayPts });
-      const open = (dateKey === today) ? ' open' : '';
-      return `<div class="res-day${open}" data-date="${dateKey}">
+    /* Día/fase más reciente con puntos → se auto-despliega. */
+    let lastActive = null;
+    dayKeysAll.forEach(k => { if (bd.byKey[k] && bd.byKey[k].subtotal > 0) lastActive = k; });
+
+    const dayBlocks = dayKeysAll.map(key => {
+      if (key === 'salida') return '';
+      const cell = bd.byKey[key] || { items: [], subtotal: 0 };
+      const isPhase = key.startsWith('ph_');
+      const isGroupDate = !!matchdays[key];
+      if (!isPhase && !isGroupDate) return '';
+      // Las fases sólo se muestran cuando ya tienen algo; los días de grupo siempre.
+      if (isPhase && cell.items.length === 0) return '';
+
+      const idx = dayKeysAll.indexOf(key);
+      const title = isPhase ? (dayLabels[idx] || key.replace('ph_', '')) : fmtDate(key);
+      const sub   = isPhase ? 'Eliminatorias' : dowOf(key);
+
+      const rows = cell.items.map(itemMarkup).join('') ||
+        '<div class="res-empty-day">Aún sin puntos este día.</div>';
+
+      let meta;
+      if (isPhase) {
+        meta = `${cell.items.length} ${cell.items.length === 1 ? 'concepto' : 'conceptos'}`;
+      } else {
+        const matches = matchdays[key] || [];
+        const played = matches.filter(m => m.result).length;
+        meta = `${matches.length} ${matches.length === 1 ? 'partido' : 'partidos'} · ${played} jugado${played === 1 ? '' : 's'}`;
+      }
+
+      const open = (key === today || key === lastActive) ? ' open' : '';
+      return `<div class="res-day${open}${isPhase ? ' res-day-ko' : ''}" data-key="${esc(key)}">
         <button class="res-day-head" type="button">
           <div class="res-day-info">
-            <span class="res-day-date">${esc(fmtDate(dateKey))}</span>
-            <span class="res-day-dow">${esc(dowOf(dateKey))}</span>
+            <span class="res-day-date">${esc(title)}</span>
+            <span class="res-day-dow">${esc(sub)}</span>
           </div>
-          <span class="res-day-meta">${matches.length} ${matches.length===1?'partido':'partidos'} · ${played} jugado${played===1?'':'s'}</span>
-          <span class="res-day-pts">${dayPts} pts</span>
+          <span class="res-day-meta">${esc(meta)}</span>
+          <span class="res-day-pts">${cell.subtotal} pts</span>
           <span class="res-day-toggle" aria-hidden="true">▾</span>
         </button>
-        <div class="res-day-matches">${rows || '<div class="res-empty-day">Sin partidos.</div>'}</div>
+        <div class="res-day-matches">${rows}</div>
       </div>`;
     }).join('');
 
@@ -128,9 +147,10 @@
       <div class="res-detail-head">
         <div class="res-detail-name">${esc(p.name)}</div>
         <div class="res-detail-meta">
-          <span class="res-detail-pill">🏆 Total acumulado: <b>${grandTotal} pts</b></span>
+          <span class="res-detail-pill">🏆 Total acumulado: <b>${bd.total} pts</b></span>
         </div>
       </div>
+      <p class="res-detail-note">Incluye puntos por partido, por equipos que pasan de fase y por posición exacta de grupo.</p>
       <div class="res-days">${dayBlocks}</div>`;
 
     $$('.res-day-head').forEach(btn => {
@@ -138,7 +158,37 @@
     });
   }
 
-  function rowMarkup(mc, pred, actual, pts) {
+  /* Despacha cada concepto a su markup según el tipo. */
+  function itemMarkup(it) {
+    switch (it.kind) {
+      case 'gpmatch':   return gpRowMarkup(it.mc, it.pred, it.actual, it.pts);
+      case 'komatch':   return koRowMarkup(it);
+      case 'position':  return conceptRow('pos', '🎯',
+                          `Posición exacta · Grupo ${esc(it.group)}`,
+                          `${it.pos}º: ${esc(it.team)}`, it.pts);
+      case 'qualifier': return conceptRow('qual', '✅',
+                          `Equipos clasificados a ${esc(KO_QUAL_LABEL[it.round] || it.round)}`,
+                          `${it.teams.map(esc).join(', ')} · ${it.teams.length} × ${SC_QUALIFIER_POINTS[it.round]} pts`, it.pts);
+      case 'award':     return conceptRow('award', '⭐', esc(it.label), '', it.pts);
+      default:          return '';
+    }
+  }
+
+  function conceptRow(cls, icon, title, detail, pts) {
+    const ptsClass = pts > 0 ? 'res-pts win' : 'res-pts zero';
+    return `<div class="res-row res-row-concept res-${cls}">
+      <div class="res-row-left">
+        <span class="res-concept-ic">${icon}</span>
+        <span class="res-teams">
+          <span class="res-concept-title">${title}</span>
+          ${detail ? `<span class="res-concept-detail">${detail}</span>` : ''}
+        </span>
+      </div>
+      <div class="${ptsClass}">${pts > 0 ? '+' + pts : pts}</div>
+    </div>`;
+  }
+
+  function gpRowMarkup(mc, pred, actual, pts) {
     const time = mc.dt ? mc.dt.slice(11) : '';
     const triple = mc.triple ? '<span class="res-trip">×3</span>' : '';
     const predStr = pred ? `${pred.signo}|${pred.gh}-${pred.ga}` : '—';
@@ -165,6 +215,30 @@
         <span class="res-actual">${actualStr}</span>
       </div>
       <div class="${ptsClass}">${actual ? (pts > 0 ? '+'+pts : pts) : '—'}</div>
+    </div>`;
+  }
+
+  function koRowMarkup(it) {
+    const predStr = it.pred ? `${it.pred.signo}|${it.pred.gh}-${it.pred.ga}` : '—';
+    const ptsClass = it.pts > 0 ? 'res-pts win' : 'res-pts zero';
+    return `<div class="res-row res-row-ko">
+      <div class="res-row-left">
+        <span class="res-time res-ko-tag">${esc(KO_MATCH_LABEL[it.round] || 'KO')}</span>
+        <span class="res-teams">
+          <span class="res-home">${esc(it.home)}</span>
+          <span class="res-vs">vs</span>
+          <span class="res-away">${esc(it.away)}</span>
+        </span>
+      </div>
+      <div class="res-row-mid">
+        <span class="res-label">tu apuesta</span>
+        <span class="res-pred">${esc(predStr)}</span>
+      </div>
+      <div class="res-row-mid">
+        <span class="res-label">real</span>
+        <span class="res-actual">${esc(it.result)}</span>
+      </div>
+      <div class="${ptsClass}">${it.pts > 0 ? '+' + it.pts : it.pts}</div>
     </div>`;
   }
 

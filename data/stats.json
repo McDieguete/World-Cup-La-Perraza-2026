@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T20:42:54.373Z",
+  "generated_at": "2026-06-28T10:08:50.339Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -708,14 +708,14 @@
             "tla": "ARG",
             "crest": "https://crests.football-data.org/762.png"
           },
-          "playedGames": 2,
-          "won": 2,
+          "playedGames": 3,
+          "won": 3,
           "draw": 0,
           "lost": 0,
-          "points": 6,
-          "goalsFor": 5,
-          "goalsAgainst": 0,
-          "goalDifference": 5,
+          "points": 9,
+          "goalsFor": 8,
+          "goalsAgainst": 1,
+          "goalDifference": 7,
           "form": ""
         },
         {
@@ -726,13 +726,13 @@
             "tla": "AUT",
             "crest": "https://crests.football-data.org/816.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 1,
-          "draw": 0,
+          "draw": 1,
           "lost": 1,
-          "points": 3,
-          "goalsFor": 3,
-          "goalsAgainst": 3,
+          "points": 4,
+          "goalsFor": 6,
+          "goalsAgainst": 6,
           "goalDifference": 0,
           "form": ""
         },
@@ -744,13 +744,13 @@
             "tla": "ALG",
             "crest": "https://crests.football-data.org/algeria.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 1,
-          "draw": 0,
+          "draw": 1,
           "lost": 1,
-          "points": 3,
-          "goalsFor": 2,
-          "goalsAgainst": 4,
+          "points": 4,
+          "goalsFor": 5,
+          "goalsAgainst": 7,
           "goalDifference": -2,
           "form": ""
         },
@@ -762,14 +762,14 @@
             "tla": "JOR",
             "crest": "https://crests.football-data.org/8049.png"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 0,
-          "lost": 2,
+          "lost": 3,
           "points": 0,
-          "goalsFor": 2,
-          "goalsAgainst": 5,
-          "goalDifference": -3,
+          "goalsFor": 3,
+          "goalsAgainst": 8,
+          "goalDifference": -5,
           "form": ""
         }
       ]
@@ -785,11 +785,11 @@
             "tla": "COL",
             "crest": "https://crests.football-data.org/818.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 2,
-          "draw": 0,
+          "draw": 1,
           "lost": 0,
-          "points": 6,
+          "points": 7,
           "goalsFor": 4,
           "goalsAgainst": 1,
           "goalDifference": 3,
@@ -803,11 +803,11 @@
             "tla": "POR",
             "crest": "https://crests.football-data.org/765.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 1,
-          "draw": 1,
+          "draw": 2,
           "lost": 0,
-          "points": 4,
+          "points": 5,
           "goalsFor": 6,
           "goalsAgainst": 1,
           "goalDifference": 5,
@@ -821,14 +821,14 @@
             "tla": "COD",
             "crest": "https://crests.football-data.org/congo_dr.svg"
           },
-          "playedGames": 2,
-          "won": 0,
+          "playedGames": 3,
+          "won": 1,
           "draw": 1,
           "lost": 1,
-          "points": 1,
-          "goalsFor": 1,
-          "goalsAgainst": 2,
-          "goalDifference": -1,
+          "points": 4,
+          "goalsFor": 4,
+          "goalsAgainst": 3,
+          "goalDifference": 1,
           "form": ""
         },
         {
@@ -839,14 +839,14 @@
             "tla": "UZB",
             "crest": "https://crests.football-data.org/8070.png"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 0,
-          "lost": 2,
+          "lost": 3,
           "points": 0,
-          "goalsFor": 1,
-          "goalsAgainst": 8,
-          "goalDifference": -7,
+          "goalsFor": 2,
+          "goalsAgainst": 11,
+          "goalDifference": -9,
           "form": ""
         }
       ]
@@ -862,50 +862,50 @@
             "tla": "ENG",
             "crest": "https://crests.football-data.org/770.svg"
           },
-          "playedGames": 2,
-          "won": 1,
+          "playedGames": 3,
+          "won": 2,
           "draw": 1,
           "lost": 0,
-          "points": 4,
-          "goalsFor": 4,
+          "points": 7,
+          "goalsFor": 6,
           "goalsAgainst": 2,
-          "goalDifference": 2,
+          "goalDifference": 4,
           "form": ""
         },
         {
           "position": 2,
-          "team": {
-            "id": 763,
-            "name": "Ghana",
-            "tla": "GHA",
-            "crest": "https://crests.football-data.org/ghana.svg"
-          },
-          "playedGames": 2,
-          "won": 1,
-          "draw": 1,
-          "lost": 0,
-          "points": 4,
-          "goalsFor": 1,
-          "goalsAgainst": 0,
-          "goalDifference": 1,
-          "form": ""
-        },
-        {
-          "position": 3,
           "team": {
             "id": 799,
             "name": "Croatia",
             "tla": "CRO",
             "crest": "https://crests.football-data.org/799.svg"
           },
-          "playedGames": 2,
-          "won": 1,
+          "playedGames": 3,
+          "won": 2,
           "draw": 0,
           "lost": 1,
-          "points": 3,
-          "goalsFor": 3,
-          "goalsAgainst": 4,
-          "goalDifference": -1,
+          "points": 6,
+          "goalsFor": 5,
+          "goalsAgainst": 5,
+          "goalDifference": 0,
+          "form": ""
+        },
+        {
+          "position": 3,
+          "team": {
+            "id": 763,
+            "name": "Ghana",
+            "tla": "GHA",
+            "crest": "https://crests.football-data.org/ghana.svg"
+          },
+          "playedGames": 3,
+          "won": 1,
+          "draw": 1,
+          "lost": 1,
+          "points": 4,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
           "form": ""
         },
         {
@@ -916,14 +916,14 @@
             "tla": "PAN",
             "crest": "https://crests.football-data.org/panama.svg"
           },
-          "playedGames": 2,
+          "playedGames": 3,
           "won": 0,
           "draw": 0,
-          "lost": 2,
+          "lost": 3,
           "points": 0,
           "goalsFor": 0,
-          "goalsAgainst": 2,
-          "goalDifference": -2,
+          "goalsAgainst": 4,
+          "goalDifference": -4,
           "form": ""
         }
       ]
@@ -934,10 +934,10 @@
       "player": "Lionel Messi",
       "team": "Argentina",
       "teamCrest": "https://crests.football-data.org/762.png",
-      "goals": 5,
+      "goals": 6,
       "assists": null,
       "penalties": null,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Vinicius Junior",
@@ -1000,6 +1000,24 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
+      "playedMatches": 3
+    },
+    {
+      "player": "Yoane Wissa",
+      "team": "Congo DR",
+      "teamCrest": "https://crests.football-data.org/congo_dr.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": 1,
+      "playedMatches": 2
+    },
+    {
+      "player": "Harry Kane",
+      "team": "England",
+      "teamCrest": "https://crests.football-data.org/770.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": 1,
       "playedMatches": 3
     },
     {
@@ -1089,24 +1107,6 @@
       "teamCrest": "https://crests.football-data.org/8601.svg",
       "goals": 2,
       "assists": 1,
-      "penalties": null,
-      "playedMatches": 3
-    },
-    {
-      "player": "Daichi Kamada",
-      "team": "Japan",
-      "teamCrest": "https://crests.football-data.org/766.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 3
-    },
-    {
-      "player": "Yasin Ayari",
-      "team": "Sweden",
-      "teamCrest": "https://crests.football-data.org/792.svg",
-      "goals": 2,
-      "assists": null,
       "penalties": null,
       "playedMatches": 3
     }

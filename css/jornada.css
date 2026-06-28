@@ -353,3 +353,28 @@
 }
 .mc-real b{color: var(--c-navy)}
 .mc-real .trip{color: var(--c-gold); font-weight: 700}
+
+/* ===== Eliminatorias ===== */
+.ko-sep{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--c-gold);
+  margin: var(--s-5) 0 var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px dashed var(--c-border-strong);
+}
+.match-card.ko::before{
+  background: linear-gradient(180deg, var(--c-gold) 0 50%, var(--c-navy) 50% 100%);
+}
+.match-card.ko .mc-team .nm.tbd{
+  color: var(--c-text-soft);
+  font-style: italic;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(12px, 1.8vw, 15px);
+  text-transform: none;
+  letter-spacing: 0;
+}

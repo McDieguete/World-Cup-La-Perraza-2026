@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T15:54:08.479Z",
+  "generated_at": "2026-06-28T18:04:08.220Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1036,7 +1036,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Matheus Cunha",
@@ -1081,7 +1081,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Folarin Balogun",

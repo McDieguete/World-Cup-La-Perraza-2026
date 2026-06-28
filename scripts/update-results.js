@@ -38,11 +38,6 @@ const COMP       = process.env.FOOTBALL_DATA_COMPETITION || 'WC';
 const SEASON     = process.env.FOOTBALL_DATA_SEASON || '2026';
 const DRY_RUN    = process.env.DRY_RUN === '1';
 
-if (!KEY) {
-  console.error('ERROR: FOOTBALL_DATA_KEY no está definido. Configúralo como secret en GitHub o como variable de entorno local.');
-  process.exit(2);
-}
-
 const TEAM_MAP = JSON.parse(fs.readFileSync(path.join(__dirname, 'team-mapping.json'), 'utf8'));
 
 /* ===== Lookup ES ↔ API ===== */
@@ -88,36 +83,56 @@ async function fetchMatches() {
 /* ===== Aplicación de resultados al DATA ===== */
 
 function applyMatch(D, apiMatch, log) {
-  if (apiMatch.status !== 'FINISHED') return false;
-  const sc = apiMatch.score && apiMatch.score.fullTime;
-  if (!sc || sc.home == null || sc.away == null) {
-    log.finishedNoScore.push(`${apiMatch.homeTeam && apiMatch.homeTeam.name} vs ${apiMatch.awayTeam && apiMatch.awayTeam.name} (stage=${apiMatch.stage})`);
+  const round = FOOTBALL_DATA_STAGE_TO_ROUND[apiMatch.stage];
+  if (!round) {
+    log.unknownStages.add(apiMatch.stage);
     return false;
+  }
+
+  const sc = apiMatch.score && apiMatch.score.fullTime;
+  const finished = apiMatch.status === 'FINISHED' && sc && sc.home != null && sc.away != null;
+  if (apiMatch.status === 'FINISHED' && !finished) {
+    log.finishedNoScore.push(`${apiMatch.homeTeam && apiMatch.homeTeam.name} vs ${apiMatch.awayTeam && apiMatch.awayTeam.name} (stage=${apiMatch.stage})`);
   }
 
   const home = apiTeamToEs(apiMatch.homeTeam);
   const away = apiTeamToEs(apiMatch.awayTeam);
-  if (!home || !away) {
+  const unknownTeams = () => {
     const ht = apiMatch.homeTeam || {};
     const at = apiMatch.awayTeam || {};
     log.unknownTeams.add(
       `${ht.name || '?'} [shortName="${ht.shortName||''}" tla="${ht.tla||''}"]` +
       ` vs ${at.name || '?'} [shortName="${at.shortName||''}" tla="${at.tla||''}"]`
     );
-    return false;
-  }
+  };
 
-  const round = FOOTBALL_DATA_STAGE_TO_ROUND[apiMatch.stage];
-  if (!round) {
-    log.unknownStages.add(apiMatch.stage);
-    return false;
-  }
-  const result = `${sc.home}-${sc.away}`;
-
+  // ----- Fase de grupos: solo FINISHED, igual que siempre -----
   if (round === 'group') {
-    return applyGroupMatch(D, home, away, result, log);
+    if (!finished) return false;
+    if (!home || !away) { unknownTeams(); return false; }
+    return applyGroupMatch(D, home, away, `${sc.home}-${sc.away}`, log);
   }
-  return applyKoMatch(D, round, home, away, sc.home, sc.away, apiMatch.utcDate, log);
+
+  // ----- Eliminatorias -----
+  let changed = false;
+
+  // a) Calendario para mostrar (DATA.ko_bracket): en cuanto la API publique el
+  //    cruce (equipos conocidos), aunque el partido aún no se haya jugado.
+  //    Los equipos por definir (homeTeam/awayTeam null en la API) se quedan como
+  //    placeholder hasta que se sepan.
+  if (home && away) {
+    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, log) || changed;
+  } else if (finished) {
+    unknownTeams();
+  }
+
+  // b) Puntuación (DATA.ko_results): solo partidos FINISHED, comportamiento intacto.
+  if (finished) {
+    if (!home || !away) { unknownTeams(); }
+    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, apiMatch.utcDate, log) || changed;
+  }
+
+  return changed;
 }
 
 function applyGroupMatch(D, home, away, result, log) {
@@ -262,9 +277,114 @@ function computeR32(D) {
   return r32;
 }
 
+/* ===== Calendario de eliminatorias para mostrar (DATA.ko_bracket) =====
+   ko_bracket es el esqueleto estático del cuadro (num, round, date, home, away
+   donde home/away son referencias tipo "1A"/"2B"/"3ABCDF"/"W74"/"L101").
+   Aquí lo "rellenamos" con los equipos y marcadores reales que va publicando
+   football-data.org, sin tocar ko_results (que es lo que puntúa). */
+
+/** Fecha/hora en horario de España a partir del utcDate de la API. */
+function madridParts(iso) {
+  if (!iso) return { date: null, time: null };
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return { date: null, time: null };
+  const date = d.toLocaleDateString('en-CA', { timeZone: 'Europe/Madrid' });        // YYYY-MM-DD
+  const time = d.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit', hour12: false });
+  return { date, time };
+}
+
+/** Ganador/perdedor de un partido KO según lo ya resuelto en ko_bracket. */
+function koOutcomeBracket(D, num, which) {
+  const e = (D.ko_bracket || []).find(x => x.num === num);
+  if (!e || !e.result || !e.home_team || !e.away_team) return null;
+  const m = String(e.result).match(/^(-?\d+)-(-?\d+)$/);
+  if (!m) return null;
+  const gh = +m[1], ga = +m[2];
+  if (gh === ga) return null;                       // sin desempate cargado, no resolvemos
+  if (which === 'L') return gh > ga ? e.away_team : e.home_team;
+  return gh > ga ? e.home_team : e.away_team;
+}
+
+/** Equipo concreto de una referencia de slot, si ya se conoce; si no, null. */
+function slotTeam(D, ref, standings) {
+  let m;
+  if ((m = String(ref).match(/^([12])([A-L])$/))) {
+    const g = standings[m[2]];
+    return (g && g.complete && g.standings[+m[1] - 1]) ? g.standings[+m[1] - 1].team : null;
+  }
+  if (/^3/.test(ref)) return null;                  // mejor 3º: solo se sabe vía API
+  if ((m = String(ref).match(/^W(\d+)$/))) return koOutcomeBracket(D, +m[1], 'W');
+  if ((m = String(ref).match(/^L(\d+)$/))) return koOutcomeBracket(D, +m[1], 'L');
+  return ref;                                       // ya es un nombre literal
+}
+
+/** Casa un cruce real de la API contra la entrada del bracket que le corresponde,
+ *  anclando por el lado ya resoluble (1º/2º de grupo o ganador de partido previo). */
+function recordKoFixture(D, round, home, away, scOrNull, dt, status, log) {
+  if (!Array.isArray(D.ko_bracket)) return false;
+  const standings = computeGroupStandings(D);
+  const apiSet = new Set([home, away]);
+
+  for (const e of D.ko_bracket) {
+    if (e.round !== round) continue;
+    const rh = e.home_team || slotTeam(D, e.home, standings);
+    const ra = e.away_team || slotTeam(D, e.away, standings);
+
+    // El cruce de la API debe ser consistente con lo ya resuelto y anclar en ≥1 lado.
+    const consistent = (rh == null || apiSet.has(rh)) && (ra == null || apiSet.has(ra)) && (rh != null || ra != null);
+    if (!consistent) continue;
+
+    let newHome, newAway;
+    if (rh != null && apiSet.has(rh)) { newHome = rh; newAway = (home === rh ? away : home); }
+    else { newAway = ra; newHome = (home === ra ? away : home); }
+
+    let newResult = e.result || null;
+    if (scOrNull) newResult = (newHome === home) ? `${scOrNull.home}-${scOrNull.away}` : `${scOrNull.away}-${scOrNull.home}`;
+
+    const { date, time } = madridParts(dt);
+    const nextDate = date || e.date;
+    const nextTime = time || e.time || null;
+
+    if (e.home_team === newHome && e.away_team === newAway && e.result === (newResult || e.result) &&
+        e.status === status && e.date === nextDate && (e.time || null) === nextTime) {
+      return false;                                 // sin cambios
+    }
+    e.home_team = newHome;
+    e.away_team = newAway;
+    if (newResult) e.result = newResult;
+    e.status = status;
+    if (nextDate) e.date = nextDate;
+    if (nextTime) e.time = nextTime;
+    log.koChanged.push(`bracket ${round} p${e.num}: ${newHome} vs ${newAway}${newResult ? ` (${newResult})` : ''} [${status}]`);
+    return true;
+  }
+  return false;
+}
+
+/** Propaga al bracket los equipos ya deducibles (1º/2º de grupos cerrados y
+ *  ganadores/perdedores de partidos ya resueltos), aunque la API no haya
+ *  publicado todavía ese cruce. Varias pasadas: Wn depende de la ronda previa. */
+function resolveKoBracket(D, log) {
+  if (!Array.isArray(D.ko_bracket)) return false;
+  const standings = computeGroupStandings(D);
+  let changed = false;
+  for (let pass = 0; pass < 4; pass++) {
+    for (const e of D.ko_bracket) {
+      if (!e.home_team) { const t = slotTeam(D, e.home, standings); if (t) { e.home_team = t; changed = true; } }
+      if (!e.away_team) { const t = slotTeam(D, e.away, standings); if (t) { e.away_team = t; changed = true; } }
+    }
+  }
+  if (changed) log.qualifChanged.push('ko_bracket: equipos deducibles propagados');
+  return changed;
+}
+
 /* ===== Main ===== */
 
 async function main() {
+  if (!KEY) {
+    console.error('ERROR: FOOTBALL_DATA_KEY no está definido. Configúralo como secret en GitHub o como variable de entorno local.');
+    process.exit(2);
+  }
   console.log(`> Cargando ${path.relative(process.cwd(), require('./data-io').DATA_PATH)}`);
   const D = readDataJs();
 
@@ -313,6 +433,7 @@ async function main() {
   let touched = false;
   matches.forEach(m => { if (applyMatch(D, m, log)) touched = true; });
   if (deriveQualifiers(D, log)) touched = true;
+  if (resolveKoBracket(D, log)) touched = true;
 
   // SIEMPRE recomputamos: aun sin partidos nuevos podrías haber editado scoring.js
   recompute(D);
@@ -367,7 +488,15 @@ function printReport(log) {
   }
 }
 
-main().catch(err => {
-  console.error('ERROR:', err.message || err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch(err => {
+    console.error('ERROR:', err.message || err);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  applyMatch, applyGroupMatch, applyKoMatch,
+  recordKoFixture, resolveKoBracket, slotTeam, koOutcomeBracket, madridParts,
+  deriveQualifiers, computeR32
+};

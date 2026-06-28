@@ -161,6 +161,15 @@ Todas viven en [`scripts/scoring.js`](scripts/scoring.js). Resumen:
 > Ejemplo grupos, 2-1 firmado vs 2-1 real → 1 + 1 + 3 = **5 pts**.
 > En partido **triple** (lista en `DATA.gp_matches[i].triple`): × 3 = 15.
 
+> **Puntos por partido en eliminatorias — cómo se aplican.** Cada porrista firma su
+> propio cuadro (`bets.ko`), así que el cruce que predijo puede no ser el cruce real.
+> Solo se cobran puntos por partido KO si **el cruce coincide** (los dos mismos
+> equipos, en cualquier orden) con el que el porrista firmó; ahí se aplican
+> signo / diferencia / exacto de la tabla. Si el cruce **no** coincide, ese partido
+> da **0 pts** y el porrista solo puede sumar por los *equipos que van pasando de
+> ronda* (tabla siguiente). Implementado en
+> [`recompute.js`](scripts/recompute.js) (`matchKoPrediction`, bloque 2).
+
 **Por equipo clasificado (cada equipo de la lista del player que realmente pasó):**
 
 | Lista (`bets.X`)      | Concepto                | Pts/equipo |
@@ -209,6 +218,29 @@ El baremo (`POSITION_POINTS` en `scoring.js`) da 5 pts por posición clavada y e
 reparto temporal vive en `recompute.js` (bloque 3): la clasificación real de
 cada grupo se calcula con `computeGroupStandings` (pts → dif → GF → alfabético,
 que coincide con los 3 primeros criterios oficiales FIFA).
+
+### Calendario de eliminatorias (pestaña "Próxima jornada")
+
+El cuadro KO es un esqueleto **estático** en `DATA.ko_bracket`: 32 partidos
+(1/16 → final) con `num`, `round` (mismas claves que `scoring.js`: `r32`, `r16`,
+`quarters`, `semis`, `thirdPlace`, `final`), `date` y las referencias de cada lado
+(`home`/`away`): `"1A"`/`"2B"` (1º/2º de grupo), `"3ABCDF"` (mejor 3º de ese
+conjunto de grupos), `"W74"` (ganador del partido 74) o `"L101"` (perdedor, para el
+3º-4º). Se extrajo de la hoja **Fixture** del Excel ADMIN.
+
+`js/jornada.js` fusiona los días de grupos (`DATA.matchdays`) con los días KO
+(`DATA.ko_bracket` agrupado por fecha) y **resuelve** cada slot al pintar: muestra el
+equipo concreto si ya se conoce (1º/2º de un grupo cerrado, o ganador/perdedor de un
+partido ya resuelto) y un *placeholder* en caso contrario
+(`1º Grupo A`, `Mejor 3º (A/B/C/D)`, `Ganador partido X`…).
+
+El cron rellena los cruces y marcadores reales a medida que football-data.org los
+publica (`recordKoFixture` + `resolveKoBracket` en
+[`update-results.js`](scripts/update-results.js)): captura los partidos KO en
+cualquier estado (`SCHEDULED`/`TIMED`/`FINISHED`), ancla cada cruce de la API contra
+la entrada del bracket por el lado ya resoluble y fija `home_team`/`away_team`/`date`/
+`result`. **No toca `DATA.ko_results`** (lo que puntúa): ese sigue recibiendo solo los
+partidos `FINISHED`.
 
 ## Mantenimiento
 

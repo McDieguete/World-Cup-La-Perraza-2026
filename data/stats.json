@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T19:03:12.578Z",
+  "generated_at": "2026-06-29T19:18:29.160Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -991,7 +991,7 @@
       "goals": 3,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Elijah Just",
@@ -1099,7 +1099,7 @@
       "goals": 2,
       "assists": null,
       "penalties": 1,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Crysencio Summerville",

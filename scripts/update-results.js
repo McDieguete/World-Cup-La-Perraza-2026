@@ -116,12 +116,17 @@ function applyMatch(D, apiMatch, log) {
   // ----- Eliminatorias -----
   let changed = false;
 
+  // Ganador real según la API (robusto a prórroga/penaltis): score.winner es
+  // HOME_TEAM / AWAY_TEAM / DRAW. Si la API no lo da, luego se infiere del marcador.
+  const winnerCode = apiMatch.score && apiMatch.score.winner;
+  const winnerTeam = winnerCode === 'HOME_TEAM' ? home : (winnerCode === 'AWAY_TEAM' ? away : null);
+
   // a) Calendario para mostrar (DATA.ko_bracket): en cuanto la API publique el
   //    cruce (equipos conocidos), aunque el partido aún no se haya jugado.
   //    Los equipos por definir (homeTeam/awayTeam null en la API) se quedan como
   //    placeholder hasta que se sepan.
   if (home && away) {
-    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, log) || changed;
+    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, finished ? winnerTeam : null, log) || changed;
   } else if (finished) {
     unknownTeams();
   }
@@ -129,7 +134,7 @@ function applyMatch(D, apiMatch, log) {
   // b) Puntuación (DATA.ko_results): solo partidos FINISHED, comportamiento intacto.
   if (finished) {
     if (!home || !away) { unknownTeams(); }
-    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, apiMatch.utcDate, log) || changed;
+    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, winnerTeam, apiMatch.utcDate, log) || changed;
   }
 
   return changed;
@@ -169,25 +174,38 @@ function applyGroupMatch(D, home, away, result, log) {
   return false;
 }
 
-function applyKoMatch(D, round, home, away, gh, ga, dt, log) {
+function applyKoMatch(D, round, home, away, gh, ga, winnerTeam, dt, log) {
   if (!Array.isArray(D.ko_results)) D.ko_results = [];
+  const win = winnerTeam || null;
   // idempotente: si ya hay una entrada con misma ronda + enfrentamiento (en cualquier orden), la actualizamos
   for (const ko of D.ko_results) {
     if (ko.round === round &&
         ((ko.home === home && ko.away === away) || (ko.home === away && ko.away === home))) {
       // alinear sentido home/away al de la API
-      if (ko.home === home && ko.away === away && ko.gh === gh && ko.ga === ga) return false;
-      ko.home = home; ko.away = away; ko.gh = gh; ko.ga = ga; ko.dt = dt || ko.dt;
-      log.koChanged.push(`${round}: ${home} ${gh}-${ga} ${away}`);
+      if (ko.home === home && ko.away === away && ko.gh === gh && ko.ga === ga && (ko.winner_team || null) === win) return false;
+      ko.home = home; ko.away = away; ko.gh = gh; ko.ga = ga; ko.winner_team = win; ko.dt = dt || ko.dt;
+      log.koChanged.push(`${round}: ${home} ${gh}-${ga} ${away}${win ? ` (pasa ${win})` : ''}`);
       return true;
     }
   }
-  D.ko_results.push({ round, home, away, gh, ga, dt: dt || null });
-  log.koChanged.push(`${round} (nuevo): ${home} ${gh}-${ga} ${away}`);
+  D.ko_results.push({ round, home, away, gh, ga, winner_team: win, dt: dt || null });
+  log.koChanged.push(`${round} (nuevo): ${home} ${gh}-${ga} ${away}${win ? ` (pasa ${win})` : ''}`);
   return true;
 }
 
 /* ===== Derivación de clasificados por ronda ===== */
+
+/** Ganador de un partido KO: usa el ganador real de la API (winner_team, que
+ *  contempla prórroga/penaltis) y, si no está, lo infiere del marcador. */
+function koWinnerOf(m) {
+  if (m.winner_team) return m.winner_team;
+  return m.gh > m.ga ? m.home : (m.gh < m.ga ? m.away : null);
+}
+function koLoserOf(m) {
+  const w = koWinnerOf(m);
+  if (!w) return null;
+  return w === m.home ? m.away : m.home;
+}
 
 function deriveQualifiers(D, log) {
   if (!D.actual_qualifiers) D.actual_qualifiers = {};
@@ -202,27 +220,24 @@ function deriveQualifiers(D, log) {
     changed = setIfDifferent(D.actual_qualifiers, 'r32', r32, log, 'qualif.r32') || changed;
   }
 
-  // 2) Para cada ronda KO: si tenemos todos los enfrentamientos jugados,
-  //    los ganadores son los clasificados a la siguiente ronda.
+  // 2) Para cada ronda KO: los GANADORES de los partidos ya jugados son los
+  //    clasificados a la siguiente ronda. Se otorga POR EQUIPO en cuanto avanza
+  //    (no se espera a que termine toda la ronda): así, en cuanto Canadá gana su
+  //    1/16, quien la firmó en su lista de octavos (bets.r16) cobra ya.
   const rounds = [
-    { round: 'r32',        expected: 16, advancesTo: 'r16',        next: 'r16'        },
-    { round: 'r16',        expected:  8, advancesTo: 'qf',         next: 'qf'         },
-    { round: 'quarters',   expected:  4, advancesTo: 'sf',         next: 'sf'         },
-    { round: 'semis',      expected:  2, advancesTo: 'final',      next: 'final',
-      losersTo: 'thirdPlace' },
+    { round: 'r32',      next: 'r16'   },
+    { round: 'r16',      next: 'qf'    },
+    { round: 'quarters', next: 'sf'    },
+    { round: 'semis',    next: 'final', losersTo: 'thirdPlace' },
   ];
-  rounds.forEach(({ round, expected, next, losersTo }) => {
+  rounds.forEach(({ round, next, losersTo }) => {
     const ms = (D.ko_results || []).filter(k => k.round === round && k.gh != null && k.ga != null);
-    if (ms.length < expected) return;
-    const winners = ms.map(m => m.gh > m.ga ? m.home : (m.gh < m.ga ? m.away : null)).filter(Boolean);
-    if (winners.length === expected) {
-      changed = setIfDifferent(D.actual_qualifiers, next, winners, log, `qualif.${next}`) || changed;
-    }
+    if (!ms.length) return;
+    const winners = ms.map(koWinnerOf).filter(Boolean).sort();
+    if (winners.length) changed = setIfDifferent(D.actual_qualifiers, next, winners, log, `qualif.${next}`) || changed;
     if (losersTo) {
-      const losers = ms.map(m => m.gh > m.ga ? m.away : (m.gh < m.ga ? m.home : null)).filter(Boolean);
-      if (losers.length === expected) {
-        changed = setIfDifferent(D.actual_qualifiers, losersTo, losers, log, `qualif.${losersTo}`) || changed;
-      }
+      const losers = ms.map(koLoserOf).filter(Boolean).sort();
+      if (losers.length) changed = setIfDifferent(D.actual_qualifiers, losersTo, losers, log, `qualif.${losersTo}`) || changed;
     }
   });
 
@@ -230,7 +245,7 @@ function deriveQualifiers(D, log) {
   const finalKo = (D.ko_results || []).find(k => k.round === 'final' && k.gh != null && k.ga != null);
   const thirdKo = (D.ko_results || []).find(k => k.round === 'thirdPlace' && k.gh != null && k.ga != null);
   if (finalKo) {
-    const champ = finalKo.gh > finalKo.ga ? finalKo.home : (finalKo.gh < finalKo.ga ? finalKo.away : null);
+    const champ = koWinnerOf(finalKo);
     const runner = champ === finalKo.home ? finalKo.away : finalKo.home;
     if (!D.actual_awards) D.actual_awards = {};
     if (champ && D.actual_awards.champion !== champ) {
@@ -241,7 +256,7 @@ function deriveQualifiers(D, log) {
     }
   }
   if (thirdKo) {
-    const third = thirdKo.gh > thirdKo.ga ? thirdKo.home : (thirdKo.gh < thirdKo.ga ? thirdKo.away : null);
+    const third = koWinnerOf(thirdKo);
     if (!D.actual_awards) D.actual_awards = {};
     if (third && D.actual_awards.third !== third) {
       D.actual_awards.third = third; changed = true; log.awardsChanged.push(`third: ${third}`);
@@ -293,16 +308,21 @@ function madridParts(iso) {
   return { date, time };
 }
 
-/** Ganador/perdedor de un partido KO según lo ya resuelto en ko_bracket. */
+/** Ganador/perdedor de un partido KO según lo ya resuelto en ko_bracket.
+ *  Prefiere winner_team (de la API, robusto a penaltis); si no, lo infiere del marcador. */
 function koOutcomeBracket(D, num, which) {
   const e = (D.ko_bracket || []).find(x => x.num === num);
-  if (!e || !e.result || !e.home_team || !e.away_team) return null;
-  const m = String(e.result).match(/^(-?\d+)-(-?\d+)$/);
-  if (!m) return null;
-  const gh = +m[1], ga = +m[2];
-  if (gh === ga) return null;                       // sin desempate cargado, no resolvemos
-  if (which === 'L') return gh > ga ? e.away_team : e.home_team;
-  return gh > ga ? e.home_team : e.away_team;
+  if (!e || !e.home_team || !e.away_team) return null;
+  let winner = e.winner_team || null;
+  if (!winner) {
+    const m = e.result && String(e.result).match(/^(-?\d+)-(-?\d+)$/);
+    if (!m) return null;
+    const gh = +m[1], ga = +m[2];
+    if (gh === ga) return null;                     // empate sin ganador conocido
+    winner = gh > ga ? e.home_team : e.away_team;
+  }
+  const loser = winner === e.home_team ? e.away_team : e.home_team;
+  return which === 'L' ? loser : winner;
 }
 
 /** Equipo concreto de una referencia de slot, si ya se conoce; si no, null. */
@@ -320,7 +340,7 @@ function slotTeam(D, ref, standings) {
 
 /** Casa un cruce real de la API contra la entrada del bracket que le corresponde,
  *  anclando por el lado ya resoluble (1º/2º de grupo o ganador de partido previo). */
-function recordKoFixture(D, round, home, away, scOrNull, dt, status, log) {
+function recordKoFixture(D, round, home, away, scOrNull, dt, status, winnerTeam, log) {
   if (!Array.isArray(D.ko_bracket)) return false;
   const standings = computeGroupStandings(D);
   const apiSet = new Set([home, away]);
@@ -340,22 +360,25 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, log) {
 
     let newResult = e.result || null;
     if (scOrNull) newResult = (newHome === home) ? `${scOrNull.home}-${scOrNull.away}` : `${scOrNull.away}-${scOrNull.home}`;
+    const newWinner = winnerTeam || e.winner_team || null;
 
     const { date, time } = madridParts(dt);
     const nextDate = date || e.date;
     const nextTime = time || e.time || null;
 
     if (e.home_team === newHome && e.away_team === newAway && e.result === (newResult || e.result) &&
+        (e.winner_team || null) === newWinner &&
         e.status === status && e.date === nextDate && (e.time || null) === nextTime) {
       return false;                                 // sin cambios
     }
     e.home_team = newHome;
     e.away_team = newAway;
     if (newResult) e.result = newResult;
+    if (newWinner) e.winner_team = newWinner;
     e.status = status;
     if (nextDate) e.date = nextDate;
     if (nextTime) e.time = nextTime;
-    log.koChanged.push(`bracket ${round} p${e.num}: ${newHome} vs ${newAway}${newResult ? ` (${newResult})` : ''} [${status}]`);
+    log.koChanged.push(`bracket ${round} p${e.num}: ${newHome} vs ${newAway}${newResult ? ` (${newResult})` : ''}${newWinner ? ` → ${newWinner}` : ''} [${status}]`);
     return true;
   }
   return false;

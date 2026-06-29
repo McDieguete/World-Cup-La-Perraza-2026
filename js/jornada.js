@@ -93,16 +93,20 @@ function resolveThird(hostRef) {
    16 de 1/16 · 8 de 1/8 · 4 de 1/4 · 2 de semis · 1 de 3º · 1 de final). */
 const KO_ROUND_SLICE = { r32: [0, 16], r16: [16, 24], quarters: [24, 28], semis: [28, 30], thirdPlace: [30, 31], final: [31, 32] };
 
-/** Ganador/perdedor real de un partido KO, si ya tiene marcador resuelto. */
+/** Ganador/perdedor real de un partido KO. Prefiere winner_team (de la API,
+ *  robusto a prórroga/penaltis); si no, lo infiere del marcador. */
 function koOutcome(num, which) {
   const e = koByNum[num];
-  if (!e || !e.result || !e.home_team || !e.away_team) return null;
-  const sc = String(e.result).match(/^(-?\d+)-(-?\d+)$/);
-  if (!sc) return null;
-  const gh = +sc[1], ga = +sc[2];
-  if (gh === ga) return null;                 // sin desempate cargado, no resolvemos
-  const winner = gh > ga ? e.home_team : e.away_team;
-  const loser  = gh > ga ? e.away_team : e.home_team;
+  if (!e || !e.home_team || !e.away_team) return null;
+  let winner = e.winner_team || null;
+  if (!winner) {
+    const sc = e.result && String(e.result).match(/^(-?\d+)-(-?\d+)$/);
+    if (!sc) return null;
+    const gh = +sc[1], ga = +sc[2];
+    if (gh === ga) return null;               // empate sin ganador conocido
+    winner = gh > ga ? e.home_team : e.away_team;
+  }
+  const loser = winner === e.home_team ? e.away_team : e.home_team;
   return which === 'L' ? loser : winner;
 }
 

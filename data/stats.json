@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T15:59:38.888Z",
+  "generated_at": "2026-06-29T16:14:54.134Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -946,7 +946,7 @@
       "goals": 4,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Kylian Mbappé",
@@ -1045,7 +1045,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Brian Brobbey",

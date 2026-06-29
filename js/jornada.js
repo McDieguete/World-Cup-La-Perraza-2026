@@ -284,7 +284,7 @@ function renderKoCard(e) {
     <div class="mc-head">
       <span class="mc-time">🗓️ ${esc(fmtDate(e.date))}${time?` · 🇪🇸 ${esc(time)} h`:''}</span>
       ${fin?'<span class="mc-final">✅ FINAL</span>':''}
-      <span class="mc-tag">Eliminatorias · ${esc(roundLabel)} · partido ${e.num}</span>
+      <span class="mc-tag">Eliminatorias · ${esc(roundLabel)} · partido ${e.num}${e.triple ? ' · ⭐ TRIPLE' : ''}</span>
     </div>
     <div class="mc-teams">
       <div class="mc-team"><div class="nm${home.tbd?' tbd':''}">${esc(home.label)}</div></div>
@@ -364,6 +364,7 @@ function openKoBets(num) {
         <span class="bm-chip">🏆 Eliminatorias · ${esc(KO_ROUND_LABEL[e.round] || '')}</span>
         <span class="bm-chip">🗓️ ${esc(fmtDate(e.date))}</span>
         <span class="bm-chip">Partido ${e.num}</span>
+        ${e.triple ? '<span class="bm-chip trip">✖3 Vale triple</span>' : ''}
         ${fin ? `<span class="bm-chip actual">✓ Final ${esc(fin)}</span>` : ''}
       </div>
     </div>

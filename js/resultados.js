@@ -230,6 +230,7 @@
     return `<div class="res-row res-row-ko">
       <div class="res-row-left">
         <span class="res-time res-ko-tag">${esc(KO_MATCH_LABEL[it.round] || 'KO')}</span>
+        ${it.triple ? '<span class="res-trip">×3</span>' : ''}
         <span class="res-teams">
           <span class="res-home">${esc(it.home)}</span>
           <span class="res-vs">vs</span>

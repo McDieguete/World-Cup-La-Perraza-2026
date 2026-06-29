@@ -141,6 +141,14 @@ function scMatchKoPrediction(p, ko) {
   return null;
 }
 
+/** ¿Un cruce KO está marcado como triple (×3) en DATA.ko_bracket?
+ *  Se puede consultar por marcador real (ko con home/away) o por nombres sueltos. */
+function scKoIsTriple(DATA, ko) {
+  const H = ko.home, A = ko.away;
+  return (DATA.ko_bracket || []).some(e => e.triple &&
+    ((e.home_team === H && e.away_team === A) || (e.home_team === A && e.away_team === H)));
+}
+
 /**
  * Desglose por porrista: para cada clave de DATA.clasif.day_keys (días de
  * grupos + buckets de fase ph_*), la lista de conceptos puntuados y su subtotal.
@@ -175,9 +183,10 @@ function scComputePlayerBreakdown(DATA, p) {
     if (!byKey[phase]) return;
     const actual = { gh: +ko.gh, ga: +ko.ga };
     if (!Number.isFinite(actual.gh) || !Number.isFinite(actual.ga)) return;
+    const triple = scKoIsTriple(DATA, ko);
     const pred = scMatchKoPrediction(p, ko);
-    const pts = scPredictionPoints(ko.round, pred, actual, false);
-    add(phase, { kind: 'komatch', round: ko.round, home: ko.home, away: ko.away, result: `${ko.gh}-${ko.ga}`, pred, pts });
+    const pts = scPredictionPoints(ko.round, pred, actual, triple);
+    add(phase, { kind: 'komatch', round: ko.round, home: ko.home, away: ko.away, result: `${ko.gh}-${ko.ga}`, pred, pts, triple });
   });
 
   // 2b) Cruces KO firmados por el porrista (su propio cuadro) que AÚN no se han
@@ -193,7 +202,8 @@ function scComputePlayerBreakdown(DATA, p) {
     const round = koRoundByIdx(i);
     const phase = SC_PHASE_KEY[round];
     if (!byKey[phase]) return;
-    add(phase, { kind: 'kobet', round, home: parts[0], away: parts[1], pred: { signo: k.signo, gh: k.gh, ga: k.ga }, pts: 0 });
+    const triple = scKoIsTriple(DATA, { home: parts[0], away: parts[1] });
+    add(phase, { kind: 'kobet', round, home: parts[0], away: parts[1], pred: { signo: k.signo, gh: k.gh, ga: k.ga }, pts: 0, triple });
   });
 
   // 3) Clasificados y posición exacta

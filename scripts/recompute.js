@@ -71,9 +71,10 @@ function recompute(DATA) {
     const actual = { gh: +ko.gh, ga: +ko.ga };
     if (!Number.isFinite(actual.gh) || !Number.isFinite(actual.ga)) return;
 
+    const triple = koIsTriple(DATA, ko);   // partidos KO marcados ×3 en DATA.ko_bracket
     players.forEach(p => {
       const pred = matchKoPrediction(p, ko);
-      const pts = predictionPoints(round, pred, actual, false);
+      const pts = predictionPoints(round, pred, actual, triple);
       if (pts) delta[p.name][phaseIdx] += pts;
     });
   });
@@ -210,6 +211,13 @@ function addPositionPoints(players, delta, dayIdx, letter, realOrder, positions)
       if (pred[i] && pred[i] === realOrder[i]) delta[p.name][dayIdx] += POSITION_POINTS[i + 1];
     });
   });
+}
+
+/** ¿El partido KO `ko` está marcado como triple (×3) en DATA.ko_bracket? */
+function koIsTriple(DATA, ko) {
+  return (DATA.ko_bracket || []).some(e => e.triple && e.round === ko.round &&
+    ((e.home_team === ko.home && e.away_team === ko.away) ||
+     (e.home_team === ko.away && e.away_team === ko.home)));
 }
 
 /** Busca la predicción KO del player que corresponde al partido real `ko`.

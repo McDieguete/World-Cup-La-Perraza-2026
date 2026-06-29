@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T21:36:11.429Z",
+  "generated_at": "2026-06-29T21:51:29.300Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -985,6 +985,15 @@
       "playedMatches": 3
     },
     {
+      "player": "Kai Havertz",
+      "team": "Germany",
+      "teamCrest": "https://crests.football-data.org/759.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": 1,
+      "playedMatches": 4
+    },
+    {
       "player": "Deniz Undav",
       "team": "Germany",
       "teamCrest": "https://crests.football-data.org/759.svg",
@@ -1091,15 +1100,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 3
-    },
-    {
-      "player": "Kai Havertz",
-      "team": "Germany",
-      "teamCrest": "https://crests.football-data.org/759.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": 1,
-      "playedMatches": 4
     },
     {
       "player": "Crysencio Summerville",

@@ -69,15 +69,22 @@ const PHASE_KEY = {
 };
 
 /* Mapeo: stage devuelto por football-data.org → nuestra ronda. */
+/* Nombres de stage de football-data.org (v4) para el Mundial de 48 equipos.
+   Confirmados en la doc oficial (lookup tables → enums):
+     LAST_32 · LAST_16 · QUARTER_FINALS · SEMI_FINALS · THIRD_PLACE · FINAL
+   OJO: en 2026 la primera ronda KO es el Round of 32 = LAST_32 (no LAST_16). */
 const FOOTBALL_DATA_STAGE_TO_ROUND = {
   'GROUP_STAGE':    'group',
-  'LAST_16':        'r32',     // ojo: football-data llama "LAST_16" al 1/16 (32 equipos)
-  'ROUND_OF_16':    'r32',     // alias defensivo
-  'LAST_8':         'r16',
-  'ROUND_OF_8':     'r16',
+  'LAST_32':        'r32',        // dieciseisavos (1/16 · 32 equipos)
+  'ROUND_OF_32':    'r32',        // alias defensivo
+  'LAST_16':        'r16',        // octavos (1/8 · 16 equipos)
+  'ROUND_OF_16':    'r16',        // alias defensivo
   'QUARTER_FINALS': 'quarters',
+  'LAST_8':         'quarters',   // alias defensivo
   'SEMI_FINALS':    'semis',
+  'LAST_4':         'semis',      // alias defensivo
   'THIRD_PLACE':    'thirdPlace',
+  '3RD_PLACE':      'thirdPlace', // alias defensivo
   'FINAL':          'final'
 };
 

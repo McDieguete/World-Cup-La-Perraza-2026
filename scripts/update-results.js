@@ -120,18 +120,30 @@ function applyMatch(D, apiMatch, log) {
   // HOME_TEAM / AWAY_TEAM / DRAW. Si la API no lo da, luego se infiere del marcador.
   const winnerCode = apiMatch.score && apiMatch.score.winner;
   const winnerTeam = winnerCode === 'HOME_TEAM' ? home : (winnerCode === 'AWAY_TEAM' ? away : null);
-  // Marcador de la tanda de penaltis (solo para mostrar; NO suma puntos de partido).
-  // sc (fullTime) es el resultado a fin de prórroga, SIN penaltis.
+  // Marcador de la tanda de penaltis (solo para mostrar / decidir quién pasa; NO puntúa).
   const pk = apiMatch.score && apiMatch.score.penalties;
   const pensStr = (pk && pk.home != null && pk.away != null) ? `${pk.home}-${pk.away}` : null;
+  // OJO: en football-data.org score.fullTime INCLUYE los penaltis
+  //   (fullTime = resultado a fin de prórroga + penaltis).
+  // El resultado del PARTIDO (lo que puntúa y se muestra arriba) es a fin de
+  // prórroga, así que restamos la tanda. La tanda va aparte (pens).
+  const koSc = (finished && pk && pk.home != null && pk.away != null)
+    ? { home: sc.home - pk.home, away: sc.away - pk.away }
+    : sc;
   const meta = { winner: finished ? winnerTeam : null, pens: finished ? pensStr : null };
+
+  // Resultado KO fijado a mano (result_manual en ko_results) → no lo pisa la API.
+  if (finished && home && away && koResultLocked(D, round, home, away)) {
+    log.manualLocked.push(`KO ${round} ${home}-${away}: result_manual — no sobrescribo el marcador`);
+    return changed;
+  }
 
   // a) Calendario para mostrar (DATA.ko_bracket): en cuanto la API publique el
   //    cruce (equipos conocidos), aunque el partido aún no se haya jugado.
   //    Los equipos por definir (homeTeam/awayTeam null en la API) se quedan como
   //    placeholder hasta que se sepan.
   if (home && away) {
-    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, meta, log) || changed;
+    changed = recordKoFixture(D, round, home, away, finished ? koSc : null, apiMatch.utcDate, apiMatch.status, meta, log) || changed;
   } else if (finished) {
     unknownTeams();
   }
@@ -139,7 +151,7 @@ function applyMatch(D, apiMatch, log) {
   // b) Puntuación (DATA.ko_results): solo partidos FINISHED, comportamiento intacto.
   if (finished) {
     if (!home || !away) { unknownTeams(); }
-    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, meta, apiMatch.utcDate, log) || changed;
+    else changed = applyKoMatch(D, round, home, away, koSc.home, koSc.away, meta, apiMatch.utcDate, log) || changed;
   }
 
   return changed;
@@ -177,6 +189,12 @@ function applyGroupMatch(D, home, away, result, log) {
   }
   log.unmatchedGroup.push(`${home} vs ${away} (${result})`);
   return false;
+}
+
+/** ¿Hay un resultado KO fijado a mano (result_manual) para este cruce? */
+function koResultLocked(D, round, home, away) {
+  return (D.ko_results || []).some(k => k.result_manual && k.round === round &&
+    ((k.home === home && k.away === away) || (k.home === away && k.away === home)));
 }
 
 function applyKoMatch(D, round, home, away, gh, ga, meta, dt, log) {

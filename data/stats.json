@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T18:46:52.109Z",
+  "generated_at": "2026-06-30T19:02:12.705Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -940,6 +940,15 @@
       "playedMatches": 3
     },
     {
+      "player": "Erling Haaland",
+      "team": "Norway",
+      "teamCrest": "https://crests.football-data.org/813.svg",
+      "goals": 5,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Vinicius Junior",
       "team": "Brazil",
       "teamCrest": "https://crests.football-data.org/764.svg",
@@ -956,15 +965,6 @@
       "assists": 2,
       "penalties": null,
       "playedMatches": 3
-    },
-    {
-      "player": "Erling Haaland",
-      "team": "Norway",
-      "teamCrest": "https://crests.football-data.org/813.svg",
-      "goals": 4,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 4
     },
     {
       "player": "Ousmane Dembélé",

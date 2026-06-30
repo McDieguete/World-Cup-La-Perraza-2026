@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T02:26:50.818Z",
+  "generated_at": "2026-06-30T02:42:10.861Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1066,6 +1066,15 @@
       "playedMatches": 4
     },
     {
+      "player": "Cody Gakpo",
+      "team": "Netherlands",
+      "teamCrest": "https://crests.football-data.org/8601.svg",
+      "goals": 3,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Ismaïla Sarr",
       "team": "Senegal",
       "teamCrest": "https://crests.football-data.org/senegal.svg",
@@ -1100,15 +1109,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 3
-    },
-    {
-      "player": "Crysencio Summerville",
-      "team": "Netherlands",
-      "teamCrest": "https://crests.football-data.org/8601.svg",
-      "goals": 2,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 4
     }
   ]
 }

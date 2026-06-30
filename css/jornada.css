@@ -334,6 +334,21 @@
   line-height: 1;
 }
 .mc-score span{color: var(--c-text-soft); font-size: .6em; font-family: var(--font-mono)}
+
+/* Bloque de marcador: resultado del partido (incl. prórroga) arriba y, debajo,
+   el de la tanda de penaltis. */
+.mc-score-block{display: flex; flex-direction: column; align-items: center; gap: 4px}
+.mc-pens{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-navy);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  padding: 2px 9px;
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+}
 .vseg.hit{
   box-shadow: 0 0 0 3px var(--c-gold) inset;
   filter: saturate(1.15);

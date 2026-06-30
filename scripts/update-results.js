@@ -370,13 +370,16 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, meta, log) 
     let newResult = e.result || null;
     if (scOrNull) newResult = (newHome === home) ? `${scOrNull.home}-${scOrNull.away}` : `${scOrNull.away}-${scOrNull.home}`;
     const newWinner = winnerTeam || e.winner_team || null;
+    // Orienta el marcador de penaltis al sentido home/away del bracket (igual que el resultado).
+    let newPens = pens || null;
+    if (pens && newHome !== home) newPens = pens.split('-').reverse().join('-');
 
     const { date, time } = madridParts(dt);
     const nextDate = date || e.date;
     const nextTime = time || e.time || null;
 
     if (e.home_team === newHome && e.away_team === newAway && e.result === (newResult || e.result) &&
-        (e.winner_team || null) === newWinner && (e.pens || null) === (pens || e.pens || null) &&
+        (e.winner_team || null) === newWinner && (e.pens || null) === (newPens || e.pens || null) &&
         e.status === status && e.date === nextDate && (e.time || null) === nextTime) {
       return false;                                 // sin cambios
     }
@@ -384,7 +387,7 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, meta, log) 
     e.away_team = newAway;
     if (newResult) e.result = newResult;
     if (newWinner) e.winner_team = newWinner;
-    if (pens) e.pens = pens;
+    if (newPens) e.pens = newPens;
     e.status = status;
     if (nextDate) e.date = nextDate;
     if (nextTime) e.time = nextTime;

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T21:50:34.607Z",
+  "generated_at": "2026-06-30T22:04:08.362Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -940,6 +940,15 @@
       "playedMatches": 3
     },
     {
+      "player": "Kylian Mbappé",
+      "team": "France",
+      "teamCrest": "https://crests.football-data.org/773.svg",
+      "goals": 5,
+      "assists": 2,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Erling Haaland",
       "team": "Norway",
       "teamCrest": "https://crests.football-data.org/813.svg",
@@ -958,20 +967,11 @@
       "playedMatches": 4
     },
     {
-      "player": "Kylian Mbappé",
-      "team": "France",
-      "teamCrest": "https://crests.football-data.org/773.svg",
-      "goals": 4,
-      "assists": 2,
-      "penalties": null,
-      "playedMatches": 4
-    },
-    {
       "player": "Ousmane Dembélé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
       "goals": 4,
-      "assists": 1,
+      "assists": 2,
       "penalties": null,
       "playedMatches": 4
     },

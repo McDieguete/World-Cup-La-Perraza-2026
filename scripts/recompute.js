@@ -62,6 +62,11 @@ function recompute(DATA) {
   });
 
   // -------- 2) Eliminatorias: puntos por partido en su fase --------
+  //   REGLA: los puntos por partido (1X2, diferencia, exacto) se cuentan SOLO
+  //   hasta la prórroga incluida. ko.gh/ko.ga es el marcador a fin de la prórroga
+  //   (football-data.org lo da en score.fullTime, SIN los penaltis). La tanda de
+  //   penaltis NO suma puntos de partido: sólo decide quién pasa (ko.winner_team,
+  //   usado en deriveQualifiers para los puntos de "equipo que avanza").
   (DATA.ko_results || []).forEach(ko => {
     const round = ko.round;
     const phase = PHASE_KEY[round];

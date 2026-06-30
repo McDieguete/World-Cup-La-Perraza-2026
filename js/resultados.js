@@ -225,7 +225,9 @@
   function koRowMarkup(it, pending) {
     const predStr = it.pred ? `${it.pred.signo}|${it.pred.gh}-${it.pred.ga}` : '—';
     const ptsClass = pending ? 'res-pts pending' : (it.pts > 0 ? 'res-pts win' : 'res-pts zero');
-    const real = pending ? '<span class="res-pending">pdte.</span>' : esc(it.result);
+    const real = pending
+      ? '<span class="res-pending">pdte.</span>'
+      : esc(it.result) + (it.pens ? ` <span class="res-trip">pen ${esc(it.pens)}</span>` : '');
     const ptsCell = pending ? '—' : (it.pts > 0 ? '+' + it.pts : it.pts);
     return `<div class="res-row res-row-ko">
       <div class="res-row-left">

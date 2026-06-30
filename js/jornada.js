@@ -291,6 +291,7 @@ function renderKoCard(e) {
       ${fin?`<div class="mc-score"><b>${fin[0]}</b><span>–</span><b>${fin[1]}</b></div>`:'<div class="mc-vs">vs</div>'}
       <div class="mc-team"><div class="nm${away.tbd?' tbd':''}">${esc(away.label)}</div></div>
     </div>
+    ${(fin && e.pens) ? `<div class="mc-real">🥅 Empate a la prórroga · <b>penaltis ${esc(e.pens)}</b>${e.winner_team ? ` · pasa <b>${esc(e.winner_team)}</b>` : ''} <span class="trip">(la tanda no puntúa)</span></div>` : ''}
     ${both
       ? `<button class="bets-btn" data-ko="${e.num}"><span class="bb-ic">👥</span> Ver apuestas a este cruce${betsN ? ` · ${betsN} clavaron el cruce` : ''}</button>`
       : (betsN ? `<div class="mc-real">👥 <b>${betsN}</b> porrista${betsN===1?'':'s'} firmaron este cruce en su quiniela.</div>` : '')}

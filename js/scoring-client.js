@@ -186,7 +186,7 @@ function scComputePlayerBreakdown(DATA, p) {
     const triple = scKoIsTriple(DATA, ko);
     const pred = scMatchKoPrediction(p, ko);
     const pts = scPredictionPoints(ko.round, pred, actual, triple);
-    add(phase, { kind: 'komatch', round: ko.round, home: ko.home, away: ko.away, result: `${ko.gh}-${ko.ga}`, pred, pts, triple });
+    add(phase, { kind: 'komatch', round: ko.round, home: ko.home, away: ko.away, result: `${ko.gh}-${ko.ga}`, pred, pts, triple, pens: ko.pens || null });
   });
 
   // 2b) Cruces KO firmados por el porrista (su propio cuadro) que AÚN no se han

@@ -120,13 +120,18 @@ function applyMatch(D, apiMatch, log) {
   // HOME_TEAM / AWAY_TEAM / DRAW. Si la API no lo da, luego se infiere del marcador.
   const winnerCode = apiMatch.score && apiMatch.score.winner;
   const winnerTeam = winnerCode === 'HOME_TEAM' ? home : (winnerCode === 'AWAY_TEAM' ? away : null);
+  // Marcador de la tanda de penaltis (solo para mostrar; NO suma puntos de partido).
+  // sc (fullTime) es el resultado a fin de prórroga, SIN penaltis.
+  const pk = apiMatch.score && apiMatch.score.penalties;
+  const pensStr = (pk && pk.home != null && pk.away != null) ? `${pk.home}-${pk.away}` : null;
+  const meta = { winner: finished ? winnerTeam : null, pens: finished ? pensStr : null };
 
   // a) Calendario para mostrar (DATA.ko_bracket): en cuanto la API publique el
   //    cruce (equipos conocidos), aunque el partido aún no se haya jugado.
   //    Los equipos por definir (homeTeam/awayTeam null en la API) se quedan como
   //    placeholder hasta que se sepan.
   if (home && away) {
-    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, finished ? winnerTeam : null, log) || changed;
+    changed = recordKoFixture(D, round, home, away, finished ? sc : null, apiMatch.utcDate, apiMatch.status, meta, log) || changed;
   } else if (finished) {
     unknownTeams();
   }
@@ -134,7 +139,7 @@ function applyMatch(D, apiMatch, log) {
   // b) Puntuación (DATA.ko_results): solo partidos FINISHED, comportamiento intacto.
   if (finished) {
     if (!home || !away) { unknownTeams(); }
-    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, winnerTeam, apiMatch.utcDate, log) || changed;
+    else changed = applyKoMatch(D, round, home, away, sc.home, sc.away, meta, apiMatch.utcDate, log) || changed;
   }
 
   return changed;
@@ -174,22 +179,24 @@ function applyGroupMatch(D, home, away, result, log) {
   return false;
 }
 
-function applyKoMatch(D, round, home, away, gh, ga, winnerTeam, dt, log) {
+function applyKoMatch(D, round, home, away, gh, ga, meta, dt, log) {
   if (!Array.isArray(D.ko_results)) D.ko_results = [];
-  const win = winnerTeam || null;
+  const win  = (meta && meta.winner) || null;
+  const pens = (meta && meta.pens)   || null;   // marcador de penaltis (solo display)
   // idempotente: si ya hay una entrada con misma ronda + enfrentamiento (en cualquier orden), la actualizamos
   for (const ko of D.ko_results) {
     if (ko.round === round &&
         ((ko.home === home && ko.away === away) || (ko.home === away && ko.away === home))) {
       // alinear sentido home/away al de la API
-      if (ko.home === home && ko.away === away && ko.gh === gh && ko.ga === ga && (ko.winner_team || null) === win) return false;
-      ko.home = home; ko.away = away; ko.gh = gh; ko.ga = ga; ko.winner_team = win; ko.dt = dt || ko.dt;
-      log.koChanged.push(`${round}: ${home} ${gh}-${ga} ${away}${win ? ` (pasa ${win})` : ''}`);
+      if (ko.home === home && ko.away === away && ko.gh === gh && ko.ga === ga &&
+          (ko.winner_team || null) === win && (ko.pens || null) === pens) return false;
+      ko.home = home; ko.away = away; ko.gh = gh; ko.ga = ga; ko.winner_team = win; ko.pens = pens; ko.dt = dt || ko.dt;
+      log.koChanged.push(`${round}: ${home} ${gh}-${ga} ${away}${pens ? ` [pen ${pens}]` : ''}${win ? ` (pasa ${win})` : ''}`);
       return true;
     }
   }
-  D.ko_results.push({ round, home, away, gh, ga, winner_team: win, dt: dt || null });
-  log.koChanged.push(`${round} (nuevo): ${home} ${gh}-${ga} ${away}${win ? ` (pasa ${win})` : ''}`);
+  D.ko_results.push({ round, home, away, gh, ga, winner_team: win, pens, dt: dt || null });
+  log.koChanged.push(`${round} (nuevo): ${home} ${gh}-${ga} ${away}${pens ? ` [pen ${pens}]` : ''}${win ? ` (pasa ${win})` : ''}`);
   return true;
 }
 
@@ -340,8 +347,10 @@ function slotTeam(D, ref, standings) {
 
 /** Casa un cruce real de la API contra la entrada del bracket que le corresponde,
  *  anclando por el lado ya resoluble (1º/2º de grupo o ganador de partido previo). */
-function recordKoFixture(D, round, home, away, scOrNull, dt, status, winnerTeam, log) {
+function recordKoFixture(D, round, home, away, scOrNull, dt, status, meta, log) {
   if (!Array.isArray(D.ko_bracket)) return false;
+  const winnerTeam = (meta && meta.winner) || null;
+  const pens       = (meta && meta.pens)   || null;
   const standings = computeGroupStandings(D);
   const apiSet = new Set([home, away]);
 
@@ -367,7 +376,7 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, winnerTeam,
     const nextTime = time || e.time || null;
 
     if (e.home_team === newHome && e.away_team === newAway && e.result === (newResult || e.result) &&
-        (e.winner_team || null) === newWinner &&
+        (e.winner_team || null) === newWinner && (e.pens || null) === (pens || e.pens || null) &&
         e.status === status && e.date === nextDate && (e.time || null) === nextTime) {
       return false;                                 // sin cambios
     }
@@ -375,6 +384,7 @@ function recordKoFixture(D, round, home, away, scOrNull, dt, status, winnerTeam,
     e.away_team = newAway;
     if (newResult) e.result = newResult;
     if (newWinner) e.winner_team = newWinner;
+    if (pens) e.pens = pens;
     e.status = status;
     if (nextDate) e.date = nextDate;
     if (nextTime) e.time = nextTime;

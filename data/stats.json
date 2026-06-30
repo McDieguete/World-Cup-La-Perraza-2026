@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T19:48:05.322Z",
+  "generated_at": "2026-06-30T20:03:23.532Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -964,7 +964,7 @@
       "goals": 4,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Ousmane Dembélé",
@@ -973,7 +973,7 @@
       "goals": 4,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Ismael Saibari",

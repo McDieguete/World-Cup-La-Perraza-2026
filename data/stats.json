@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T15:27:27.682Z",
+  "generated_at": "2026-06-30T15:42:44.582Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -964,7 +964,7 @@
       "goals": 4,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Ousmane Dembélé",

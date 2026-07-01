@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T14:40:33.543Z",
+  "generated_at": "2026-07-01T14:55:55.428Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1027,7 +1027,7 @@
       "goals": 3,
       "assists": null,
       "penalties": 1,
-      "playedMatches": 2
+      "playedMatches": 3
     },
     {
       "player": "Harry Kane",
@@ -1036,7 +1036,7 @@
       "goals": 3,
       "assists": null,
       "penalties": 1,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Johan Manzambi",

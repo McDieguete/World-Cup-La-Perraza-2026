@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T19:00:50.956Z",
+  "generated_at": "2026-07-01T19:16:06.970Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1090,7 +1090,7 @@
       "goals": 3,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Raúl Jiménez",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T23:52:50.833Z",
+  "generated_at": "2026-07-01T00:08:06.771Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1090,7 +1090,7 @@
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Cyle Larin",

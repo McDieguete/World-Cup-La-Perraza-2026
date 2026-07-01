@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T21:03:12.754Z",
+  "generated_at": "2026-07-01T21:18:32.757Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -985,6 +985,15 @@
       "playedMatches": 4
     },
     {
+      "player": "Ismaïla Sarr",
+      "team": "Senegal",
+      "teamCrest": "https://crests.football-data.org/senegal.svg",
+      "goals": 4,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Julián Quiñones",
       "team": "Mexico",
       "teamCrest": "https://crests.football-data.org/769.svg",
@@ -1078,15 +1087,6 @@
       "player": "Cody Gakpo",
       "team": "Netherlands",
       "teamCrest": "https://crests.football-data.org/8601.svg",
-      "goals": 3,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 4
-    },
-    {
-      "player": "Ismaïla Sarr",
-      "team": "Senegal",
-      "teamCrest": "https://crests.football-data.org/senegal.svg",
       "goals": 3,
       "assists": 1,
       "penalties": null,

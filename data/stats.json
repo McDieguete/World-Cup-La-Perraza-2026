@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T02:10:29.016Z",
+  "generated_at": "2026-07-01T02:25:47.273Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -976,6 +976,15 @@
       "playedMatches": 4
     },
     {
+      "player": "Julián Quiñones",
+      "team": "Mexico",
+      "teamCrest": "https://crests.football-data.org/769.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Ismael Saibari",
       "team": "Morocco",
       "teamCrest": "https://crests.football-data.org/morocco.svg",
@@ -1082,15 +1091,6 @@
       "assists": 1,
       "penalties": null,
       "playedMatches": 3
-    },
-    {
-      "player": "Julián Quiñones",
-      "team": "Mexico",
-      "teamCrest": "https://crests.football-data.org/769.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 4
     },
     {
       "player": "Cyle Larin",

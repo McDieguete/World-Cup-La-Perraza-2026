@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T03:26:56.611Z",
+  "generated_at": "2026-07-01T03:42:14.389Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -931,6 +931,15 @@
   ],
   "scorers": [
     {
+      "player": "Kylian Mbappé",
+      "team": "France",
+      "teamCrest": "https://crests.football-data.org/773.svg",
+      "goals": 6,
+      "assists": 2,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Lionel Messi",
       "team": "Argentina",
       "teamCrest": "https://crests.football-data.org/762.png",
@@ -938,6 +947,15 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 3
+    },
+    {
+      "player": "Erling Haaland",
+      "team": "Norway",
+      "teamCrest": "https://crests.football-data.org/813.svg",
+      "goals": 5,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 4
     },
     {
       "player": "Vinicius Junior",
@@ -949,31 +967,22 @@
       "playedMatches": 4
     },
     {
-      "player": "Kylian Mbappé",
+      "player": "Ousmane Dembélé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
       "goals": 4,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
-      "player": "Erling Haaland",
-      "team": "Norway",
-      "teamCrest": "https://crests.football-data.org/813.svg",
-      "goals": 4,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 3
-    },
-    {
-      "player": "Ousmane Dembélé",
-      "team": "France",
-      "teamCrest": "https://crests.football-data.org/773.svg",
-      "goals": 4,
+      "player": "Julián Quiñones",
+      "team": "Mexico",
+      "teamCrest": "https://crests.football-data.org/769.svg",
+      "goals": 3,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Ismael Saibari",
@@ -1084,13 +1093,13 @@
       "playedMatches": 3
     },
     {
-      "player": "Julián Quiñones",
+      "player": "Raúl Jiménez",
       "team": "Mexico",
       "teamCrest": "https://crests.football-data.org/769.svg",
       "goals": 2,
       "assists": null,
       "penalties": null,
-      "playedMatches": 3
+      "playedMatches": 4
     },
     {
       "player": "Cyle Larin",
@@ -1100,15 +1109,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 4
-    },
-    {
-      "player": "Folarin Balogun",
-      "team": "USA",
-      "teamCrest": "https://crests.football-data.org/usa.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 3
     }
   ]
 }

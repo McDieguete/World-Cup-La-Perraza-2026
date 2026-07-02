@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T00:37:44.182Z",
+  "generated_at": "2026-07-02T00:53:04.881Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1003,6 +1003,15 @@
       "playedMatches": 4
     },
     {
+      "player": "Folarin Balogun",
+      "team": "USA",
+      "teamCrest": "https://crests.football-data.org/usa.svg",
+      "goals": 3,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Ismael Saibari",
       "team": "Morocco",
       "teamCrest": "https://crests.football-data.org/morocco.svg",
@@ -1096,15 +1105,6 @@
       "player": "Raúl Jiménez",
       "team": "Mexico",
       "teamCrest": "https://crests.football-data.org/769.svg",
-      "goals": 2,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 4
-    },
-    {
-      "player": "Cyle Larin",
-      "team": "Canada",
-      "teamCrest": "https://crests.football-data.org/canada.svg",
       "goals": 2,
       "assists": null,
       "penalties": null,

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02T20:47:09.128Z",
+  "generated_at": "2026-07-02T21:02:28.403Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -976,6 +976,15 @@
       "playedMatches": 4
     },
     {
+      "player": "Mikel Oyarzabal",
+      "team": "Spain",
+      "teamCrest": "https://crests.football-data.org/760.svg",
+      "goals": 4,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 4
+    },
+    {
       "player": "Ousmane Dembélé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
@@ -1096,15 +1105,6 @@
       "player": "Cody Gakpo",
       "team": "Netherlands",
       "teamCrest": "https://crests.football-data.org/8601.svg",
-      "goals": 3,
-      "assists": 1,
-      "penalties": null,
-      "playedMatches": 4
-    },
-    {
-      "player": "Mikel Oyarzabal",
-      "team": "Spain",
-      "teamCrest": "https://crests.football-data.org/760.svg",
       "goals": 3,
       "assists": 1,
       "penalties": null,

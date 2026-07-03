@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03T03:09:55.349Z",
+  "generated_at": "2026-07-03T03:25:16.015Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1070,7 +1070,7 @@
       "team": "Switzerland",
       "teamCrest": "https://crests.football-data.org/788.svg",
       "goals": 3,
-      "assists": 1,
+      "assists": 2,
       "penalties": null,
       "playedMatches": 4
     },

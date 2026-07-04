@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T00:20:30.578Z",
+  "generated_at": "2026-07-04T00:35:52.579Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -935,7 +935,7 @@
       "team": "Argentina",
       "teamCrest": "https://crests.football-data.org/762.png",
       "goals": 7,
-      "assists": null,
+      "assists": 1,
       "penalties": null,
       "playedMatches": 4
     },

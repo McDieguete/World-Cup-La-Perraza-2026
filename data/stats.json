@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T15:53:42.211Z",
+  "generated_at": "2026-07-04T16:08:59.384Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1027,7 +1027,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Kai Havertz",
@@ -1081,7 +1081,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Matheus Cunha",

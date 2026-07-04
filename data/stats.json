@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-04T19:42:58.299Z",
+  "generated_at": "2026-07-04T19:58:16.748Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -946,7 +946,7 @@
       "goals": 6,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Erling Haaland",
@@ -991,7 +991,7 @@
       "goals": 4,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Ismaïla Sarr",

@@ -448,8 +448,12 @@ function resolveKoBracket(D, log) {
   const tkey = thirdsKeyCron(standings);
   let changed = false;
   const resolveSide = (e, side) => {
-    if (e[side + '_team']) return;
     const ref = e[side];
+    // Los slots que dependen del ganador/perdedor de un partido previo (W#/L#)
+    // pueden cambiar tras la prórroga o los penaltis: se vuelven a derivar y se
+    // corrigen aunque ya tuvieran equipo. El resto de slots ya fijados no se tocan.
+    const isMatchRef = /^[WL]\d+$/.test(ref);
+    if (e[side + '_team'] && !isMatchRef) return;
     let t = null;
     if (/^3[A-L]+$/.test(ref)) {
       const other = e[side === 'home' ? 'away' : 'home'];
@@ -457,7 +461,7 @@ function resolveKoBracket(D, log) {
     } else {
       t = slotTeam(D, ref, standings);
     }
-    if (t) { e[side + '_team'] = t; changed = true; }
+    if (t && e[side + '_team'] !== t) { e[side + '_team'] = t; changed = true; }
   };
   for (let pass = 0; pass < 4; pass++) {
     for (const e of D.ko_bracket) { resolveSide(e, 'home'); resolveSide(e, 'away'); }

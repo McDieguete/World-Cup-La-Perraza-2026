@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T21:46:14.570Z",
+  "generated_at": "2026-07-05T22:01:36.537Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -940,6 +940,15 @@
       "playedMatches": 5
     },
     {
+      "player": "Erling Haaland",
+      "team": "Norway",
+      "teamCrest": "https://crests.football-data.org/813.svg",
+      "goals": 7,
+      "assists": null,
+      "penalties": null,
+      "playedMatches": 5
+    },
+    {
       "player": "Lionel Messi",
       "team": "Argentina",
       "teamCrest": "https://crests.football-data.org/762.png",
@@ -947,15 +956,6 @@
       "assists": null,
       "penalties": null,
       "playedMatches": 4
-    },
-    {
-      "player": "Erling Haaland",
-      "team": "Norway",
-      "teamCrest": "https://crests.football-data.org/813.svg",
-      "goals": 6,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 5
     },
     {
       "player": "Harry Kane",

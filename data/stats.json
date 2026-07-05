@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T23:02:47.221Z",
+  "generated_at": "2026-07-05T23:18:05.630Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -964,7 +964,7 @@
       "goals": 5,
       "assists": null,
       "penalties": 1,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Vinicius Junior",
@@ -1009,7 +1009,7 @@
       "goals": 3,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Folarin Balogun",

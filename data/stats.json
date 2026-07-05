@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T21:30:54.765Z",
+  "generated_at": "2026-07-05T21:46:14.570Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -952,7 +952,7 @@
       "player": "Erling Haaland",
       "team": "Norway",
       "teamCrest": "https://crests.football-data.org/813.svg",
-      "goals": 5,
+      "goals": 6,
       "assists": null,
       "penalties": null,
       "playedMatches": 5

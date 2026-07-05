@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05T18:42:37.044Z",
+  "generated_at": "2026-07-05T18:57:55.062Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -955,7 +955,7 @@
       "goals": 5,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Harry Kane",
@@ -973,7 +973,7 @@
       "goals": 4,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Mikel Oyarzabal",
@@ -1090,7 +1090,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Brian Brobbey",

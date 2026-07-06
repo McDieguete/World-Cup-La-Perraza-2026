@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-06T22:34:40.827Z",
+  "generated_at": "2026-07-06T22:49:56.482Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1036,7 +1036,7 @@
       "goals": 3,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Ismael Saibari",

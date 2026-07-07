@@ -225,13 +225,31 @@ function koIsTriple(DATA, ko) {
      (e.home_team === ko.away && e.away_team === ko.home)));
 }
 
+/** Ronda a la que pertenece la entrada `i` del bracket personal `bets.ko`.
+ *  El bracket son 32 cruces en orden canónico:
+ *    0-15 → r32 (1/16) · 16-23 → r16 (octavos) · 24-27 → quarters ·
+ *    28-29 → semis · 30 → thirdPlace (3º y 4º) · 31 → final. */
+function koPredRound(i) {
+  if (i < 16) return 'r32';
+  if (i < 24) return 'r16';
+  if (i < 28) return 'quarters';
+  if (i < 30) return 'semis';
+  if (i === 30) return 'thirdPlace';
+  return 'final';
+}
+
 /** Busca la predicción KO del player que corresponde al partido real `ko`.
- *  Estrategia: matchea por enfrentamiento exacto (home-away o away-home). */
+ *  Estrategia: matchea por enfrentamiento exacto (home-away o away-home)
+ *  PERO SÓLO dentro de la misma ronda: un cruce sólo puntúa si el player lo
+ *  firmó en la fase en la que realmente se jugó. Así, si alguien puso
+ *  España-Portugal en la final y ese cruce cae en octavos, NO cobra por él. */
 function matchKoPrediction(p, ko) {
   if (!p.bets || !Array.isArray(p.bets.ko)) return null;
   const a = ko.home, b = ko.away;
-  for (const k of p.bets.ko) {
+  for (let i = 0; i < p.bets.ko.length; i++) {
+    const k = p.bets.ko[i];
     if (!k || !k.match) continue;
+    if (koPredRound(i) !== ko.round) continue;   // la ronda predicha debe coincidir
     const m = k.match.split('-');
     if (m.length !== 2) continue;
     const [h, w] = m.map(s => s.trim());

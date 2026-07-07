@@ -1,0 +1,136 @@
+/* ===========================================================
+   metaporra.css — panel "Metaporra"
+   =========================================================== */
+
+.mp-card{
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--s-5);
+  margin-bottom: var(--s-5);
+}
+.mp-lead{
+  font-size: var(--fs-caption);
+  color: var(--c-text-soft);
+  margin-bottom: var(--s-4);
+}
+.mp-lead b{ color: var(--c-navy); }
+
+.mp-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--s-4);
+  align-items: end;
+}
+.mp-field{ display: flex; flex-direction: column; gap: var(--s-2); position: relative; }
+.mp-field label{
+  font-size: var(--fs-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-soft);
+  font-weight: 600;
+}
+.mp-field select{
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  background: var(--c-surface-alt);
+  color: var(--c-text);
+}
+.mp-field select:focus{ outline: 2px solid var(--c-usa); outline-offset: 1px; }
+
+.mp-seeall{
+  align-self: flex-start;
+  font-size: var(--fs-micro);
+  color: var(--c-usa);
+  padding: 2px 0;
+  text-decoration: underline;
+}
+.mp-seeall.on{ color: var(--c-canada); }
+
+.mp-save{
+  background: var(--c-navy);
+  color: #fff;
+  font-weight: 700;
+  padding: 11px 20px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+.mp-save:hover{ box-shadow: var(--shadow-hover); }
+.mp-save:disabled{ opacity: .55; cursor: default; }
+
+.mp-yourvote{
+  margin-top: var(--s-4);
+  font-size: var(--fs-caption);
+  color: var(--c-text);
+}
+.mp-changeable{ color: var(--c-text-soft); }
+
+.mp-status{ margin-top: var(--s-3); font-size: var(--fs-caption); min-height: 1em; }
+.mp-ok{ color: var(--c-mexico); }
+.mp-err{ color: var(--c-canada); }
+.mp-warn{ color: var(--gold-deep); }
+.mp-info, .mp-status .mp-info{ color: var(--c-text-soft); }
+.mp-wa{
+  display: inline-block; margin-left: 6px;
+  background: #25D366; color: #073b23; font-weight: 700;
+  padding: 4px 12px; border-radius: var(--r-pill); font-size: var(--fs-micro);
+}
+
+.mp-closed{ display: flex; align-items: center; gap: var(--s-4); }
+.mp-closed-ico{ font-size: 26px; }
+
+/* ---- tablón ---- */
+.mp-board{
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+}
+.mp-board h3{ display: flex; align-items: center; gap: var(--s-3); }
+.mp-count{
+  font-family: var(--font-mono); font-size: var(--fs-micro);
+  background: var(--c-navy); color: #fff;
+  padding: 2px 10px; border-radius: var(--r-pill); font-weight: 700;
+}
+.mp-fav{ font-size: var(--fs-caption); color: var(--c-text-soft); margin: var(--s-2) 0 var(--s-4); }
+.mp-fav b{ color: var(--c-navy); }
+.mp-empty{ color: var(--c-text-soft); font-size: var(--fs-caption); margin-top: var(--s-3); }
+
+.mp-bars{ display: flex; flex-direction: column; gap: var(--s-3); }
+.mp-barrow{ display: flex; flex-direction: column; gap: 4px; }
+.mp-bartop{ display: flex; justify-content: space-between; font-size: var(--fs-caption); }
+.mp-barname{ font-weight: 600; color: var(--c-navy); }
+.mp-barval{ font-family: var(--font-mono); color: var(--c-text-soft); }
+.mp-fe{
+  font-size: var(--fs-micro); color: var(--gold-deep);
+  background: var(--c-gold-soft); padding: 1px 7px; border-radius: var(--r-pill);
+  margin-left: 6px; font-weight: 600;
+}
+.mp-bartrack{ background: var(--c-navy-soft); border-radius: var(--r-pill); height: 12px; overflow: hidden; }
+.mp-barfill{
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-usa), var(--c-mexico));
+  border-radius: var(--r-pill);
+  transition: width .5s ease;
+}
+
+.mp-whovoted{ margin-top: var(--s-5); }
+.mp-whovoted summary{ cursor: pointer; font-size: var(--fs-caption); color: var(--c-usa); font-weight: 600; }
+.mp-votelist{
+  list-style: none; margin-top: var(--s-3);
+  columns: 2; column-gap: var(--s-6);
+  font-size: var(--fs-caption);
+}
+.mp-votelist li{ padding: 3px 0; break-inside: avoid; }
+.mp-voter{ color: var(--c-text-soft); }
+.mp-live{ margin-top: var(--s-4); font-size: var(--fs-micro); color: var(--c-mexico); }
+
+@media (max-width: 720px){
+  .mp-form{ grid-template-columns: 1fr; }
+  .mp-save{ width: 100%; }
+  .mp-votelist{ columns: 1; }
+}

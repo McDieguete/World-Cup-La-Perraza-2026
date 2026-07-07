@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/players.css">
   <link rel="stylesheet" href="css/stats.css">
   <link rel="stylesheet" href="css/clasif.css">
+  <link rel="stylesheet" href="css/metaporra.css">
   <link rel="stylesheet" href="css/jornada.css">
   <link rel="stylesheet" href="css/modal.css">
   <link rel="stylesheet" href="css/resultados.css">
@@ -35,6 +36,7 @@
   <script defer src="js/buscador.js"></script>
   <script defer src="js/stats.js"></script>
   <script defer src="js/clasif.js"></script>
+  <script defer src="js/metaporra.js"></script>
   <script defer src="js/modal.js"></script>
   <script defer src="js/jornada.js"></script>
   <script defer src="js/resultados.js"></script>
@@ -71,6 +73,7 @@
       <button class="tab"        data-tab="stats"><span class="ico">📊</span>Estadísticas</button>
       <button class="tab"        data-tab="buscador"><span class="ico">🔎</span>Buscador</button>
       <button class="tab"        data-tab="clasif"><span class="ico">🏆</span>Clasificación</button>
+      <button class="tab"        data-tab="metaporra"><span class="ico">🎰</span>Metaporra</button>
       <button class="tab"        data-tab="mundial"><span class="ico">🌍</span>Mundial</button>
       <button class="tab"        data-tab="resultados"><span class="ico">🎟️</span>Mis resultados</button>
       <button class="tab"        data-tab="jornada"><span class="ico">📅</span>Próxima jornada</button>
@@ -206,6 +209,17 @@
       </div>
       <div class="clas-day-sel"><label>Cambios del día:</label><select id="clasDaySel"></select></div>
       <div class="clas-table-wrap"><table class="clas-table" id="clasTable"></table></div>
+    </section>
+
+    <!-- ===== METAPORRA (apuesta por el ganador de la porra) ===== -->
+    <section class="panel" id="metaporra" aria-label="Metaporra">
+      <div class="sec-head">
+        <span class="kicker">La porra dentro de la porra</span>
+        <h2>La <em>Metaporra</em></h2>
+        <p>¿Quién crees que levantará La Perraza? Apuesta por el porrista que ganará la porra. Puedes elegir entre los contendientes reales o, si te va el riesgo, por cualquiera de los 81. Solo por diversión: no suma puntos, solo el gustazo de acertar.</p>
+      </div>
+      <div id="mpVote"></div>
+      <div id="mpBoard"></div>
     </section>
 
     <!-- ===== MUNDIAL (stats reales via API-Football) ===== -->

@@ -12,6 +12,7 @@ $$('.tab').forEach(t => t.addEventListener('click', () => {
   if (t.dataset.tab === 'stats')   setTimeout(animateBars, 80);
   if (t.dataset.tab === 'buscador' && window.__initBuscador) setTimeout(window.__initBuscador, 30);
   if (t.dataset.tab === 'clasif')  setTimeout(renderClasif, 60);
+  if (t.dataset.tab === 'metaporra' && window.__initMetaporra) setTimeout(window.__initMetaporra, 40);
   if (t.dataset.tab === 'mundial' && window.__initMundial) setTimeout(window.__initMundial, 60);
 }));
 

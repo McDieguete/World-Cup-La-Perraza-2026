@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-07T14:54:13.319Z",
+  "generated_at": "2026-07-07T15:09:34.057Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -955,7 +955,7 @@
       "goals": 7,
       "assists": null,
       "penalties": null,
-      "playedMatches": 4
+      "playedMatches": 5
     },
     {
       "player": "Harry Kane",

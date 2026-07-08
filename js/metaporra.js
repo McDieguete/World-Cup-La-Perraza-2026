@@ -23,6 +23,38 @@
   const candidateList = () => (Array.isArray(MP.candidates) && MP.candidates.length ? MP.candidates : allPlayers());
   const isCandidate = n => candidateList().includes(n);
 
+  /* ---------- cierre automático ----------
+     La votación se cierra sola al iniciarse el primer partido de cuartos.
+     El instante se toma de MP.deadline si está fijado; si no, se calcula
+     desde DATA.ko_bracket (ronda "quarters"). Horario peninsular (CEST, +02:00
+     en julio). MP.open === false fuerza el cierre manual antes de tiempo. */
+  function firstQuarter() {
+    const qfs = (DATA.ko_bracket || []).filter(m => m.round === 'quarters' && m.date);
+    if (!qfs.length) return null;
+    qfs.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+    return qfs[0];
+  }
+  function deadlineTs() {
+    if (MP.deadline) { const t = Date.parse(MP.deadline); if (!isNaN(t)) return t; }
+    const q = firstQuarter();
+    return q ? Date.parse(`${q.date}T${q.time || '00:00'}:00+02:00`) : null;
+  }
+  function votingClosed() {
+    if (MP.open === false) return true;                 // cierre manual
+    const ts = deadlineTs();
+    return ts != null && Date.now() >= ts;              // cierre automático
+  }
+  function deadlineLabel() {
+    const ts = deadlineTs();
+    if (ts == null) return '';
+    try {
+      return new Intl.DateTimeFormat('es-ES', {
+        day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+        timeZone: 'Europe/Madrid'
+      }).format(new Date(ts));
+    } catch (_) { return ''; }
+  }
+
   function currentLeader() {
     const s = DATA.clasif && DATA.clasif.series;
     if (!s) return null;
@@ -94,7 +126,7 @@
     const mine = getLocalVote();
     const lead = currentLeader();
 
-    if (MP.open === false) {
+    if (votingClosed()) {
       box.innerHTML = `<div class="mp-card mp-closed">
         <div class="mp-closed-ico">🔒</div>
         <div><b>Apuestas cerradas.</b> Ya no se puede cambiar el pronóstico${mine ? ` — tú apostaste por <b>${esc(mine.pick)}</b>.` : '.'}</div>
@@ -109,7 +141,7 @@
     box.innerHTML = `
       <div class="mp-card">
         <div class="mp-lead">${lead ? `🏁 Ahora mismo va ganando <b>${esc(lead.name)}</b> (${lead.pts} pts). Quedan ~673 en juego, así que…` : ''}</div>
-        <div class="mp-deadline">🟢 La votación está abierta hasta que se inicie el primer partido de cuartos. Los votos se desvelarán cuando se cierre la apuesta.</div>
+        <div class="mp-deadline">🟢 La votación está abierta hasta que se inicie el primer partido de cuartos${deadlineLabel() ? ` (${deadlineLabel()})` : ''}. Los votos se desvelarán cuando se cierre la apuesta.</div>
         <div class="mp-form">
           <div class="mp-field">
             <label for="mpWho">¿Quién eres?</label>
@@ -177,17 +209,18 @@
     // Mientras la votación está abierta el tablón permanece en secreto:
     // ni recuento ni lista nominal, se lean o no los votos del servidor.
     // Todo se destapa al cerrar las apuestas (open:false en data.js).
-    if (MP.open !== false) {
+    if (!votingClosed()) {
       const countLine = (!offline && votes.length)
         ? ` <span class="mp-count">${votes.length} voto${votes.length === 1 ? '' : 's'}</span>`
         : '';
+      const when = deadlineLabel();
       box.innerHTML = `
         <div class="mp-board">
           <h3>🗳️ El tablón${countLine}</h3>
           <div class="mp-card mp-hidden">
             <div class="mp-hidden-ico">🙈</div>
             <div><b>Votos en secreto.</b> Los votos se desvelarán cuando se cierre la apuesta —
-            la votación está abierta hasta que se inicie el primer partido de cuartos.</div>
+            la votación está abierta hasta que se inicie el primer partido de cuartos${when ? ` (${when})` : ''}.</div>
           </div>
         </div>`;
       return;

@@ -83,6 +83,9 @@
 .mp-closed{ display: flex; align-items: center; gap: var(--s-4); }
 .mp-closed-ico{ font-size: 26px; }
 
+.mp-hidden{ display: flex; align-items: center; gap: var(--s-4); margin-top: var(--s-4); }
+.mp-hidden-ico{ font-size: 26px; }
+
 /* ---- tablón ---- */
 .mp-board{
   background: var(--c-surface);

@@ -181,6 +181,23 @@
       return;
     }
 
+    const total0 = votes.length;
+
+    // Mientras la votación está abierta: recuento y lista nominal ocultos
+    // (nadie ve a quién ha votado nadie ni las tendencias). Se destapan al cerrar.
+    if (MP.open !== false) {
+      box.innerHTML = `
+        <div class="mp-board">
+          <h3>🗳️ El tablón <span class="mp-count">${total0} voto${total0 === 1 ? '' : 's'}</span></h3>
+          <div class="mp-card mp-hidden">
+            <div class="mp-hidden-ico">🙈</div>
+            <div><b>Votos en secreto.</b> El recuento y quién ha votado a quién se revelarán cuando se cierren las apuestas. De momento solo se sabe cuánta gente ha votado.</div>
+          </div>
+          ${offline ? '' : '<p class="mp-live">🟢 En vivo desde el servidor de votos.</p>'}
+        </div>`;
+      return;
+    }
+
     // conteo por candidato elegido
     const tally = {};
     votes.forEach(v => { if (v && v.pick) tally[v.pick] = (tally[v.pick] || 0) + 1; });

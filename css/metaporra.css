@@ -86,6 +86,11 @@
 .mp-hidden{ display: flex; align-items: center; gap: var(--s-4); margin-top: var(--s-4); }
 .mp-hidden-ico{ font-size: 26px; }
 
+.mp-deadline{
+  font-size: var(--fs-caption); color: var(--c-text-soft);
+  margin: var(--s-2) 0 var(--s-4);
+}
+
 /* ---- tablón ---- */
 .mp-board{
   background: var(--c-surface);

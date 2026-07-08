@@ -109,6 +109,7 @@
     box.innerHTML = `
       <div class="mp-card">
         <div class="mp-lead">${lead ? `🏁 Ahora mismo va ganando <b>${esc(lead.name)}</b> (${lead.pts} pts). Quedan ~673 en juego, así que…` : ''}</div>
+        <div class="mp-deadline">🟢 La votación está abierta hasta que se inicie el primer partido de cuartos. Los votos se desvelarán cuando se cierre la apuesta.</div>
         <div class="mp-form">
           <div class="mp-field">
             <label for="mpWho">¿Quién eres?</label>
@@ -173,28 +174,30 @@
     const votes = liveVotes !== null ? liveVotes : (MP.votes || []);
     const offline = liveVotes === null && MP.endpoint;
 
+    // Mientras la votación está abierta el tablón permanece en secreto:
+    // ni recuento ni lista nominal, se lean o no los votos del servidor.
+    // Todo se destapa al cerrar las apuestas (open:false en data.js).
+    if (MP.open !== false) {
+      const countLine = (!offline && votes.length)
+        ? ` <span class="mp-count">${votes.length} voto${votes.length === 1 ? '' : 's'}</span>`
+        : '';
+      box.innerHTML = `
+        <div class="mp-board">
+          <h3>🗳️ El tablón${countLine}</h3>
+          <div class="mp-card mp-hidden">
+            <div class="mp-hidden-ico">🙈</div>
+            <div><b>Votos en secreto.</b> Los votos se desvelarán cuando se cierre la apuesta —
+            la votación está abierta hasta que se inicie el primer partido de cuartos.</div>
+          </div>
+        </div>`;
+      return;
+    }
+
     if (!votes.length) {
       box.innerHTML = `<div class="mp-board">
         <h3>🗳️ El tablón</h3>
         <p class="mp-empty">${offline ? 'Aún no he podido leer los votos del servidor (o todavía no hay ninguno). Vuelve en un rato.' : 'Todavía no ha votado nadie. ¡Sé el primero!'}</p>
       </div>`;
-      return;
-    }
-
-    const total0 = votes.length;
-
-    // Mientras la votación está abierta: recuento y lista nominal ocultos
-    // (nadie ve a quién ha votado nadie ni las tendencias). Se destapan al cerrar.
-    if (MP.open !== false) {
-      box.innerHTML = `
-        <div class="mp-board">
-          <h3>🗳️ El tablón <span class="mp-count">${total0} voto${total0 === 1 ? '' : 's'}</span></h3>
-          <div class="mp-card mp-hidden">
-            <div class="mp-hidden-ico">🙈</div>
-            <div><b>Votos en secreto.</b> El recuento y quién ha votado a quién se revelarán cuando se cierren las apuestas. De momento solo se sabe cuánta gente ha votado.</div>
-          </div>
-          ${offline ? '' : '<p class="mp-live">🟢 En vivo desde el servidor de votos.</p>'}
-        </div>`;
       return;
     }
 

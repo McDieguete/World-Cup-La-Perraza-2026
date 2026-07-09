@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T21:15:30.792Z",
+  "generated_at": "2026-07-09T21:30:54.502Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -931,6 +931,15 @@
   ],
   "scorers": [
     {
+      "player": "Kylian Mbappé",
+      "team": "France",
+      "teamCrest": "https://crests.football-data.org/773.svg",
+      "goals": 8,
+      "assists": 2,
+      "penalties": 1,
+      "playedMatches": 6
+    },
+    {
       "player": "Lionel Messi",
       "team": "Argentina",
       "teamCrest": "https://crests.football-data.org/762.png",
@@ -938,15 +947,6 @@
       "assists": 1,
       "penalties": null,
       "playedMatches": 5
-    },
-    {
-      "player": "Kylian Mbappé",
-      "team": "France",
-      "teamCrest": "https://crests.football-data.org/773.svg",
-      "goals": 7,
-      "assists": 2,
-      "penalties": 1,
-      "playedMatches": 6
     },
     {
       "player": "Erling Haaland",

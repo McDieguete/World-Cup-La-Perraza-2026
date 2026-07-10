@@ -103,8 +103,26 @@
 .mp-fav b{ color: var(--c-navy); }
 .mp-empty{ color: var(--c-text-soft); font-size: var(--fs-caption); margin-top: var(--s-3); }
 
+.mp-hint{ font-size: var(--fs-micro); color: var(--c-text-soft); margin: calc(-1 * var(--s-2)) 0 var(--s-4); }
 .mp-bars{ display: flex; flex-direction: column; gap: var(--s-3); }
 .mp-barrow{ display: flex; flex-direction: column; gap: 4px; }
+
+/* cada barra es un <details> desplegable con sus votantes */
+.mp-barsum{ list-style: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; border-radius: var(--r-sm); }
+.mp-barsum::-webkit-details-marker{ display: none; }
+.mp-barsum:hover .mp-barname{ color: var(--c-usa); }
+.mp-caret{
+  display: inline-block; width: 6px; height: 6px; margin-right: 7px; vertical-align: 1px;
+  border: solid var(--c-text-soft); border-width: 0 2px 2px 0; padding: 0;
+  transform: rotate(-45deg); transition: transform .15s;
+}
+details[open] > .mp-barsum .mp-caret{ transform: rotate(45deg); }
+.mp-voters{
+  list-style: none; margin: var(--s-3) 0 var(--s-2); padding-left: 13px;
+  columns: 2; column-gap: var(--s-6); font-size: var(--fs-caption); color: var(--c-text);
+}
+.mp-voters li{ padding: 2px 0; break-inside: avoid; }
+
 .mp-bartop{ display: flex; justify-content: space-between; font-size: var(--fs-caption); }
 .mp-barname{ font-weight: 600; color: var(--c-navy); }
 .mp-barval{ font-family: var(--font-mono); color: var(--c-text-soft); }

@@ -206,25 +206,31 @@
     const maxN = rows[0][1];
     const fav = rows[0][0];
 
+    // votantes de cada candidato (para el desplegable por jugador)
+    const votersByPick = {};
+    votes.forEach(v => { if (v && v.pick) (votersByPick[v.pick] = votersByPick[v.pick] || []).push(v.voter); });
+
     const bars = rows.map(([name, n]) => {
       const pct = Math.round(n / total * 100);
       const w = Math.round(n / maxN * 100);
       const flag = isCandidate(name) ? '' : ' <span class="mp-fe">voto de fe</span>';
-      return `<div class="mp-barrow">
-        <div class="mp-bartop"><span class="mp-barname">${esc(name)}${flag}</span><span class="mp-barval">${n} · ${pct}%</span></div>
-        <div class="mp-bartrack"><div class="mp-barfill" style="width:${w}%"></div></div>
-      </div>`;
+      const voters = (votersByPick[name] || []).slice().sort((a, b) => a.localeCompare(b, 'es'));
+      const voterItems = voters.map(vn => `<li>${esc(vn)}</li>`).join('');
+      return `<details class="mp-barrow">
+        <summary class="mp-barsum">
+          <div class="mp-bartop"><span class="mp-barname"><i class="mp-caret" aria-hidden="true"></i>${esc(name)}${flag}</span><span class="mp-barval">${n} · ${pct}%</span></div>
+          <div class="mp-bartrack"><div class="mp-barfill" style="width:${w}%"></div></div>
+        </summary>
+        <ul class="mp-voters">${voterItems}</ul>
+      </details>`;
     }).join('');
-
-    const list = votes.slice().sort((a, b) => a.voter.localeCompare(b.voter, 'es'))
-      .map(v => `<li><span class="mp-voter">${esc(v.voter)}</span> → <b>${esc(v.pick)}</b></li>`).join('');
 
     box.innerHTML = `
       <div class="mp-board">
         <h3>🗳️ El tablón <span class="mp-count">${total} voto${total === 1 ? '' : 's'}</span></h3>
         <p class="mp-fav">Favorito de la metaporra: <b>${esc(fav)}</b></p>
+        <p class="mp-hint">Pulsa en cualquier jugador para ver quién le ha votado.</p>
         <div class="mp-bars">${bars}</div>
-        <details class="mp-whovoted"><summary>Ver quién ha votado a quién</summary><ul class="mp-votelist">${list}</ul></details>
         ${offline ? '' : '<p class="mp-live">🟢 En vivo desde el servidor de votos.</p>'}
       </div>`;
   }

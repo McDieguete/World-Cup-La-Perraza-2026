@@ -122,13 +122,25 @@ function scPickBestThirds(gs, n) {
   return thirds.sort(cmp).slice(0, n).map(r => r.team);
 }
 
+/* Ronda del cruce `i` del cuadro personal bets.ko (orden canónico:
+   0-15 r32 · 16-23 r16 · 24-27 cuartos · 28-29 semis · 30 3º/4º · 31 final).
+   Espejo de koPredRound en recompute.js. */
+function scKoPredRound(i) {
+  return i < 16 ? 'r32' : i < 24 ? 'r16' : i < 28 ? 'quarters' : i < 30 ? 'semis' : i < 31 ? 'thirdPlace' : 'final';
+}
+
 /* Empareja la predicción KO del porrista con un partido KO real `ko`
-   (mismo cruce en cualquier orden). Espejo de recompute.js. */
+   (mismo cruce en cualquier orden) PERO sólo dentro de la misma ronda:
+   un cruce sólo puntúa si el porrista lo firmó en la fase en que se jugó.
+   Espejo de recompute.js — evita puntos fantasma (p. ej. España-Portugal
+   firmado en la final cobrando por el de octavos). */
 function scMatchKoPrediction(p, ko) {
   if (!p.bets || !Array.isArray(p.bets.ko)) return null;
   const a = ko.home, b = ko.away;
-  for (const k of p.bets.ko) {
+  for (let i = 0; i < p.bets.ko.length; i++) {
+    const k = p.bets.ko[i];
     if (!k || !k.match) continue;
+    if (scKoPredRound(i) !== ko.round) continue;   // la ronda predicha debe coincidir
     const m = k.match.split('-');
     if (m.length !== 2) continue;
     const [h, w] = m.map(s => s.trim());

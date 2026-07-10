@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T17:30:24.674Z",
+  "generated_at": "2026-07-10T17:41:41.435Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -1009,7 +1009,7 @@
       "goals": 4,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 5
+      "playedMatches": 6
     },
     {
       "player": "Ismaïla Sarr",

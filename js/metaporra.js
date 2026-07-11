@@ -239,10 +239,12 @@
   async function init() {
     renderVote();
     renderBoard();               // pinta al instante con lo último que tengamos
-    const v = await fetchVotes();  // refresca desde el endpoint en cada visita
-    if (v !== null) liveVotes = v; // si el fetch falla, conservamos lo anterior
-    renderVote();
-    renderBoard();
+    if (MP.open !== false) {      // con las apuestas cerradas se usa el registro congelado (MP.votes)
+      const v = await fetchVotes();  // refresca desde el endpoint en cada visita
+      if (v !== null) liveVotes = v; // si el fetch falla, conservamos lo anterior
+      renderVote();
+      renderBoard();
+    }
   }
 
   window.__initMetaporra = init;

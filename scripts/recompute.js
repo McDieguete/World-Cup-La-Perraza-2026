@@ -115,9 +115,15 @@ function recompute(DATA) {
     if (idx < 0) return;
     const list = DATA.actual_qualifiers && DATA.actual_qualifiers[key];
     if (!list || !list.length) return;
-    // El "clasificado a 3º-4º" se cobra por los equipos del bets.sf que
-    // pierden la semifinal: los porristas NO firman una lista bets.thirdPlace.
-    addQualifierPoints(players, delta, idx, key, list, key === 'thirdPlace' ? 'sf' : key);
+    // El "clasificado a 3º-4º" se cobra por los equipos que el porrista colocó
+    // en el 3º-4º de su propio cuadro: sus semifinalistas (bets.sf) que NO puso
+    // en la final (bets.final). Los porristas NO firman una lista bets.thirdPlace;
+    // los 2 sf que no van a su final son sus perdedores de semis previstos.
+    // Un sf que el porrista mandó a la final no cuenta aquí aunque perdiera la
+    // semifinal: en su cuadro ese equipo iba a la final, no al 3º-4º.
+    addQualifierPoints(players, delta, idx, key, list,
+      key === 'thirdPlace' ? 'sf' : key,
+      key === 'thirdPlace' ? 'final' : null);
   });
 
   // -------- 4) Premios finales (campeón, balón, bota) --------
@@ -194,14 +200,18 @@ function phaseForQualifier(key) {
   })[key];
 }
 
-/** Añade los puntos de "Equipo clasificado a X" al delta del día indicado. */
-function addQualifierPoints(players, delta, dayIdx, key, actualList, betsKey = key) {
+/** Añade los puntos de "Equipo clasificado a X" al delta del día indicado.
+ *  @param betsKey     Lista del porrista contra la que se cruza (por defecto `key`).
+ *  @param excludeKey  Si se indica, los equipos presentes en esta otra lista del
+ *                     porrista NO puntúan (p.ej. el 3º-4º excluye los bets.final). */
+function addQualifierPoints(players, delta, dayIdx, key, actualList, betsKey = key, excludeKey = null) {
   const set = new Set(actualList);
   const pts = QUALIFIER_POINTS[key];
   players.forEach(p => {
     const picks = (p.bets && p.bets[betsKey]) || [];
+    const excluded = excludeKey ? new Set((p.bets && p.bets[excludeKey]) || []) : null;
     let hits = 0;
-    picks.forEach(team => { if (set.has(team)) hits++; });
+    picks.forEach(team => { if (set.has(team) && !(excluded && excluded.has(team))) hits++; });
     if (hits) delta[p.name][dayIdx] += hits * pts;
   });
 }

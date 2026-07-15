@@ -163,7 +163,7 @@ Todas viven en [`scripts/scoring.js`](scripts/scoring.js). Resumen:
 | 1/16 (r32)      | 2     | 2          | 3      |
 | 1/8 (r16)       | 2     | 2          | 3      |
 | Cuartos         | 3     | 3          | 5      |
-| Semis           | 4     | 4          | 5      |
+| Semis           | 3     | 3          | 5      |
 | 3º-4º puesto    | 5     | 6          | 7      |
 | Final           | 5     | 6          | 7      |
 

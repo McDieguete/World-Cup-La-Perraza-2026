@@ -22,7 +22,7 @@ const ROUND_POINTS = {
   r32:        { signo: 2, diferencia: 2, exacto: 3 },   // dieciseisavos (1/16)
   r16:        { signo: 2, diferencia: 2, exacto: 3 },   // octavos
   quarters:   { signo: 3, diferencia: 3, exacto: 5 },
-  semis:      { signo: 4, diferencia: 4, exacto: 5 },
+  semis:      { signo: 3, diferencia: 3, exacto: 5 },
   thirdPlace: { signo: 5, diferencia: 6, exacto: 7 },
   final:      { signo: 5, diferencia: 6, exacto: 7 }
 };

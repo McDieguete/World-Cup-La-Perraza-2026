@@ -15,7 +15,7 @@ const SC_ROUND_POINTS = {
   r32:        { signo: 2, diferencia: 2, exacto: 3 },
   r16:        { signo: 2, diferencia: 2, exacto: 3 },
   quarters:   { signo: 3, diferencia: 3, exacto: 5 },
-  semis:      { signo: 4, diferencia: 4, exacto: 5 },
+  semis:      { signo: 3, diferencia: 3, exacto: 5 },
   thirdPlace: { signo: 5, diferencia: 6, exacto: 7 },
   final:      { signo: 5, diferencia: 6, exacto: 7 }
 };
@@ -225,9 +225,9 @@ function scComputePlayerBreakdown(DATA, p) {
   let lastGroupKey = null;
   for (let j = groupDates.length - 1; j >= 0; j--) { if (byKey[groupDates[j]]) { lastGroupKey = groupDates[j]; break; } }
 
-  const addQualifier = (key, round, actualList) => {
+  const addQualifier = (key, round, actualList, betsField = round) => {
     const set = new Set(actualList);
-    const picks = (p.bets && p.bets[round]) || [];
+    const picks = (p.bets && p.bets[betsField]) || [];
     const hits = picks.filter(t => set.has(t));
     if (hits.length) add(key, { kind: 'qualifier', round, teams: hits, pts: hits.length * SC_QUALIFIER_POINTS[round] });
   };
@@ -248,11 +248,14 @@ function scComputePlayerBreakdown(DATA, p) {
   ['r16', 'qf', 'sf', 'thirdPlace', 'final'].forEach(round => {
     const phaseKey = SC_PHASE_KEY[scPhaseForQualifier(round)];
     if (!byKey[phaseKey]) return;
+    // El "clasificado a 3º-4º" se cobra por los equipos del bets.sf (perdedores
+    // de semis): no existe una lista bets.thirdPlace firmada por el porrista.
+    const betsField = round === 'thirdPlace' ? 'sf' : round;
     const list = DATA.actual_qualifiers && DATA.actual_qualifiers[round];
     if (list && list.length) {
-      addQualifier(phaseKey, round, list);            // ya resuelto: puntos reales
+      addQualifier(phaseKey, round, list, betsField); // ya resuelto: puntos reales
     } else {
-      const picks = (p.bets && p.bets[round]) || [];   // pendiente: equipos firmados
+      const picks = (p.bets && p.bets[betsField]) || []; // pendiente: equipos firmados
       if (picks.length) add(phaseKey, { kind: 'qualbet', round, teams: picks, pts: 0 });
     }
   });

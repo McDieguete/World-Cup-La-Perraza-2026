@@ -115,7 +115,9 @@ function recompute(DATA) {
     if (idx < 0) return;
     const list = DATA.actual_qualifiers && DATA.actual_qualifiers[key];
     if (!list || !list.length) return;
-    addQualifierPoints(players, delta, idx, key, list);
+    // El "clasificado a 3º-4º" se cobra por los equipos del bets.sf que
+    // pierden la semifinal: los porristas NO firman una lista bets.thirdPlace.
+    addQualifierPoints(players, delta, idx, key, list, key === 'thirdPlace' ? 'sf' : key);
   });
 
   // -------- 4) Premios finales (campeón, balón, bota) --------
@@ -193,11 +195,11 @@ function phaseForQualifier(key) {
 }
 
 /** Añade los puntos de "Equipo clasificado a X" al delta del día indicado. */
-function addQualifierPoints(players, delta, dayIdx, key, actualList) {
+function addQualifierPoints(players, delta, dayIdx, key, actualList, betsKey = key) {
   const set = new Set(actualList);
   const pts = QUALIFIER_POINTS[key];
   players.forEach(p => {
-    const picks = (p.bets && p.bets[key]) || [];
+    const picks = (p.bets && p.bets[betsKey]) || [];
     let hits = 0;
     picks.forEach(team => { if (set.has(team)) hits++; });
     if (hits) delta[p.name][dayIdx] += hits * pts;

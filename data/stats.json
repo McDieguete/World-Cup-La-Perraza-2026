@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T17:37:12.647Z",
+  "generated_at": "2026-07-15T17:52:32.269Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -946,7 +946,7 @@
       "goals": 8,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 6
+      "playedMatches": 7
     },
     {
       "player": "Erling Haaland",
@@ -964,7 +964,7 @@
       "goals": 6,
       "assists": 1,
       "penalties": 2,
-      "playedMatches": 6
+      "playedMatches": 7
     },
     {
       "player": "Jude Bellingham",
@@ -973,7 +973,7 @@
       "goals": 6,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 6
+      "playedMatches": 7
     },
     {
       "player": "Mikel Oyarzabal",

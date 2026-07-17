@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17T07:09:08.068Z",
+  "generated_at": "2026-07-17T07:24:26.276Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -935,7 +935,7 @@
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
       "goals": 8,
-      "assists": 2,
+      "assists": 3,
       "penalties": 1,
       "playedMatches": 7
     },

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T19:43:53.561Z",
+  "generated_at": "2026-07-18T19:59:13.212Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -937,7 +937,7 @@
       "goals": 8,
       "assists": 3,
       "penalties": 1,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Lionel Messi",
@@ -964,7 +964,7 @@
       "goals": 6,
       "assists": 1,
       "penalties": 2,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Jude Bellingham",
@@ -973,7 +973,7 @@
       "goals": 6,
       "assists": 1,
       "penalties": null,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Mikel Oyarzabal",
@@ -991,7 +991,7 @@
       "goals": 5,
       "assists": 2,
       "penalties": null,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Julián Quiñones",

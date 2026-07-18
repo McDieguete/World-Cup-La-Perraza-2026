@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T22:17:09.727Z",
+  "generated_at": "2026-07-18T22:32:29.269Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -934,8 +934,8 @@
       "player": "Kylian Mbappé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
-      "goals": 9,
-      "assists": 3,
+      "goals": 10,
+      "assists": 4,
       "penalties": 1,
       "playedMatches": 8
     },
@@ -1075,6 +1075,15 @@
       "playedMatches": 3
     },
     {
+      "player": "Bradley Barcola",
+      "team": "France",
+      "teamCrest": "https://crests.football-data.org/773.svg",
+      "goals": 3,
+      "assists": 1,
+      "penalties": null,
+      "playedMatches": 8
+    },
+    {
       "player": "Yoane Wissa",
       "team": "Congo DR",
       "teamCrest": "https://crests.football-data.org/congo_dr.svg",
@@ -1096,15 +1105,6 @@
       "player": "Jonathan David",
       "team": "Canada",
       "teamCrest": "https://crests.football-data.org/canada.svg",
-      "goals": 3,
-      "assists": null,
-      "penalties": null,
-      "playedMatches": 5
-    },
-    {
-      "player": "Matheus Cunha",
-      "team": "Brazil",
-      "teamCrest": "https://crests.football-data.org/764.svg",
       "goals": 3,
       "assists": null,
       "penalties": null,

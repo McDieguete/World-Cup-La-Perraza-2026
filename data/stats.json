@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T22:01:49.282Z",
+  "generated_at": "2026-07-18T22:17:09.727Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -934,7 +934,7 @@
       "player": "Kylian Mbappé",
       "team": "France",
       "teamCrest": "https://crests.football-data.org/773.svg",
-      "goals": 8,
+      "goals": 9,
       "assists": 3,
       "penalties": 1,
       "playedMatches": 8

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T17:57:40.428Z",
+  "generated_at": "2026-07-19T18:03:57.050Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -946,7 +946,7 @@
       "goals": 8,
       "assists": 4,
       "penalties": null,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Erling Haaland",

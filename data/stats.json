@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T17:27:01.998Z",
+  "generated_at": "2026-07-19T17:42:19.949Z",
   "source": "football-data.org",
   "competition": "WC",
   "season": "2026",
@@ -991,7 +991,7 @@
       "goals": 5,
       "assists": 1,
       "penalties": 1,
-      "playedMatches": 7
+      "playedMatches": 8
     },
     {
       "player": "Julián Quiñones",

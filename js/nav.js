@@ -16,6 +16,20 @@ $$('.tab').forEach(t => t.addEventListener('click', () => {
   if (t.dataset.tab === 'mundial' && window.__initMundial) setTimeout(window.__initMundial, 60);
 }));
 
+/* ===== Init de la pestaña activa al cargar =====
+   El panel activo por defecto (Clasificación) necesita pintarse al arrancar;
+   antes solo se renderizaba al hacer clic. Se dispara el inicializador que
+   corresponda a la pestaña marcada como .active en el HTML. */
+document.addEventListener('DOMContentLoaded', () => {
+  const active = $('.tab.active');
+  const tab = active && active.dataset.tab;
+  if (tab === 'clasif' && typeof renderClasif === 'function') renderClasif();
+  else if (tab === 'stats' && typeof animateBars === 'function') animateBars();
+  else if (tab === 'buscador' && window.__initBuscador) window.__initBuscador();
+  else if (tab === 'metaporra' && window.__initMetaporra) window.__initMetaporra();
+  else if (tab === 'mundial' && window.__initMundial) window.__initMundial();
+});
+
 /* ===== Countdown ===== */
 (function () {
   const start = new Date(2026, 5, 11, 0, 0, 0);

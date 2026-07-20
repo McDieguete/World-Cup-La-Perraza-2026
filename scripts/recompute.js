@@ -20,7 +20,7 @@
 
 const {
   QUALIFIER_POINTS, POSITION_POINTS, AWARD_POINTS, PHASE_KEY,
-  parsePred, parseScore, predictionPoints,
+  parsePred, parseScore, predictionPoints, awardMatch,
   computeGroupStandings, pickBestThirds
 } = require('./scoring');
 
@@ -135,9 +135,12 @@ function recompute(DATA) {
       if (awards.runnerup && p.runnerup === awards.runnerup) delta[p.name][finalIdx] += AWARD_POINTS.runnerup;
       if (awards.third    && p.third    === awards.third)    delta[p.name][finalIdx] += AWARD_POINTS.third;
 
+      // Premios individuales: los porristas escribieron los nombres a mano con
+      // grafías muy dispares (tildes, nombre completo vs apellido…), así que se
+      // casan de forma tolerante (awardMatch) en lugar de por igualdad exacta.
       const aw = (p.bets && p.bets.awards) || {};
       ['balon_oro','balon_plata','balon_bronce','bota_oro','bota_plata','bota_bronce'].forEach(k => {
-        if (awards[k] && aw[k] === awards[k]) delta[p.name][finalIdx] += AWARD_POINTS[k];
+        if (awards[k] && awardMatch(aw[k], awards[k])) delta[p.name][finalIdx] += AWARD_POINTS[k];
       });
     });
   }

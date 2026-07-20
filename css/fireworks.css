@@ -1,0 +1,24 @@
+/* ===========================================================
+   fireworks.css — Overlay de fuegos artificiales (rojo/amarillo,
+   colores de España) que se muestra ~5 s al abrir la web.
+   El lienzo no captura eventos (pointer-events:none) para no
+   estorbar la navegación, y se desvanece al terminar.
+   =========================================================== */
+
+.fw-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;          /* nunca bloquea clics ni scroll */
+  opacity: 1;
+  transition: opacity .6s ease;
+}
+
+.fw-canvas.fw-out { opacity: 0; }
+
+/* Accesibilidad: quien pide menos movimiento no ve la animación. */
+@media (prefers-reduced-motion: reduce) {
+  .fw-canvas { display: none !important; }
+}

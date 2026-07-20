@@ -157,3 +157,9 @@ function drawChart() {
     ? '<div class="legend"><div class="li" style="color:var(--cream-dim)">Mostrando los 81 porristas — la leyenda se omite por espacio.</div></div>'
     : buildLegend(sel);
 }
+
+/* Auto-render al cargar: la Clasificación es la pestaña activa por defecto, así
+   que se pinta ya al ejecutarse este módulo (script defer → el DOM y DATA ya
+   están listos), sin depender de eventos ni de que el usuario pulse la pestaña.
+   Mismo patrón que players.js. Idempotente si nav.js la vuelve a invocar. */
+if (typeof DATA !== 'undefined' && $('#clasChart')) renderClasif();

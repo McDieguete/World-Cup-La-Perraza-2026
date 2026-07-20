@@ -109,6 +109,33 @@ function scoreSign({ gh, ga }) {
   return gh > ga ? '1' : (gh < ga ? '2' : 'X');
 }
 
+/* ===== Comparación de nombres para premios individuales (balón / bota) ===== */
+
+/** Normaliza un nombre de jugador: minúsculas, sin tildes, sin signos de
+ *  puntuación y espacios colapsados. */
+function normalizeName(s) {
+  return String(s || '')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')   // quita diacríticos
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')                        // signos → espacio
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** ¿La predicción de un premio individual casa con el ganador real?
+ *  Tolerante a mayúsculas, tildes y variantes nombre/apellido: coincide por
+ *  igualdad normalizada o por apellido (último token, ≥3 letras). Así "Mbappe",
+ *  "Mbappé" y "Kylian Mbappé" cuentan como el mismo jugador, igual que "Messi"
+ *  y "Lionel Messi". Los apellidos de los premios reales se guardan en forma
+ *  simple (p. ej. "Rodri", "Messi", "Mbappé") para que casen con lo escrito. */
+function awardMatch(pred, official) {
+  const a = normalizeName(pred), b = normalizeName(official);
+  if (!a || !b) return false;
+  if (a === b) return true;
+  const la = a.split(' ').pop(), lb = b.split(' ').pop();
+  return lb.length >= 3 && la === lb;
+}
+
 /* ===== Cálculo de puntos de UN pronóstico ===== */
 
 /**
@@ -224,6 +251,8 @@ module.exports = {
   parsePred,
   parseScore,
   scoreSign,
+  normalizeName,
+  awardMatch,
   predictionPoints,
   cmpGroupTeam,
   computeGroupStandings,

@@ -150,6 +150,34 @@ details[open] > .mp-barsum .mp-caret{ transform: rotate(45deg); }
 .mp-voter{ color: var(--c-text-soft); }
 .mp-live{ margin-top: var(--s-4); font-size: var(--fs-micro); color: var(--c-mexico); }
 
+/* ---- ganadores (mostrado al quedar decidida La Perraza) ---- */
+.mp-winner{
+  display: flex; align-items: center; gap: var(--s-4);
+  background: var(--c-gold-soft);
+  border: 1px solid var(--c-gold);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  margin: var(--s-2) 0 var(--s-4);
+}
+.mp-winner-crown{ font-size: 30px; line-height: 1; flex-shrink: 0; }
+.mp-winner-txt{ display: flex; flex-direction: column; gap: 4px; }
+.mp-winner-title{ font-size: var(--fs-body); color: var(--c-text); }
+.mp-winner-title b{ color: var(--gold-deep); }
+.mp-winner-pts{
+  font-family: var(--font-mono); font-size: var(--fs-micro); font-weight: 700;
+  background: var(--c-gold); color: #fff;
+  padding: 1px 9px; border-radius: var(--r-pill); margin-left: 4px;
+  white-space: nowrap;
+}
+.mp-winner-meta{ font-size: var(--fs-caption); color: var(--c-text-soft); }
+.mp-winner-meta b{ color: var(--c-navy); }
+.mp-fav-note{ color: var(--c-text-soft); font-weight: 400; }
+
+/* barra del campeón resaltada */
+.mp-barcrown{ margin-right: 2px; }
+.mp-barwin .mp-barname{ color: var(--gold-deep); font-weight: 800; }
+.mp-barwin .mp-barfill{ background: linear-gradient(90deg, var(--gold-deep), var(--c-gold)); }
+
 @media (max-width: 720px){
   .mp-form{ grid-template-columns: 1fr; }
   .mp-save{ width: 100%; }

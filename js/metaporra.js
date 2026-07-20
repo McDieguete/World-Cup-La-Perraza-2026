@@ -34,6 +34,21 @@
     return best;
   }
 
+  /* Ganador(es) definitivo(s) de La Perraza. La porra queda decidida cuando se
+     juega la final del Mundial (señal: DATA.actual_awards.champion). Devuelve
+     null mientras no esté decidida; si hay empate a puntos, varios ganadores. */
+  function perrazaWinners() {
+    const decided = DATA.actual_awards && DATA.actual_awards.champion;
+    const s = DATA.clasif && DATA.clasif.series;
+    if (!decided || !s) return null;
+    let max = -Infinity;
+    Object.keys(s).forEach(n => { const v = s[n][s[n].length - 1]; if (v > max) max = v; });
+    const winners = Object.keys(s)
+      .filter(n => s[n][s[n].length - 1] === max)
+      .sort((a, b) => a.localeCompare(b, 'es'));
+    return { winners, pts: max };
+  }
+
   /* ---------- localStorage ---------- */
   function getLocalVote() { try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch (_) { return null; } }
   function setLocalVote(v) { try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch (_) {} }
@@ -210,15 +225,39 @@
     const votersByPick = {};
     votes.forEach(v => { if (v && v.pick) (votersByPick[v.pick] = votersByPick[v.pick] || []).push(v.voter); });
 
+    // Ganador(es) reales de La Perraza y quién acertó en la metaporra.
+    const champ = perrazaWinners();
+    const winSet = new Set(champ ? champ.winners : []);
+    let winnerBlock = '';
+    if (champ) {
+      const metaWinners = [...new Set(
+        votes.filter(v => v && winSet.has(v.pick)).map(v => v.voter)
+      )].sort((a, b) => a.localeCompare(b, 'es'));
+      const champNames = champ.winners.map(esc).join(' y ');
+      const plural = champ.winners.length > 1;
+      winnerBlock = `
+        <div class="mp-winner">
+          <div class="mp-winner-crown" aria-hidden="true">🏆</div>
+          <div class="mp-winner-txt">
+            <div class="mp-winner-title">${plural ? 'Ganadores' : 'Ganador'} de La Perraza: <b>${champNames}</b> <span class="mp-winner-pts">${champ.pts} pts</span></div>
+            <div class="mp-winner-meta">${metaWinners.length
+              ? `🎯 ${metaWinners.length > 1 ? 'Ganadores' : 'Ganador'} de la metaporra — acertaron al campeón: <b>${metaWinners.map(esc).join(', ')}</b>`
+              : 'Nadie acertó al campeón en la metaporra: queda desierta. 🤷'}</div>
+          </div>
+        </div>`;
+    }
+
     const bars = rows.map(([name, n]) => {
       const pct = Math.round(n / total * 100);
       const w = Math.round(n / maxN * 100);
       const flag = isCandidate(name) ? '' : ' <span class="mp-fe">voto de fe</span>';
+      const isWin = winSet.has(name);
+      const crown = isWin ? '<span class="mp-barcrown" title="Ganador de La Perraza" aria-hidden="true">👑</span> ' : '';
       const voters = (votersByPick[name] || []).slice().sort((a, b) => a.localeCompare(b, 'es'));
       const voterItems = voters.map(vn => `<li>${esc(vn)}</li>`).join('');
-      return `<details class="mp-barrow">
+      return `<details class="mp-barrow${isWin ? ' mp-barwin' : ''}">
         <summary class="mp-barsum">
-          <div class="mp-bartop"><span class="mp-barname"><i class="mp-caret" aria-hidden="true"></i>${esc(name)}${flag}</span><span class="mp-barval">${n} · ${pct}%</span></div>
+          <div class="mp-bartop"><span class="mp-barname"><i class="mp-caret" aria-hidden="true"></i>${crown}${esc(name)}${flag}</span><span class="mp-barval">${n} · ${pct}%</span></div>
           <div class="mp-bartrack"><div class="mp-barfill" style="width:${w}%"></div></div>
         </summary>
         <ul class="mp-voters">${voterItems}</ul>
@@ -228,7 +267,8 @@
     box.innerHTML = `
       <div class="mp-board">
         <h3>🗳️ El tablón <span class="mp-count">${total} voto${total === 1 ? '' : 's'}</span></h3>
-        <p class="mp-fav">Favorito de la metaporra: <b>${esc(fav)}</b></p>
+        ${winnerBlock}
+        <p class="mp-fav">Favorito de la metaporra: <b>${esc(fav)}</b>${champ && !winSet.has(fav) ? ' <span class="mp-fav-note">(no acertó)</span>' : ''}</p>
         <p class="mp-hint">Pulsa en cualquier jugador para ver quién le ha votado.</p>
         <div class="mp-bars">${bars}</div>
         ${offline ? '' : '<p class="mp-live">🟢 En vivo desde el servidor de votos.</p>'}
